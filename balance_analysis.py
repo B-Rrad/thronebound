@@ -672,7 +672,8 @@ class SimulationGame:
         if hero_id == "sauron":
             return player == self.attacker and self.play_phase == "ATTACK" and not self.table_attacks and self.revealed_hand is None
         if hero_id == "balrog":
-            return player == self.attacker and self.play_phase in ("ATTACK", "REINFORCE") and self.round_effects["balrog_active"] is None
+            legal_attack_exists = any(self.can_attack_with_card(card) for card in self.get_player_realm_hand(player))
+            return player == self.attacker and self.play_phase in ("ATTACK", "REINFORCE") and self.round_effects["balrog_active"] is None and legal_attack_exists
         if hero_id == "gollum":
             return player == self.attacker and self.play_phase in ("ATTACK", "REINFORCE") and not self.round_effects["trump_disabled"] and self.round_effects["temporary_trump_suit"] is None
         if hero_id == "wormtongue":
@@ -830,7 +831,6 @@ class SimulationGame:
     def end_round(self, defender_took_wound, pickup_defenses):
         if not defender_took_wound and self.round_effects["balrog_active"] == self.attacker:
             self.wounds[self.defender] += 1
-            defender_took_wound = True
 
         if not defender_took_wound:
             self.attacker, self.defender = self.defender, self.attacker

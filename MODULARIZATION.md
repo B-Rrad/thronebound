@@ -14,6 +14,19 @@ How to use
 
 Current entries
 ---------------
+- 2026-05-06 — Split active game core into focused modules (Codex)
+  - Files added: `ringbound_game/ai_turns.py`, `audio.py`, `combat.py`, `drafting.py`,
+    `heroes.py`, `rounds.py`, `rules.py`, `state.py`, `test_current_game_rules.py`
+  - Files modified: `ringbound_game/ui_game.py`, `ringbound_game/events.py`,
+    `test_ai.py`, `test_gollum.py`, `test_heroes.py`, `README.md`, `ARCHITECTURE.md`
+  - Files removed: stale pre-UI modules `ringbound_game/base.py`, `gameplay.py`,
+    `rendering.py`, and `ai_mixin.py`; unused duplicate AI module `ai_players.py`
+  - Summary: Reduced `RingboundGame` to a composition root and moved gameplay
+    responsibilities into named modules for state/setup, drafting, legality rules,
+    hero powers, round flow, AI turns, events, and audio. Added rule regression tests
+    covering illegal plays, AI draft flow, AI pending hero actions, and full headless
+    vs-AI play.
+
 - 2026-05-04 — Extract AI and resource responsibilities (GitHub Copilot)
   - Files added: `ai_manager.py`, `resource_manager.py`
   - Files modified: `main.py`

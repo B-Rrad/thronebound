@@ -201,7 +201,7 @@ class HeroRegressionTests(unittest.TestCase):
         self.assertEqual(self.game.revealed_hand, {"viewer": "P1", "target": "P2"})
         self.assertIn(sauron, self.game.hero_discard)
 
-    def test_balrog_requires_attack_card_and_deals_wound_after_full_defense(self):
+    def test_balrog_deals_wound_after_full_defense_but_defender_takes_initiative(self):
         attack_card = realm("Balrog Attack", "Shire", 7)
         defense_card = realm("Defense", "Shire", 9)
         balrog = hero("balrog", "Shadow")
@@ -222,17 +222,18 @@ class HeroRegressionTests(unittest.TestCase):
         self.game.end_round(False, False)
 
         self.assertEqual(self.game.wounds["P2"], 1)
-        self.assertEqual(self.game.attacker, "P1")
+        self.assertEqual(self.game.attacker, "P2")
+        self.assertEqual(self.game.defender, "P1")
 
-    def test_gollum_lets_defender_redefine_trump_and_returns_control(self):
+    def test_gollum_lets_owner_redefine_trump_and_returns_control(self):
         gollum = hero("gollum", "Shadow")
         self.game.p1_heroes = [gollum]
 
         self.game.attempt_hero_play(gollum)
 
         self.assertEqual(self.game.pending_action["type"], "choose_suit")
-        self.assertEqual(self.game.pending_action["chooser"], "P2")
-        self.assertEqual(self.game.current_player, "P2")
+        self.assertEqual(self.game.pending_action["chooser"], "P1")
+        self.assertEqual(self.game.current_player, "P1")
 
         self.game.resolve_suit_choice("Mordor")
 

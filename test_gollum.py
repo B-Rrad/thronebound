@@ -10,7 +10,7 @@ import pygame
 pygame.init()
 pygame.display.set_mode((1, 1))
 
-from ai_players import EasyAI
+from ai_manager import make_ai
 from ringbound_game import RingboundGame
 from settings import STATE_PLAYING
 
@@ -71,7 +71,8 @@ def test_human_gollum_chooser_stays_with_owner():
 
 def test_ai_gollum_choice_stays_with_ai_owner():
     game = RingboundGame()
-    game.ai_opponent = EasyAI()
+    game.p2_ai = make_ai("Random")
+    game._ai_action_delay_ms = 0
     build_attack_state(game, "P2")
 
     gollum = hero_by_id(game, "gollum")
@@ -83,11 +84,11 @@ def test_ai_gollum_choice_stays_with_ai_owner():
     assert game.pending_action is not None
     assert game.pending_action["chooser"] == "P2"
     assert game.current_player == "P2"
-    assert game.is_ai_turn()
+    assert not game.is_human_turn()
 
-    action = game.ai_opponent.choose_action(game, "P2")
-    assert action["type"] == "suit"
-    assert action["suit"] in game.all_suits
+    game.step_ai()
+    assert game.pending_action is None
+    assert game.round_effects["temporary_trump_suit"] in game.all_suits
 
 
 if __name__ == "__main__":
