@@ -48,7 +48,23 @@ class GameStateMixin:
         self.round_effects = self.new_round_effects()
         self.pending_action = None
         self.revealed_hand = None
+        self.game_log = []
         self.status_message = "Click to start the draft."
+
+    @property
+    def status_message(self):
+        return getattr(self, "_status_message", "")
+
+    @status_message.setter
+    def status_message(self, message):
+        self._status_message = message
+        if not message or not hasattr(self, "game_log"):
+            return
+        if self.game_log and self.game_log[-1] == message:
+            return
+        self.game_log.append(message)
+        if len(self.game_log) > 12:
+            self.game_log = self.game_log[-12:]
 
     def get_ai(self, player):
         return self.p1_ai if player == "P1" else self.p2_ai

@@ -251,6 +251,35 @@ class CurrentGameRuleTests(unittest.TestCase):
         self.assertEqual(self.game.active_hand_visuals, [human_card])
         self.assertNotIn(ai_card, self.game.active_hand_visuals)
 
+    def test_same_suit_higher_defense_is_playable(self):
+        attack = realm("6 of Shire", "Shire", 6)
+        defense = realm("12 of Shire", "Shire", 12)
+        self.game.attacker = "P1"
+        self.game.defender = "P2"
+        self.game.current_player = "P2"
+        self.game.play_phase = "DEFEND"
+        self.game.table_attacks = [attack]
+        self.game.table_defenses = []
+        self.game.p2_hand = [defense]
+
+        self.game.update_hand_visuals()
+
+        self.assertTrue(self.game.can_defend_with_card(defense, attack))
+        self.assertTrue(self.game.is_card_playable_in_hand(defense))
+        self.assertEqual(self.game.card_play_hint(defense), "Playable defense.")
+
+    def test_defense_hint_names_wormtongue_blocker(self):
+        attack = realm("6 of Shire", "Shire", 6)
+        defense = realm("12 of Shire", "Shire", 12)
+        self.game.current_player = "P2"
+        self.game.play_phase = "DEFEND"
+        self.game.table_attacks = [attack]
+        self.game.p2_hand = [defense]
+        self.game.round_effects["wormtongue_suit"] = "Shire"
+
+        self.assertFalse(self.game.is_card_playable_in_hand(defense))
+        self.assertEqual(self.game.card_play_hint(defense), "Wormtongue forbids Shire this round.")
+
     def test_deck_empty_tiebreak_uses_empty_realm_hands_before_wounds(self):
         self.game.realm_deck = []
         self.game.p1_hand = []

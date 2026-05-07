@@ -115,6 +115,13 @@ class EventLoopMixin:
         if action == "request_redraw":
             return
 
+        if action == "scroll_log":
+            delta = payload.get("delta", 0)
+            if isinstance(delta, int):
+                current = getattr(self.ui.input_handler, "game_log_scroll", 0)
+                self.ui.input_handler.game_log_scroll = max(0, current + delta)
+            return
+
         if action == "pause_confirm_yes":
             self.ui.input_handler.pause_confirm = False
             self.reset_game_state()
