@@ -103,10 +103,11 @@ class RulesMixin:
 
     def update_hand_visuals(self):
         self.active_hand_visuals = []
-        if self.current_player is None:
+        visible_player = self.visible_hand_player()
+        if visible_player is None:
             return
-        current_realm_hand = self.get_player_realm_hand(self.current_player)
-        current_hero_hand = self.get_player_hero_hand(self.current_player)
+        current_realm_hand = self.get_player_realm_hand(visible_player)
+        current_hero_hand = self.get_player_hero_hand(visible_player)
         self.active_hand_visuals = current_realm_hand + current_hero_hand
 
     # AI compatibility helpers (used by balance_analysis AIs)
@@ -170,4 +171,3 @@ class RulesMixin:
         if self.play_phase in ("ATTACK", "REINFORCE"):
             return self.can_attack_with_card(card_data)
         return False
-

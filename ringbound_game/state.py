@@ -56,6 +56,19 @@ class GameStateMixin:
     def is_ai_player(self, player):
         return player is not None and self.get_ai(player) is not None
 
+    def human_players(self):
+        return [player for player in ("P1", "P2") if not self.is_ai_player(player)]
+
+    def visible_hand_player(self):
+        if self.current_player is None:
+            return None
+
+        humans = self.human_players()
+        if len(humans) == 1 and self.is_ai_player(self.current_player):
+            return humans[0]
+
+        return self.current_player
+
     def current_interaction_player(self):
         if self.state == STATE_DRAFTING:
             return self.current_drafter

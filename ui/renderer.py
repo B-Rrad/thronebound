@@ -398,10 +398,13 @@ class Renderer:
         self._draw_translucent_rect(screen, hand_area, (18, 14, 22, 172), (*self.theme.border_subtle, 150), max(1, int(hand_area.h * 0.05)), radius=max(1, int(hand_area.h * 0.08)))
 
         try:
-            ai = getattr(game, "get_ai", lambda p: None)(game.current_player)
+            visible_player = getattr(game, "visible_hand_player", lambda: game.current_player)()
+            ai = getattr(game, "get_ai", lambda p: None)(visible_player)
         except Exception:
+            visible_player = getattr(game, "current_player", None)
             ai = None
-        caption_text = ("AI" if ai is not None else "Player") + " Hand"
+        caption_owner = "AI" if ai is not None else "Player"
+        caption_text = f"{caption_owner} Hand"
         caption = self.layout.fonts["label"].render(caption_text, True, self.theme.text_primary)
         self._render_text_box(screen, caption, (hand_area.centerx, hand_area.y + int(hand_area.h * 0.12)), fill=(22, 18, 28, 196), outline=(*self.theme.accent_gold, 120), radius=16, padding=(18, 10))
 

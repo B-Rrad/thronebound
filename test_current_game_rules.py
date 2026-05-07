@@ -50,6 +50,10 @@ class ScriptedAI:
         return game.get_player_realm_hand(player)[0]
 
 
+class DummyAI:
+    name = "Dummy"
+
+
 class CurrentGameRuleTests(unittest.TestCase):
     def setUp(self):
         self.game = RingboundGame()
@@ -230,6 +234,22 @@ class CurrentGameRuleTests(unittest.TestCase):
         self.assertEqual(self.game.round_effects, self.game.new_round_effects())
         self.assertIsNone(self.game.pending_action)
         self.assertIsNone(self.game.revealed_hand)
+
+    def test_vs_ai_does_not_display_ai_hand_during_ai_turn(self):
+        human_card = realm("Human Card", "Rohan", 4)
+        ai_card = realm("AI Card", "Mordor", 11)
+        self.game.p1_ai = None
+        self.game.p2_ai = DummyAI()
+        self.game.p1_hand = [human_card]
+        self.game.p2_hand = [ai_card]
+        self.game.p1_heroes = []
+        self.game.p2_heroes = []
+        self.game.current_player = "P2"
+
+        self.game.update_hand_visuals()
+
+        self.assertEqual(self.game.active_hand_visuals, [human_card])
+        self.assertNotIn(ai_card, self.game.active_hand_visuals)
 
     def test_deck_empty_tiebreak_uses_empty_realm_hands_before_wounds(self):
         self.game.realm_deck = []
