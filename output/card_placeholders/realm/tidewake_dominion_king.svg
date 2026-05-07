@@ -32,6 +32,8 @@
           <circle cx="454" cy="226" r="8" fill="#90c8ef" opacity="0.28"/>
         </g>
         
+  <g transform="translate(375,432) scale(1.0)"><path d="M-124 108 C-116 66 -108 34 -88 6 M124 108 C116 66 108 34 88 6" fill="none" stroke="#1e3554" stroke-width="12" stroke-linecap="round" opacity="0.26"/></g>
+  <g transform="translate(375,432) scale(1.0)"><path d="M-92 98 L-52 34 L0 34 L52 34 L92 98" fill="none" stroke="#3E8EDE" stroke-width="10" stroke-linecap="round" opacity="0.38"/><path d="M-112 78 C-42 32 22 28 96 48" fill="none" stroke="#3E8EDE" stroke-width="8" stroke-linecap="round" opacity="0.5"/></g>
   
         <g transform="translate(375,450) scale(1.34)">
           <path d="M0 -138 L28 -102 L46 10 L62 104 L-62 104 L-46 10 L-28 -102 Z" fill="#1e3554"/>
@@ -41,7 +43,7 @@
         </g>
         
 
-  <line x1="118" y1="856" x2="632" y2="856" stroke="#dbeaf9" stroke-width="4"/>
-  <text x="375" y="904" text-anchor="middle" font-size="42" font-weight="700" fill="#1e3554">Deep Sovereign</text>
-  <text x="375" y="952" text-anchor="middle" font-size="26" font-weight="700" fill="#3E8EDE" letter-spacing="3">TIDEWAKE DOMINION</text>
+  <line x1="96" y1="742" x2="654" y2="742" stroke="#dbeaf9" stroke-width="4"/>
+  <text x="375" y="866" text-anchor="middle" font-size="92" font-weight="700" fill="#1e3554">Deep Sovereign</text>
+  <text x="375" y="976" text-anchor="middle" font-size="54" font-weight="700" fill="#3E8EDE" letter-spacing="2">TIDEWAKE DOMINION</text>
 </svg>

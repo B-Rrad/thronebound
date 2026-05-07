@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" role="img" aria-labelledby="title desc">
+  <title id="title">Athena</title>
+  <desc id="desc">Concept art hero card for Athena with gold hero framing.</desc>
+  <defs>
+    <linearGradient id="bg-gandalf" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f6f0e4"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="718" height="1018" rx="40" fill="url(#bg-gandalf)" stroke="#c9a84c" stroke-width="16"/>
+  <rect x="42" y="42" width="666" height="966" rx="28" fill="none" stroke="#8b6d21" stroke-width="5"/>
+
+  <g transform="translate(112,112)">
+    
+    <g transform="translate(0,0) scale(0.62)">
+      <path d="M0 -58 C18 -48 30 -28 30 -6 C30 22 10 42 0 58 C-10 42 -30 22 -30 -6 C-30 -28 -18 -48 0 -58 Z" fill="#c9a84c"/>
+      <circle cx="0" cy="-6" r="12" fill="#241d12"/>
+      <path d="M-48 -4 C-44 18 -32 34 -18 46" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round"/>
+      <path d="M48 -4 C44 18 32 34 18 46" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round"/>
+      <path d="M-54 6 C-48 18 -42 28 -32 34" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round"/>
+      <path d="M54 6 C48 18 42 28 32 34" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round"/>
+    </g>
+    
+  </g>
+
+  <g transform="translate(375,220) scale(0.76)"><circle cx="0" cy="-96" r="72" fill="none" stroke="#c9a84c" stroke-width="10" opacity="0.2"/><path d="M-94 30 C-46 0 0 -4 60 14" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" opacity="0.16"/></g>
+  
+        <g transform="translate(375,184) scale(0.7)">
+          <circle cx="0" cy="0" r="56" fill="none" stroke="#c9a84c" stroke-width="10" opacity="0.3"/>
+          <circle cx="0" cy="-6" r="12" fill="#c9a84c" opacity="0.28"/>
+          <path d="M-20 -18 C-6 -46 10 -56 28 -58 C22 -40 18 -24 20 -4" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round" opacity="0.38"/>
+        </g>
+        
+  <g transform="translate(375,320) scale(0.68)">
+          <path d="M-86 -18 C-46 -36 -2 -36 44 -10" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" opacity="0.64"/>
+          <circle cx="58" cy="-84" r="14" fill="#c9a84c" opacity="0.82"/>
+          <path d="M44 -100 C58 -118 74 -122 92 -116" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" opacity="0.58"/>
+        </g>
+  
+        <g transform="translate(375,248) scale(0.62)">
+          <path d="M0 -132 C22 -126 34 -110 34 -88 C34 -66 18 -48 0 -38 C-18 -48 -34 -66 -34 -88 C-34 -110 -22 -126 0 -132 Z" fill="#c9a84c" opacity="0.38"/>
+          <path d="M0 -92 L28 -32 L42 106 L-42 106 L-28 -32 Z" fill="#241d12"/>
+          <circle cx="54" cy="-78" r="16" fill="#c9a84c" opacity="0.72"/>
+          <path d="M-54 -10 C-30 -24 -10 -30 14 -28 C36 -26 54 -18 70 -4" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round"/>
+        </g>
+        
+
+  <line x1="92" y1="392" x2="658" y2="392" stroke="#ece2cb" stroke-width="4"/>
+  <rect x="56" y="410" width="638" height="334" rx="24" fill="#ece2cb" opacity="0.72"/>
+  <text x="375" y="553" text-anchor="middle" font-size="58" font-weight="600" fill="#241d12" opacity="0.9">Cancel one non-crown</text>
+<text x="375" y="617" text-anchor="middle" font-size="58" font-weight="600" fill="#241d12" opacity="0.9">attack (standalone).</text>
+
+  <line x1="92" y1="760" x2="658" y2="760" stroke="#ece2cb" stroke-width="4"/>
+  <text x="375" y="878" text-anchor="middle" font-size="116" font-weight="700" fill="#241d12">Athena</text>
+  <text x="375" y="974" text-anchor="middle" font-size="68" font-weight="700" fill="#c9a84c" letter-spacing="4">HERO</text>
+</svg>

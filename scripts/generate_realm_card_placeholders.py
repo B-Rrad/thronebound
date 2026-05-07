@@ -4,6 +4,7 @@ import json
 from html import escape
 from pathlib import Path
 import re
+from PIL import Image, ImageDraw, ImageFont
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -12,11 +13,29 @@ OUTPUT_DIR = PROJECT_ROOT / "output" / "card_placeholders" / "realm"
 
 CARD_W = 750
 CARD_H = 1050
+REALM_TITLE_MAX_WIDTH = 610
+REALM_TITLE_BASE_SIZE = 116
 
 
 def load_json(path: Path) -> dict:
     with path.open("r", encoding="utf-8") as file:
         return json.load(file)
+
+
+def realm_title_font_size(title: str) -> int:
+    try:
+        font = ImageFont.truetype(r"C:\Windows\Fonts\timesbd.ttf", REALM_TITLE_BASE_SIZE)
+    except OSError:
+        return REALM_TITLE_BASE_SIZE
+
+    draw = ImageDraw.Draw(Image.new("RGB", (2000, 400)))
+    bbox = draw.textbbox((0, 0), title, font=font)
+    width = bbox[2] - bbox[0]
+    if width <= REALM_TITLE_MAX_WIDTH:
+        return REALM_TITLE_BASE_SIZE
+
+    scale = REALM_TITLE_MAX_WIDTH / max(1, width)
+    return max(76, int(REALM_TITLE_BASE_SIZE * scale))
 
 
 def palette_for_dominion(entry: dict) -> dict[str, str]:
@@ -153,6 +172,10 @@ def art_slug(card: dict) -> str:
     return "scout"
 
 
+def card_text(card: dict) -> str:
+    return f"{card['rank_title']} {card['art_brief']}".lower()
+
+
 def backdrop_svg(dominion_id: str, card: dict, palette: dict[str, str]) -> str:
     art_type = art_slug(card)
     if dominion_id == "verdant_court":
@@ -199,6 +222,103 @@ def backdrop_svg(dominion_id: str, card: dict, palette: dict[str, str]) -> str:
       <path d="M510 588 L456 428 L424 618 Z" fill="{palette["panel"]}" opacity="0.22"/>
     </g>
     """
+
+
+def motif_svg(dominion_id: str, card: dict, x: int, y: int, scale: float, color: str, accent: str) -> str:
+    text = card_text(card)
+    motifs: list[str] = []
+
+    if dominion_id == "verdant_court":
+        if any(word in text for word in ("staff", "sage", "oracle", "initiate")):
+            motifs.append(f'<path d="M12 -154 L12 112" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>')
+        if "bow" in text:
+            motifs.append(f'<path d="M-82 -62 C-112 -8 -112 48 -82 106" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>')
+            motifs.append(f'<path d="M-82 -62 C-56 -2 -56 46 -82 106" fill="none" stroke="{accent}" stroke-width="4" stroke-linecap="round" opacity="0.65"/>')
+        if any(word in text for word in ("antler", "hart", "stag")):
+            motifs.append(f'<path d="M-32 -138 C-52 -164 -74 -182 -100 -192 M32 -138 C52 -164 74 -182 100 -192" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round"/>')
+        if any(word in text for word in ("ruin", "standing stones", "stone")):
+            motifs.append(f'<path d="M-132 102 L-118 -84 M132 102 L118 -84" fill="none" stroke="{color}" stroke-width="14" stroke-linecap="round" opacity="0.28"/>')
+        if any(word in text for word in ("moon", "oracle")):
+            motifs.append(f'<path d="M78 -124 C98 -124 114 -108 114 -88 C114 -64 92 -46 70 -52 C82 -60 90 -72 90 -88 C90 -102 84 -114 72 -122 C74 -123 76 -124 78 -124 Z" fill="{accent}" opacity="0.62"/>')
+
+    elif dominion_id == "ember_throne":
+        if any(word in text for word in ("spear", "champion", "knight")):
+            motifs.append(f'<path d="M42 -156 L96 126" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>')
+            motifs.append(f'<path d="M32 -154 L54 -188 L68 -150 Z" fill="{accent}" opacity="0.84"/>')
+        if any(word in text for word in ("dragon", "wyrm", "draconic")):
+            motifs.append(f'<path d="M-112 -36 C-72 -82 -24 -104 32 -104 C70 -104 106 -90 132 -62" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round" opacity="0.74"/>')
+        if any(word in text for word in ("citadel", "gates", "throne", "sovereign")):
+            motifs.append(f'<path d="M-128 108 L-92 -18 L-52 108 M52 108 L92 -18 L128 108" fill="none" stroke="{color}" stroke-width="14" stroke-linecap="round" opacity="0.26"/>')
+        if any(word in text for word in ("flame", "fire", "cinders", "ash")):
+            motifs.append(f'<path d="M-66 88 C-50 56 -40 30 -40 6 C-24 30 -18 56 -24 86 M74 86 C86 60 88 32 76 2 C64 30 58 58 62 86" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.72"/>')
+
+    elif dominion_id == "tidewake_dominion":
+        if any(word in text for word in ("trident", "reef guard", "wave champion")):
+            motifs.append(f'<path d="M44 -150 L44 110 M44 -150 L18 -112 M44 -150 L70 -112" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>')
+        if "shell" in text:
+            motifs.append(f'<path d="M-108 22 C-84 -20 -46 -34 -8 -18 C18 -8 32 10 36 36 C22 24 6 18 -10 18 C-34 18 -54 28 -72 46 C-80 40 -90 32 -108 22 Z" fill="{accent}" opacity="0.28"/>')
+        if any(word in text for word in ("coral", "palace", "arches")):
+            motifs.append(f'<path d="M-124 108 C-116 66 -108 34 -88 6 M124 108 C116 66 108 34 88 6" fill="none" stroke="{color}" stroke-width="12" stroke-linecap="round" opacity="0.26"/>')
+        if any(word in text for word in ("storm", "current", "tide", "leviathan")):
+            motifs.append(f'<path d="M-120 74 C-70 42 -18 36 44 52 C80 62 110 60 130 50" fill="none" stroke="{accent}" stroke-width="9" stroke-linecap="round" opacity="0.8"/>')
+
+    else:
+        if any(word in text for word in ("shard", "sepulcher", "guard")):
+            motifs.append(f'<path d="M-100 114 L-62 -74 M100 114 L62 -74" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round" opacity="0.72"/>')
+        if any(word in text for word in ("eclipse", "oracle", "revenant")):
+            motifs.append(f'<circle cx="0" cy="-112" r="54" fill="none" stroke="{accent}" stroke-width="10" opacity="0.72"/><circle cx="14" cy="-112" r="32" fill="{accent}" opacity="0.22"/>')
+        if any(word in text for word in ("scythe", "knight", "champion")):
+            motifs.append(f'<path d="M56 -138 L38 104" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/><path d="M56 -138 C94 -132 120 -104 126 -70 C106 -80 82 -80 62 -68" fill="{accent}" opacity="0.34"/>')
+        if any(word in text for word in ("procession", "standards", "sovereign", "crown")):
+            motifs.append(f'<path d="M-24 -154 L0 -182 L24 -154" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round"/>')
+
+    if not motifs:
+        return ""
+
+    return f'<g transform="translate({x},{y}) scale({scale})">{"".join(motifs)}</g>'
+
+
+def signature_prop_svg(card: dict, dominion_id: str, x: int, y: int, scale: float, color: str, accent: str) -> str:
+    card_id = card["id"]
+    props = {
+        "verdant_court_6": f'<path d="M28 -150 L28 110" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/><path d="M-108 100 L-92 -58 M108 100 L92 -58" fill="none" stroke="{color}" stroke-width="12" stroke-linecap="round" opacity="0.22"/>',
+        "verdant_court_7": f'<path d="M-74 -64 C-104 -6 -104 50 -74 112" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/><path d="M-74 -64 C-48 -2 -48 48 -74 112" fill="none" stroke="{accent}" stroke-width="4" stroke-linecap="round" opacity="0.64"/>',
+        "verdant_court_8": f'<path d="M-116 108 L-116 -22 L-76 -56 M116 108 L116 -22 L76 -56" fill="none" stroke="{color}" stroke-width="12" stroke-linecap="round" opacity="0.26"/>',
+        "verdant_court_9": f'<path d="M-86 -62 C-118 -2 -118 54 -86 114" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/><path d="M78 -124 C98 -124 114 -108 114 -88 C114 -64 92 -46 70 -52 C82 -60 90 -72 90 -88 C90 -102 84 -114 72 -122 C74 -123 76 -124 78 -124 Z" fill="{accent}" opacity="0.6"/>',
+        "verdant_court_10": f'<circle cx="12" cy="-96" r="56" fill="none" stroke="{accent}" stroke-width="8" opacity="0.6"/><path d="M18 -150 L18 110" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>',
+        "verdant_court_jack": f'<path d="M0 -148 L0 104" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/><path d="M-34 -136 C-52 -162 -72 -180 -96 -188 M34 -136 C52 -162 72 -180 96 -188" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round"/>',
+        "verdant_court_queen": f'<path d="M-86 -10 C-38 -46 6 -48 48 -18" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.62"/><circle cx="72" cy="-98" r="34" fill="none" stroke="{accent}" stroke-width="8" opacity="0.46"/>',
+        "verdant_court_king": f'<path d="M-96 98 L-54 40 L0 40 L54 40 L96 98" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round" opacity="0.4"/><path d="M-24 -146 L0 -174 L24 -146" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round"/>',
+        "verdant_court_ace": f'<path d="M-8 -76 C-34 -122 -66 -150 -104 -168 M16 -72 C48 -122 82 -148 124 -162" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.84"/>',
+        "ember_throne_6": f'<path d="M32 -128 L72 52" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/><path d="M92 76 C106 52 108 26 96 -4" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.62"/>',
+        "ember_throne_7": f'<path d="M30 -148 L78 112" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/><path d="M24 -144 L46 -180 L60 -144 Z" fill="{accent}" opacity="0.74"/>',
+        "ember_throne_8": f'<path d="M-112 108 L-88 -28 L-44 108 M112 108 L88 -28 L44 108" fill="none" stroke="{color}" stroke-width="12" stroke-linecap="round" opacity="0.24"/>',
+        "ember_throne_9": f'<path d="M36 -152 L88 118" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/><path d="M-86 -98 C-42 -128 2 -134 50 -114" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.56"/>',
+        "ember_throne_10": f'<circle cx="18" cy="-78" r="44" fill="none" stroke="{accent}" stroke-width="8" opacity="0.52"/><path d="M18 -150 L18 112" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>',
+        "ember_throne_jack": f'<path d="M28 -150 L88 120" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/><path d="M-102 -16 C-62 -62 -10 -84 46 -74" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.58"/>',
+        "ember_throne_queen": f'<circle cx="14" cy="-94" r="52" fill="none" stroke="{accent}" stroke-width="8" opacity="0.54"/><path d="M-74 90 C-50 54 -40 28 -42 4" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.58"/>',
+        "ember_throne_king": f'<path d="M-92 94 L-52 30 L0 30 L52 30 L92 94" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round" opacity="0.4"/><path d="M-28 -142 L0 -176 L28 -142" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round"/>',
+        "ember_throne_ace": f'<path d="M-114 -28 C-62 -86 8 -112 90 -94" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round" opacity="0.74"/><path d="M26 -112 L60 -148 L82 -114" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round"/>',
+        "tidewake_dominion_6": f'<path d="M-92 18 C-68 -24 -28 -36 8 -14 C28 -2 42 18 44 44" fill="{accent}" opacity="0.24"/><path d="M72 78 C88 66 102 50 112 30" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.58"/>',
+        "tidewake_dominion_7": f'<path d="M44 -34 C76 -22 96 0 106 32" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.58"/><path d="M-98 68 C-44 32 12 28 76 42" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.48"/>',
+        "tidewake_dominion_8": f'<path d="M44 -148 L44 110 M44 -148 L18 -108 M44 -148 L70 -108" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/><path d="M-104 96 C-74 46 -56 12 -46 -8" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.22"/>',
+        "tidewake_dominion_9": f'<path d="M54 -152 L54 108 M54 -152 L24 -114 M54 -152 L84 -114" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/><path d="M-110 76 C-46 26 24 20 98 44" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.56"/>',
+        "tidewake_dominion_10": f'<circle cx="16" cy="-92" r="54" fill="none" stroke="{accent}" stroke-width="8" opacity="0.56"/><path d="M-102 68 C-44 42 14 44 82 66" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.5"/>',
+        "tidewake_dominion_jack": f'<path d="M-112 58 C-40 2 26 -6 110 22" fill="none" stroke="{accent}" stroke-width="9" stroke-linecap="round" opacity="0.62"/><path d="M56 -144 L56 102 M56 -144 L30 -106 M56 -144 L82 -106" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>',
+        "tidewake_dominion_queen": f'<path d="M-92 12 C-66 -30 -28 -40 10 -18 C34 -4 48 18 50 42" fill="{accent}" opacity="0.24"/><circle cx="72" cy="-92" r="30" fill="none" stroke="{accent}" stroke-width="8" opacity="0.48"/>',
+        "tidewake_dominion_king": f'<path d="M-92 98 L-52 34 L0 34 L52 34 L92 98" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round" opacity="0.38"/><path d="M-112 78 C-42 32 22 28 96 48" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.5"/>',
+        "tidewake_dominion_ace": f'<path d="M-120 32 C-72 -28 -8 -56 66 -42 C94 -36 116 -28 132 -14" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round" opacity="0.72"/><circle cx="84" cy="-32" r="8" fill="{accent}" opacity="0.72"/>',
+        "obsidian_veil_6": f'<path d="M18 -148 L18 112" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/><path d="M-106 102 L-80 -48 M106 102 L80 -48" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.24"/>',
+        "obsidian_veil_7": f'<path d="M-86 -122 L-86 92" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round" opacity="0.62"/><path d="M-86 -122 L-42 -94" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round"/><circle cx="54" cy="-94" r="38" fill="none" stroke="{accent}" stroke-width="8" opacity="0.46"/>',
+        "obsidian_veil_8": f'<path d="M-104 106 L-68 -82 M104 106 L68 -82" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round" opacity="0.62"/><path d="M-34 26 L34 26" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.42"/>',
+        "obsidian_veil_9": f'<path d="M58 -152 L40 104" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/><path d="M58 -152 C98 -146 124 -118 128 -82 C106 -90 82 -90 62 -78" fill="{accent}" opacity="0.28"/>',
+        "obsidian_veil_10": f'<circle cx="8" cy="-104" r="58" fill="none" stroke="{accent}" stroke-width="8" opacity="0.56"/><circle cx="24" cy="-104" r="34" fill="{accent}" opacity="0.18"/><path d="M-90 100 L-28 54 L28 54 L90 100" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.22"/>',
+        "obsidian_veil_jack": f'<path d="M-94 -116 L-94 90" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round" opacity="0.62"/><path d="M-94 -116 L-44 -88" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round"/><path d="M-24 -146 L0 -174 L24 -146" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round"/>',
+        "obsidian_veil_queen": f'<circle cx="0" cy="-108" r="56" fill="none" stroke="{accent}" stroke-width="8" opacity="0.58"/><circle cx="16" cy="-108" r="34" fill="{accent}" opacity="0.18"/><path d="M-74 12 C-40 -18 -2 -20 42 0" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.52"/>',
+        "obsidian_veil_king": f'<path d="M-96 98 L-58 30 L0 30 L58 30 L96 98" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round" opacity="0.38"/><path d="M-26 -146 L0 -176 L26 -146" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round"/>',
+        "obsidian_veil_ace": f'<circle cx="0" cy="-108" r="64" fill="none" stroke="{accent}" stroke-width="8" opacity="0.62"/><circle cx="18" cy="-108" r="38" fill="{accent}" opacity="0.18"/><path d="M-110 84 L-66 -24 M110 84 L66 -24" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.5"/>',
+    }
+    return f'<g transform="translate({x},{y}) scale({scale})">{props.get(card_id, "")}</g>'
 
 
 def figure_svg(card: dict, dominion_id: str, x: int, y: int, scale: float, color: str, accent: str) -> str:
@@ -286,10 +406,14 @@ def card_svg(card: dict, dominion_entry: dict, palette: dict[str, str]) -> str:
     rank = escape(str(card["rank_code"]))
     card_name = escape(card["rank_title"])
     dominion_label = escape(dominion_name.upper())
+    dominion_font_size = 54 if dominion_id == "tidewake_dominion" else 68
+    title_font_size = realm_title_font_size(card["rank_title"])
 
     icon_corner = icon_svg(dominion_id, 0, 0, 0.48, palette["primary"], palette["ink"])
     backdrop = backdrop_svg(dominion_id, card, palette)
     figure = figure_svg(card, dominion_id, 375, 450, 1.34, palette["ink"], palette["primary"])
+    motifs = motif_svg(dominion_id, card, 375, 432, 1.0, palette["ink"], palette["primary"])
+    signature = signature_prop_svg(card, dominion_id, 375, 432, 1.0, palette["ink"], palette["primary"])
 
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {CARD_W} {CARD_H}" role="img" aria-labelledby="title desc">
   <title id="title">{escape(card["name"])}</title>
@@ -308,11 +432,13 @@ def card_svg(card: dict, dominion_entry: dict, palette: dict[str, str]) -> str:
     <g transform="translate(24,74)">{icon_corner}</g>
   </g>
   {backdrop}
+  {motifs}
+  {signature}
   {figure}
 
-  <line x1="118" y1="856" x2="632" y2="856" stroke="{palette["panel"]}" stroke-width="4"/>
-  <text x="375" y="904" text-anchor="middle" font-size="42" font-weight="700" fill="{palette["ink"]}">{card_name}</text>
-  <text x="375" y="952" text-anchor="middle" font-size="26" font-weight="700" fill="{palette["primary"]}" letter-spacing="3">{dominion_label}</text>
+  <line x1="96" y1="742" x2="654" y2="742" stroke="{palette["panel"]}" stroke-width="4"/>
+  <text x="375" y="866" text-anchor="middle" font-size="{title_font_size}" font-weight="700" fill="{palette["ink"]}">{card_name}</text>
+  <text x="375" y="976" text-anchor="middle" font-size="{dominion_font_size}" font-weight="700" fill="{palette["primary"]}" letter-spacing="2">{dominion_label}</text>
 </svg>
 """
 

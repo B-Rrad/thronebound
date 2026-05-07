@@ -112,5 +112,5 @@ If you need to regenerate the executable on Windows:
 
 ```powershell
 python -m pip install pyinstaller
-python -m PyInstaller --noconfirm --clean --onefile --windowed --name Ringbound --add-data "data;data" main.py
+python -m PyInstaller --noconfirm --clean --onefile --windowed --name Ringbound --add-data "data;data" --add-data "output;output" main.py
 ```

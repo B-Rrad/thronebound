@@ -1,0 +1,9 @@
+2026/05/07-19:34:55.634 2b98 Reusing MANIFEST C:\Users\bradl\OneDrive\Desktop\ECE348\ringbound\.codex_tmp\edge-profile\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/05/07-19:34:55.635 2b98 Recovering log #111
+2026/05/07-19:34:55.637 2b98 Level-0 table #114: started
+2026/05/07-19:34:55.647 2b98 Level-0 table #114: 682316 bytes OK
+2026/05/07-19:34:55.647 2b98 Recovering log #113
+2026/05/07-19:34:55.648 2b98 Reusing old log C:\Users\bradl\OneDrive\Desktop\ECE348\ringbound\.codex_tmp\edge-profile\Default\EdgeCoupons/coupons_data.db/000113.log 
+2026/05/07-19:34:55.650 2b98 Delete type=0 #111
+2026/05/07-19:34:55.651 6830 Compacting 5@0 + 1@1 files
+2026/05/07-19:34:55.660 6830 compacted to: files[ 5 1 0 0 0 0 0 ]

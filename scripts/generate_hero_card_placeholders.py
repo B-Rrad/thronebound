@@ -5,6 +5,7 @@ import textwrap
 from html import escape
 from pathlib import Path
 import re
+from PIL import Image, ImageDraw, ImageFont
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -18,11 +19,29 @@ DEEP_GOLD = "#8b6d21"
 INK = "#241d12"
 PAPER = "#f6f0e4"
 PANEL = "#ece2cb"
+HERO_NAME_BASE_SIZE = 116
+HERO_NAME_MAX_WIDTH = 540
 
 
 def load_json(path: Path) -> dict:
     with path.open("r", encoding="utf-8") as file:
         return json.load(file)
+
+
+def hero_name_font_size(name: str) -> int:
+    try:
+        font = ImageFont.truetype(r"C:\Windows\Fonts\timesbd.ttf", HERO_NAME_BASE_SIZE)
+    except OSError:
+        return HERO_NAME_BASE_SIZE
+
+    draw = ImageDraw.Draw(Image.new("RGB", (2000, 400)))
+    bbox = draw.textbbox((0, 0), name, font=font)
+    width = bbox[2] - bbox[0]
+    if width <= HERO_NAME_MAX_WIDTH:
+        return HERO_NAME_BASE_SIZE
+
+    scale = HERO_NAME_MAX_WIDTH / max(1, width)
+    return max(42, int(HERO_NAME_BASE_SIZE * scale))
 
 
 def clean_text(text: str) -> str:
@@ -67,35 +86,191 @@ def icon_svg(x: int, y: int, scale: float, color: str, stroke: str) -> str:
     """
 
 
-def emblem_svg(seed: str, x: int, y: int, scale: float, color: str) -> str:
-    index = sum(ord(ch) for ch in seed) % 4
-    if index == 0:
+def hero_emblem_svg(slot: dict, x: int, y: int, scale: float, color: str, stroke: str) -> str:
+    hero_id = slot["legacy_id"]
+    if hero_id == "aragorn":
         return f"""
         <g transform="translate({x},{y}) scale({scale})">
-          <circle cx="0" cy="0" r="60" fill="none" stroke="{color}" stroke-width="10" opacity="0.32"/>
-          <path d="M0 -54 L22 -12 L56 -8 L30 16 L40 52 L0 30 L-40 52 L-30 16 L-56 -8 L-22 -12 Z" fill="{color}" opacity="0.18"/>
+          <path d="M-54 18 C-26 -18 10 -34 54 -26" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.34"/>
+          <path d="M-28 -48 C-54 0 -56 36 -30 84" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.34"/>
+          <path d="M-28 -48 C-4 0 -2 36 -28 84" fill="none" stroke="{stroke}" stroke-width="4" stroke-linecap="round" opacity="0.28"/>
         </g>
         """
-    if index == 1:
+    if hero_id == "legolas":
         return f"""
         <g transform="translate({x},{y}) scale({scale})">
-          <path d="M0 -72 C28 -62 52 -34 56 -4 C60 26 42 52 14 60 L0 72 L-14 60 C-42 52 -60 26 -56 -4 C-52 -34 -28 -62 0 -72 Z" fill="{color}" opacity="0.16"/>
-          <path d="M0 -54 V48 M-34 -10 H34" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.26"/>
+          <circle cx="0" cy="0" r="54" fill="none" stroke="{color}" stroke-width="10" opacity="0.3"/>
+          <path d="M0 -54 V54 M-52 0 H52" fill="none" stroke="{stroke}" stroke-width="8" stroke-linecap="round" opacity="0.24"/>
+          <path d="M-14 -66 L0 -92 L14 -66" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.38"/>
         </g>
         """
-    if index == 2:
+    if hero_id == "gandalf":
         return f"""
         <g transform="translate({x},{y}) scale({scale})">
-          <path d="M-54 30 C-24 -8 8 -22 42 -14 C58 -10 70 -16 82 -32 C82 8 58 46 18 62 C-14 74 -42 66 -66 48 C-60 48 -56 42 -54 30 Z" fill="{color}" opacity="0.18"/>
-          <path d="M-36 30 C-10 46 16 46 50 26" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.3"/>
+          <circle cx="0" cy="0" r="56" fill="none" stroke="{color}" stroke-width="10" opacity="0.3"/>
+          <circle cx="0" cy="-6" r="12" fill="{color}" opacity="0.28"/>
+          <path d="M-20 -18 C-6 -46 10 -56 28 -58 C22 -40 18 -24 20 -4" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.38"/>
+        </g>
+        """
+    if hero_id == "galadriel":
+        return f"""
+        <g transform="translate({x},{y}) scale({scale})">
+          <path d="M0 -60 V56" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.34"/>
+          <path d="M0 -60 L-24 -24 M0 -60 L24 -24" fill="none" stroke="{color}" stroke-width="9" stroke-linecap="round" opacity="0.34"/>
+          <path d="M0 -18 C18 -8 26 10 22 30 C18 48 4 62 -14 66 C-2 50 2 32 -2 12 C-6 -2 -14 -12 -24 -18" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.38"/>
+        </g>
+        """
+    if hero_id == "frodo":
+        return f"""
+        <g transform="translate({x},{y}) scale({scale})">
+          <path d="M-38 6 C-18 -28 8 -40 36 -34" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.34"/>
+          <path d="M-34 0 C-8 18 18 18 42 0" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.3"/>
+          <path d="M-10 58 L8 24 L30 58" fill="none" stroke="{stroke}" stroke-width="8" stroke-linecap="round" opacity="0.22"/>
+        </g>
+        """
+    if hero_id == "boromir":
+        return f"""
+        <g transform="translate({x},{y}) scale({scale})">
+          <circle cx="-12" cy="6" r="44" fill="none" stroke="{color}" stroke-width="10" opacity="0.34"/>
+          <path d="M16 -48 L54 52" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.34"/>
+          <path d="M10 -44 L30 -74 L42 -40" fill="{color}" opacity="0.18"/>
+        </g>
+        """
+    if hero_id == "nazgul":
+        return f"""
+        <g transform="translate({x},{y}) scale({scale})">
+          <circle cx="0" cy="0" r="54" fill="none" stroke="{color}" stroke-width="10" opacity="0.3"/>
+          <path d="M0 -58 V56 M0 -58 L-22 -24 M0 -58 L22 -24" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.34"/>
+        </g>
+        """
+    if hero_id == "saruman":
+        return f"""
+        <g transform="translate({x},{y}) scale({scale})">
+          <path d="M-18 54 C-44 18 -40 -26 -8 -54 C12 -38 24 -18 28 8 C32 34 24 52 6 68" fill="{color}" opacity="0.14"/>
+          <path d="M-8 -42 C10 -62 28 -60 46 -44" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.38"/>
+          <path d="M-28 22 C0 8 24 8 46 22" fill="none" stroke="{stroke}" stroke-width="8" stroke-linecap="round" opacity="0.24"/>
+        </g>
+        """
+    if hero_id == "sauron":
+        return f"""
+        <g transform="translate({x},{y}) scale({scale})">
+          <circle cx="0" cy="0" r="56" fill="none" stroke="{color}" stroke-width="10" opacity="0.3"/>
+          <circle cx="-24" cy="-2" r="7" fill="{color}" opacity="0.34"/>
+          <circle cx="0" cy="-22" r="7" fill="{color}" opacity="0.34"/>
+          <circle cx="24" cy="-2" r="7" fill="{color}" opacity="0.34"/>
+          <circle cx="-16" cy="20" r="7" fill="{color}" opacity="0.34"/>
+          <circle cx="16" cy="20" r="7" fill="{color}" opacity="0.34"/>
+        </g>
+        """
+    if hero_id == "balrog":
+        return f"""
+        <g transform="translate({x},{y}) scale({scale})">
+          <path d="M0 -60 L26 -24 L0 58 L-26 -24 Z" fill="{color}" opacity="0.16"/>
+          <path d="M-26 -30 L-60 -54 M26 -30 L60 -54" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.34"/>
+        </g>
+        """
+    if hero_id == "gollum":
+        return f"""
+        <g transform="translate({x},{y}) scale({scale})">
+          <path d="M-44 -8 C-28 -34 -2 -42 22 -34 C36 -30 48 -18 52 -2 C34 6 20 18 8 36 C-6 28 -26 14 -44 -8 Z" fill="{color}" opacity="0.16"/>
+          <path d="M10 -48 L32 -70 L42 -44" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.36"/>
         </g>
         """
     return f"""
     <g transform="translate({x},{y}) scale({scale})">
-      <path d="M0 -64 L46 -10 L18 56 L-18 56 L-46 -10 Z" fill="{color}" opacity="0.14"/>
-      <circle cx="0" cy="0" r="60" fill="none" stroke="{color}" stroke-width="10" opacity="0.26"/>
+      <path d="M0 -54 C14 -42 24 -20 24 0 C24 24 10 44 -10 56 C-4 34 -10 14 -30 -2 C-18 -2 -8 -6 0 -14 C8 -22 12 -34 10 -46 Z" fill="{color}" opacity="0.18"/>
+      <path d="M-34 20 H34" fill="none" stroke="{stroke}" stroke-width="8" stroke-linecap="round" opacity="0.22"/>
     </g>
     """
+
+
+def hero_backdrop_svg(slot: dict, x: int, y: int, scale: float, color: str) -> str:
+    hero_id = slot["legacy_id"]
+    backdrops = {
+        "aragorn": f'<path d="M-122 42 C-70 -18 -10 -40 66 -30 C90 -26 110 -20 126 -8" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.22"/><path d="M-112 84 C-62 56 -12 50 46 64" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.18"/>',
+        "legolas": f'<circle cx="22" cy="-104" r="54" fill="none" stroke="{color}" stroke-width="10" opacity="0.24"/><path d="M-90 18 L108 18" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.14"/>',
+        "gandalf": f'<circle cx="0" cy="-96" r="72" fill="none" stroke="{color}" stroke-width="10" opacity="0.2"/><path d="M-94 30 C-46 0 0 -4 60 14" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.16"/>',
+        "galadriel": f'<path d="M-78 -112 L-78 66 M78 -112 L78 66" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.16"/><path d="M-78 -112 Q0 -146 78 -112" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.18"/>',
+        "frodo": f'<path d="M-104 18 C-60 -18 -20 -22 18 4 C42 20 64 20 92 4" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.18"/><path d="M0 -86 L0 82 M-36 -18 H36" fill="none" stroke="{color}" stroke-width="7" stroke-linecap="round" opacity="0.14"/>',
+        "boromir": f'<circle cx="-8" cy="2" r="92" fill="none" stroke="{color}" stroke-width="10" opacity="0.18"/>',
+        "nazgul": f'<circle cx="0" cy="-90" r="78" fill="none" stroke="{color}" stroke-width="10" opacity="0.18"/><path d="M-118 92 L-72 -28 M118 92 L72 -28" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.14"/>',
+        "saruman": f'<path d="M-84 -100 C-32 -142 26 -136 86 -90" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.18"/><circle cx="56" cy="-32" r="32" fill="none" stroke="{color}" stroke-width="8" opacity="0.16"/>',
+        "sauron": f'<circle cx="0" cy="-94" r="84" fill="none" stroke="{color}" stroke-width="10" opacity="0.2"/><circle cx="-50" cy="-94" r="10" fill="{color}" opacity="0.14"/><circle cx="50" cy="-94" r="10" fill="{color}" opacity="0.14"/>',
+        "balrog": f'<path d="M-94 -72 L-24 -116 M94 -72 L24 -116" fill="none" stroke="{color}" stroke-width="10" stroke-linecap="round" opacity="0.18"/><path d="M-120 80 C-54 36 16 34 90 56" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.16"/>',
+        "gollum": f'<path d="M-118 48 C-78 6 -28 -10 28 0 C54 4 82 -4 114 -22" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.18"/>',
+        "wormtongue": f'<circle cx="0" cy="-46" r="66" fill="none" stroke="{color}" stroke-width="10" opacity="0.16"/><path d="M-42 -46 H42" fill="none" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity="0.14"/>',
+    }
+    return f'<g transform="translate({x},{y}) scale({scale})">{backdrops.get(hero_id, "")}</g>'
+
+
+def hero_prop_svg(slot: dict, x: int, y: int, scale: float, color: str, accent: str) -> str:
+    hero_id = slot["legacy_id"]
+    props = {
+        "aragorn": f"""
+          <path d="M38 -118 L90 108" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>
+          <path d="M34 -120 L58 -154 L72 -118 Z" fill="{accent}" opacity="0.76"/>
+          <path d="M-96 18 C-56 -26 -12 -40 40 -32" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
+        """,
+        "legolas": f"""
+          <circle cx="-22" cy="-2" r="40" fill="none" stroke="{accent}" stroke-width="8" opacity="0.58"/>
+          <path d="M18 -96 L84 112" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>
+          <path d="M10 -92 L34 -124 L48 -92 Z" fill="{accent}" opacity="0.8"/>
+        """,
+        "gandalf": f"""
+          <path d="M-86 -18 C-46 -36 -2 -36 44 -10" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.64"/>
+          <circle cx="58" cy="-84" r="14" fill="{accent}" opacity="0.82"/>
+          <path d="M44 -100 C58 -118 74 -122 92 -116" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.58"/>
+        """,
+        "galadriel": f"""
+          <path d="M44 -118 L44 88" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>
+          <path d="M44 -118 L18 -80 M44 -118 L70 -80" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round"/>
+          <path d="M48 -44 C72 -18 78 14 66 44" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.62"/>
+        """,
+        "frodo": f"""
+          <path d="M-34 88 C-14 56 8 34 32 22" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.62"/>
+          <path d="M-68 -4 C-34 -26 0 -30 38 -16" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.58"/>
+          <path d="M10 -112 L42 -86" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.54"/>
+        """,
+        "boromir": f"""
+          <circle cx="-50" cy="8" r="50" fill="none" stroke="{accent}" stroke-width="8" opacity="0.56"/>
+          <path d="M22 -86 L76 106" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>
+          <path d="M16 -84 L38 -118 L52 -82 Z" fill="{accent}" opacity="0.74"/>
+        """,
+        "nazgul": f"""
+          <path d="M10 -126 L10 92" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>
+          <path d="M10 -126 L-18 -86 M10 -126 L38 -86" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round"/>
+          <path d="M-12 -148 L8 -172 L28 -148" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.72"/>
+        """,
+        "saruman": f"""
+          <path d="M46 -98 C72 -74 84 -42 80 -4" fill="{accent}" opacity="0.24"/>
+          <path d="M-26 -6 C-2 -20 22 -20 48 -8" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.62"/>
+          <circle cx="52" cy="-34" r="18" fill="none" stroke="{accent}" stroke-width="8" opacity="0.54"/>
+        """,
+        "sauron": f"""
+          <circle cx="0" cy="-118" r="52" fill="none" stroke="{accent}" stroke-width="8" opacity="0.62"/>
+          <circle cx="-28" cy="-116" r="6" fill="{accent}" opacity="0.72"/>
+          <circle cx="0" cy="-132" r="6" fill="{accent}" opacity="0.72"/>
+          <circle cx="28" cy="-116" r="6" fill="{accent}" opacity="0.72"/>
+          <circle cx="-18" cy="-94" r="6" fill="{accent}" opacity="0.72"/>
+          <circle cx="18" cy="-94" r="6" fill="{accent}" opacity="0.72"/>
+        """,
+        "balrog": f"""
+          <path d="M20 -100 L88 110" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>
+          <path d="M14 -96 L40 -134 L54 -96 Z" fill="{accent}" opacity="0.8"/>
+          <path d="M-34 -120 L-88 -158 M34 -120 L88 -158" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.62"/>
+        """,
+        "gollum": f"""
+          <path d="M34 -104 L62 -128 L56 -94" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.72"/>
+          <path d="M-48 -6 C-20 16 6 18 34 8" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.58"/>
+          <path d="M12 -54 C30 -44 42 -28 48 -8" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.58"/>
+        """,
+        "wormtongue": f"""
+          <path d="M40 -98 C66 -74 80 -42 80 -2" fill="{accent}" opacity="0.22"/>
+          <path d="M-28 6 C0 -10 26 -10 54 0" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.58"/>
+          <path d="M-26 -44 H26" fill="none" stroke="{accent}" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
+        """,
+    }
+    return f'<g transform="translate({x},{y}) scale({scale})">{props.get(hero_id, "")}</g>'
 
 
 def portrait_svg(hero_id: str, x: int, y: int, scale: float, color: str, accent: str) -> str:
@@ -222,21 +397,31 @@ def resolve_preview_name(slot: dict) -> str:
     return slot["legacy_id"].replace("_", " ").title()
 
 
+def hero_art_scale_adjustment(legacy_id: str) -> float:
+    if legacy_id in {"aragorn", "legolas", "boromir", "balrog"}:
+        return 0.85
+    return 1.0
+
+
 def hero_svg(slot: dict, hero_card: dict) -> str:
     hero_name = escape(resolve_preview_name(slot))
-    power_lines = [escape(line) for line in wrap_lines(hero_card["power"], width=34, limit=5)]
-    line_height = 34
-    text_box_y = 676
-    text_box_h = 188
-    baseline_offset = 22
+    hero_name_size = hero_name_font_size(resolve_preview_name(slot))
+    power_lines = [escape(line) for line in wrap_lines(hero_card["power"], width=20, limit=5)]
+    line_height = 64
+    text_box_y = 410
+    text_box_h = 334
+    baseline_offset = 40
     first_line_y = text_box_y + ((text_box_h - len(power_lines) * line_height) // 2) + baseline_offset
     power_svg = "\n".join(
-        f'<text x="375" y="{first_line_y + idx * line_height}" text-anchor="middle" font-size="29" font-weight="600" fill="{INK}" opacity="0.9">{line}</text>'
+        f'<text x="375" y="{first_line_y + idx * line_height}" text-anchor="middle" font-size="58" font-weight="600" fill="{INK}" opacity="0.9">{line}</text>'
         for idx, line in enumerate(power_lines)
     )
     icon = icon_svg(0, 0, 0.62, PRIMARY_GOLD, INK)
-    emblem = emblem_svg(slot["legacy_id"], 375, 254, 1.42, PRIMARY_GOLD)
-    silhouette = portrait_svg(slot["legacy_id"], 375, 400, 1.28, INK, PRIMARY_GOLD)
+    art_scale = hero_art_scale_adjustment(slot["legacy_id"])
+    backdrop = hero_backdrop_svg(slot, 375, 220, 0.76 * art_scale, PRIMARY_GOLD)
+    emblem = hero_emblem_svg(slot, 375, 184, 0.70 * art_scale, PRIMARY_GOLD, INK)
+    props = hero_prop_svg(slot, 375, 320, 0.68 * art_scale, INK, PRIMARY_GOLD)
+    silhouette = portrait_svg(slot["legacy_id"], 375, 248, 0.62 * art_scale, INK, PRIMARY_GOLD)
 
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {CARD_W} {CARD_H}" role="img" aria-labelledby="title desc">
   <title id="title">{hero_name}</title>
@@ -254,16 +439,18 @@ def hero_svg(slot: dict, hero_card: dict) -> str:
     {icon}
   </g>
 
+  {backdrop}
   {emblem}
+  {props}
   {silhouette}
 
-  <line x1="118" y1="658" x2="632" y2="658" stroke="{PANEL}" stroke-width="4"/>
-  <rect x="92" y="676" width="566" height="188" rx="22" fill="{PANEL}" opacity="0.72"/>
+  <line x1="92" y1="392" x2="658" y2="392" stroke="{PANEL}" stroke-width="4"/>
+  <rect x="56" y="410" width="638" height="334" rx="24" fill="{PANEL}" opacity="0.72"/>
   {power_svg}
 
-  <line x1="118" y1="892" x2="632" y2="892" stroke="{PANEL}" stroke-width="4"/>
-  <text x="375" y="944" text-anchor="middle" font-size="42" font-weight="700" fill="{INK}">{hero_name}</text>
-  <text x="375" y="980" text-anchor="middle" font-size="22" font-weight="700" fill="{PRIMARY_GOLD}" letter-spacing="4">HERO</text>
+  <line x1="92" y1="760" x2="658" y2="760" stroke="{PANEL}" stroke-width="4"/>
+  <text x="375" y="878" text-anchor="middle" font-size="{hero_name_size}" font-weight="700" fill="{INK}">{hero_name}</text>
+  <text x="375" y="974" text-anchor="middle" font-size="68" font-weight="700" fill="{PRIMARY_GOLD}" letter-spacing="4">HERO</text>
 </svg>
 """
 
@@ -366,7 +553,7 @@ def main() -> None:
     for slot in spec_data["hero_slots"]:
         hero_card = heroes_by_id[slot["legacy_id"]]
         preview_name = resolve_preview_name(slot)
-        svg_name = f"{slot['legacy_id']}.svg"
+        svg_name = slot["image"].replace(".png", ".svg")
         out_path = OUTPUT_DIR / svg_name
         out_path.write_text(hero_svg(slot, hero_card), encoding="utf-8")
         gallery_cards.append(

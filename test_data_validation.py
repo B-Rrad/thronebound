@@ -1,5 +1,6 @@
 import os
 import unittest
+from pathlib import Path
 
 from resource_manager import discover_music_tracks, load_cards
 
@@ -69,6 +70,18 @@ class CardDataValidationTests(unittest.TestCase):
         self.assertTrue(os.path.isfile(os.path.join(PROJECT_ROOT, "background.jpg")))
         self.assertTrue(os.path.isfile(os.path.join(PROJECT_ROOT, "release", "Ringbound.exe")))
         self.assertGreaterEqual(len(discover_music_tracks(PROJECT_ROOT)), 1)
+
+    def test_generated_card_art_exists_for_runtime_ui(self):
+        hero_dir = Path(PROJECT_ROOT) / "output" / "card_placeholders" / "heroes"
+        realm_dir = Path(PROJECT_ROOT) / "output" / "card_placeholders" / "realm"
+
+        for card in self.hero_cards:
+            svg_name = Path(card["image"]).with_suffix(".svg").name
+            self.assertTrue((hero_dir / svg_name).is_file(), svg_name)
+
+        for card in self.realm_cards:
+            svg_name = Path(card["image"]).with_suffix(".svg").name
+            self.assertTrue((realm_dir / svg_name).is_file(), svg_name)
 
 
 if __name__ == "__main__":

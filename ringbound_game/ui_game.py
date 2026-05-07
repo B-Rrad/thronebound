@@ -34,7 +34,7 @@ class RingboundGame(
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.RESIZABLE)
-        pygame.display.set_caption("Ringbound: Battle for the One Ring")
+        pygame.display.set_caption("Thronebound: Battle for the Throne")
         self.clock = pygame.time.Clock()
 
         if hasattr(sys, "_MEIPASS"):

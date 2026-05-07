@@ -31,6 +31,8 @@
           <path d="M292 338 Q375 296 458 338" fill="none" stroke="#e4ead7" stroke-width="16" stroke-linecap="round" opacity="0.52"/>
         </g>
         
+  <g transform="translate(375,432) scale(1.0)"><path d="M-132 102 L-118 -84 M132 102 L118 -84" fill="none" stroke="#2d3a2e" stroke-width="14" stroke-linecap="round" opacity="0.28"/></g>
+  <g transform="translate(375,432) scale(1.0)"><path d="M-96 98 L-54 40 L0 40 L54 40 L96 98" fill="none" stroke="#9CAF88" stroke-width="10" stroke-linecap="round" opacity="0.4"/><path d="M-24 -146 L0 -174 L24 -146" fill="none" stroke="#9CAF88" stroke-width="8" stroke-linecap="round"/></g>
   
         <g transform="translate(375,450) scale(1.34)">
           <path d="M0 -138 L28 -102 L46 10 L62 104 L-62 104 L-46 10 L-28 -102 Z" fill="#2d3a2e"/>
@@ -40,7 +42,7 @@
         </g>
         
 
-  <line x1="118" y1="856" x2="632" y2="856" stroke="#e4ead7" stroke-width="4"/>
-  <text x="375" y="904" text-anchor="middle" font-size="42" font-weight="700" fill="#2d3a2e">Thorn Sovereign</text>
-  <text x="375" y="952" text-anchor="middle" font-size="26" font-weight="700" fill="#9CAF88" letter-spacing="3">VERDANT COURT</text>
+  <line x1="96" y1="742" x2="654" y2="742" stroke="#e4ead7" stroke-width="4"/>
+  <text x="375" y="866" text-anchor="middle" font-size="84" font-weight="700" fill="#2d3a2e">Thorn Sovereign</text>
+  <text x="375" y="976" text-anchor="middle" font-size="68" font-weight="700" fill="#9CAF88" letter-spacing="2">VERDANT COURT</text>
 </svg>

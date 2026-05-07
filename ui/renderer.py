@@ -28,12 +28,12 @@ class Renderer:
         self._phase_flash_until = 0
         self._last_wounds: dict[str, int] = {"P1": 0, "P2": 0}
         self._wound_flash_until: dict[str, int] = {"P1": 0, "P2": 0}
-        self._hover_card: Any | None = None
-        self._hover_hint: str = ""
+        self._hover_draw_request: dict[str, Any] | None = None
 
     def draw(self, screen: pygame.Surface, game: Any, input_handler: InputHandler) -> list[HitTarget]:
         now = pygame.time.get_ticks()
         targets: list[HitTarget] = []
+        self._hover_draw_request = None
 
         self._draw_background(screen)
 
@@ -47,9 +47,10 @@ class Renderer:
         else:
             self._draw_game_over(screen, game, targets)
 
+        self._draw_hovered_card(screen)
+        self._append_hovered_hit_target(targets)
         if input_handler.pause_confirm:
             self._draw_pause_confirm(screen, targets, input_handler)
-
         self._draw_custom_cursor(screen, input_handler)
         return targets
 
@@ -129,11 +130,13 @@ class Renderer:
 
     def _draw_splash(self, screen: pygame.Surface, targets: list[HitTarget]) -> None:
         center = self.layout.rects["screen"].center
-        title = self.layout.fonts["title"].render("RINGBOUND", True, self.theme.accent_gold)
+        title = self.layout.fonts["title"].render("THRONEBOUND", True, self.theme.accent_gold)
+        subtitle = self.layout.fonts["phase"].render("Battle for the Throne", True, self.theme.text_primary)
         prompt = self.layout.fonts["heading"].render("Click to start draft", True, self.theme.text_primary)
 
         self._render_text_box(screen, title, (center[0], int(center[1] * 0.78)), fill=(24, 18, 30, 204), outline=(*self.theme.accent_gold, 150), radius=24, padding=(26, 18))
-        prompt_rect = prompt.get_rect(center=(center[0], int(center[1] * 1.05)))
+        self._render_text_box(screen, subtitle, (center[0], int(center[1] * 0.93)), fill=(20, 16, 24, 194), outline=(*self.theme.border_subtle, 150), radius=20, padding=(22, 12))
+        prompt_rect = prompt.get_rect(center=(center[0], int(center[1] * 1.10)))
         self._render_text_box(screen, prompt, prompt_rect.center, fill=(18, 14, 22, 190), outline=(*self.theme.border_subtle, 170), radius=20, padding=(22, 14))
 
         # Splash controls: choose play mode
@@ -163,7 +166,7 @@ class Renderer:
             winner_label = ("AI" if getattr(game, "get_ai", lambda p: None)(winner) is not None else "Player")
         except Exception:
             winner_label = winner
-        winner_text = self.layout.fonts["phase"].render(f"{winner_label} claims the One Ring", True, self.theme.accent_gold)
+        winner_text = self.layout.fonts["phase"].render(f"{winner_label} claims the Throne", True, self.theme.accent_gold)
         prompt = self.layout.fonts["label"].render("Click to return to splash", True, self.theme.text_primary)
 
         self._render_text_box(screen, title, (center[0], int(center[1] * 0.72)), fill=(30, 18, 18, 205), outline=(*self.theme.accent_ember, 150), radius=24, padding=(26, 18))
@@ -203,8 +206,20 @@ class Renderer:
         )
         self._render_text_box(screen, trump_label, (trump_rect.centerx, int(self.layout.height * 0.08)), fill=(24, 18, 30, 196), outline=(*self.theme.accent_gold, 140), radius=16, padding=(18, 10))
         if game.trump_card is not None:
-            trump_surface = self.card_renderer.card_surface(game.trump_card, "normal", trump_rect.size)
-            screen.blit(trump_surface, trump_rect)
+            self._draw_card_instance(
+                screen,
+                game.trump_card,
+                trump_rect,
+                input_handler,
+                targets,
+                now,
+                "draft_crown_card",
+                "noop",
+                {},
+                enabled=False,
+                render_disabled=False,
+                animate=False,
+            )
 
         draft_x = int(self.layout.width * 0.14)
         draft_w = int(self.layout.width * 0.72)
@@ -213,6 +228,12 @@ class Renderer:
 
         realm_rects = self.layout.place_row(realm_area, len(game.realm_draft_visuals), realm_area.centery)
         hero_rects = self.layout.place_row(hero_area, len(game.hero_draft_visuals), hero_area.centery)
+        realm_ids = [f"draft_realm_{idx}" for idx in range(len(game.realm_draft_visuals))]
+        hero_ids = [f"draft_hero_{idx}" for idx in range(len(game.hero_draft_visuals))]
+        realm_hovered = self._resolve_row_hover_target(realm_ids, realm_rects, input_handler)
+        hero_hovered = self._resolve_row_hover_target(hero_ids, hero_rects, input_handler)
+        realm_rects = self._apply_hover_push(realm_rects, realm_ids, realm_hovered, realm_area)
+        hero_rects = self._apply_hover_push(hero_rects, hero_ids, hero_hovered, hero_area)
 
         realm_enabled = input_enabled and game.can_draft_card_type(game.current_drafter, "realm")
         hero_enabled = input_enabled and game.can_draft_card_type(game.current_drafter, "hero")
@@ -265,14 +286,13 @@ class Renderer:
             self._phase_flash_until = now + 180
         self._last_phase = phase_text
 
-        self._draw_trump_panel(screen, game)
+        self._draw_trump_panel(screen, game, targets, input_handler, now)
         self._draw_effects_panel(screen, game, targets, input_handler)
         self._draw_status_banner(screen, game)
         self._draw_opponent_hand(screen, game, targets, input_handler, now)
         self._draw_combat(screen, game, targets, input_handler, now)
         self._draw_hand(screen, game, targets, input_handler, now)
         self._draw_action_buttons(screen, game, targets, input_handler)
-        self._draw_hover_inspector(screen, input_handler)
 
     def _draw_player_header(self, screen: pygame.Surface, player: str, wounds: int, rect: pygame.Rect, now: int, game: Any | None = None) -> None:
         try:
@@ -327,7 +347,7 @@ class Renderer:
             )
             screen.blit(pulse_surface, (pulse_x - pulse_radius * 2, y - pulse_radius * 2))
 
-    def _draw_trump_panel(self, screen: pygame.Surface, game: Any) -> None:
+    def _draw_trump_panel(self, screen: pygame.Surface, game: Any, targets: list[HitTarget], input_handler: InputHandler, now: int) -> None:
         panel = self.layout.rects["trump_panel"]
         self._draw_translucent_rect(screen, panel, (22, 18, 28, 168), (*self.theme.border_subtle, 150), max(1, int(panel.w * 0.03)), radius=max(1, int(panel.w * 0.06)))
 
@@ -338,8 +358,20 @@ class Renderer:
             card_w = int(panel.w * 0.70)
             card_h = int(card_w * 1.5)
             card_rect = pygame.Rect(panel.centerx - card_w // 2, panel.y + int(panel.h * 0.11), card_w, card_h)
-            card_surface = self.card_renderer.card_surface(game.trump_card, "normal", card_rect.size)
-            screen.blit(card_surface, card_rect)
+            self._draw_card_instance(
+                screen,
+                game.trump_card,
+                card_rect,
+                input_handler,
+                targets,
+                now,
+                "play_crown_card",
+                "noop",
+                {},
+                enabled=False,
+                render_disabled=False,
+                animate=False,
+            )
 
         trump_text = game.get_effective_trump_suit()
         trump_line = self.layout.fonts["tiny"].render(f"Active: {trump_text if trump_text else 'None'}", True, self.theme.text_primary)
@@ -459,8 +491,15 @@ class Renderer:
         y = area.y + int(area.h * 0.45)
 
         if show_realm:
+            revealed_rects = [
+                pygame.Rect(start_x + idx * (mini_w + gap), y, mini_w, mini_h)
+                for idx in range(len(realm_cards))
+            ]
+            revealed_ids = [f"opp_revealed_{idx}" for idx in range(len(realm_cards))]
+            revealed_hovered = self._resolve_row_hover_target(revealed_ids, revealed_rects, input_handler)
+            revealed_rects = self._apply_hover_push(revealed_rects, revealed_ids, revealed_hovered, area, max_push=int(mini_w * 0.9))
             for idx, card_data in enumerate(realm_cards):
-                rect = pygame.Rect(start_x + idx * (mini_w + gap), y, mini_w, mini_h)
+                rect = revealed_rects[idx]
                 self._draw_card_instance(screen, card_data, rect, input_handler, targets, now, f"opp_revealed_{idx}", "noop", {"card_data": card_data}, enabled=False, animate=False)
             return
 
@@ -480,6 +519,12 @@ class Renderer:
 
         attack_rects = self.layout.place_row(attack_zone, len(game.table_attacks), int(attack_zone.y + attack_zone.h * 0.60))
         defense_rects = self.layout.place_row(defense_zone, len(game.table_defenses), int(defense_zone.y + defense_zone.h * 0.60))
+        attack_ids = [f"atk_{idx}" for idx in range(len(game.table_attacks))]
+        defense_ids = [f"def_{idx}" for idx in range(len(game.table_defenses))]
+        attack_hovered = self._resolve_row_hover_target(attack_ids, attack_rects, input_handler)
+        defense_hovered = self._resolve_row_hover_target(defense_ids, defense_rects, input_handler)
+        attack_rects = self._apply_hover_push(attack_rects, attack_ids, attack_hovered, attack_zone)
+        defense_rects = self._apply_hover_push(defense_rects, defense_ids, defense_hovered, defense_zone)
 
         for idx, card_data in enumerate(game.table_attacks):
             payload = {"attack_index": idx}
@@ -515,13 +560,19 @@ class Renderer:
         total_w = (len(hand_cards) - 1) * spacing + card_w
         start_x = hand_area.x + (hand_area.w - total_w) / 2
         y = hand_area.y + int(hand_area.h * 0.20)
+        hand_rects = [
+            pygame.Rect(int(start_x + idx * spacing), y, card_w, card_h)
+            for idx in range(len(hand_cards))
+        ]
+        hand_ids = [f"hand_{idx}" for idx in range(len(hand_cards))]
+        hand_hovered = self._resolve_row_hover_target(hand_ids, hand_rects, input_handler)
+        hand_rects = self._apply_hover_push(hand_rects, hand_ids, hand_hovered, hand_area)
 
         for idx, card_data in enumerate(hand_cards):
-            rect = pygame.Rect(int(start_x + idx * spacing), y, card_w, card_h)
             self._draw_card_instance(
                 screen,
                 card_data,
-                rect,
+                hand_rects[idx],
                 input_handler,
                 targets,
                 now,
@@ -591,6 +642,78 @@ class Renderer:
             points = [(cx, cy + offset), (cx - offset, cy - offset), (cx + offset, cy - offset)]
         pygame.draw.polygon(screen, self.theme.text_primary if enabled else self.theme.text_muted, points)
 
+    def _resolve_row_hover_target(
+        self,
+        target_ids: list[str],
+        rects: list[pygame.Rect],
+        input_handler: InputHandler,
+    ) -> str | None:
+        if not rects or len(rects) != len(target_ids):
+            return None
+
+        mouse_pos = input_handler.mouse_pos
+        if self._hover_draw_request is not None:
+            hover_target_id = self._hover_draw_request["target_id"]
+            hover_rect = self._hover_draw_request["rect"]
+            if hover_target_id in target_ids and hover_rect.collidepoint(mouse_pos):
+                return hover_target_id
+
+        for idx in range(len(rects) - 1, -1, -1):
+            if rects[idx].collidepoint(mouse_pos):
+                return target_ids[idx]
+        return None
+
+    def _apply_hover_push(
+        self,
+        rects: list[pygame.Rect],
+        target_ids: list[str],
+        hovered_id: str | None,
+        area: pygame.Rect,
+        max_push: int | None = None,
+    ) -> list[pygame.Rect]:
+        if not rects or len(rects) != len(target_ids):
+            return rects
+
+        if hovered_id not in target_ids:
+            return [rect.copy() for rect in rects]
+
+        hovered_index = target_ids.index(hovered_id)
+        pushed = [rect.copy() for rect in rects]
+        base_push = max_push if max_push is not None else int(rects[hovered_index].w * 0.72)
+
+        if hovered_index > 0:
+            pushed[hovered_index - 1].x = rects[hovered_index - 1].x - base_push
+            for idx in range(hovered_index - 2, -1, -1):
+                original_delta = rects[idx + 1].x - rects[idx].x
+                pushed[idx].x = pushed[idx + 1].x - original_delta
+
+        if hovered_index < len(pushed) - 1:
+            pushed[hovered_index + 1].x = rects[hovered_index + 1].x + base_push
+            for idx in range(hovered_index + 2, len(pushed)):
+                original_delta = rects[idx].x - rects[idx - 1].x
+                pushed[idx].x = pushed[idx - 1].x + original_delta
+
+        left_limit = area.left + max(6, int(rects[0].w * 0.08))
+        right_limit = area.right - max(6, int(rects[0].w * 0.08))
+
+        for idx in range(hovered_index - 1, -1, -1):
+            pushed[idx].x = min(pushed[idx].x, pushed[idx + 1].x - pushed[idx].w)
+        if hovered_index > 0:
+            left_overflow = left_limit - min(rect.x for rect in pushed[:hovered_index])
+            if left_overflow > 0:
+                for idx in range(hovered_index):
+                    pushed[idx].x += left_overflow
+
+        for idx in range(hovered_index + 1, len(pushed)):
+            pushed[idx].x = max(pushed[idx].x, pushed[idx - 1].right)
+        if hovered_index < len(pushed) - 1:
+            right_overflow = max(rect.right for rect in pushed[hovered_index + 1:]) - right_limit
+            if right_overflow > 0:
+                for idx in range(hovered_index + 1, len(pushed)):
+                    pushed[idx].x -= right_overflow
+
+        return pushed
+
     def _draw_card_instance(
         self,
         screen: pygame.Surface,
@@ -603,20 +726,18 @@ class Renderer:
         action: str,
         payload: dict[str, Any],
         enabled: bool = True,
+        render_disabled: bool = True,
         animate: bool = True,
     ) -> None:
         card_id = self.card_renderer._id_for_card(card_data)
 
         targets.append(HitTarget(target_id, logical_rect.copy(), action, payload, enabled=enabled))
-        if input_handler.hovered == target_id:
-            self._hover_card = card_data
-            self._hover_hint = str(payload.get("hint", ""))
-
-        state = "disabled" if not enabled else "normal"
-        if input_handler.hovered == target_id and enabled:
+        hovered = input_handler.hovered == target_id
+        state = "disabled" if (not enabled and render_disabled) else "normal"
+        if hovered and enabled:
             state = "hovered"
 
-        scale = self.layout.metrics["hover_scale"] if state == "hovered" else 1.0
+        scale = 1.0
         draw_size = (int(logical_rect.w * scale), int(logical_rect.h * scale))
         draw_rect = pygame.Rect(
             logical_rect.centerx - draw_size[0] // 2,
@@ -636,6 +757,8 @@ class Renderer:
             self._card_last_rects[card_id] = draw_rect.copy()
             card_surface = self.card_renderer.card_surface(card_data, state, draw_rect.size)
             screen.blit(card_surface, draw_rect)
+            if hovered:
+                self._queue_hovered_card(card_data, logical_rect, target_id, action, payload, enabled)
             return
 
         if prior_card_id != card_id:
@@ -661,41 +784,98 @@ class Renderer:
             card_surface.set_alpha(final_alpha)
 
         screen.blit(card_surface, final_rect)
+        if hovered:
+            self._queue_hovered_card(card_data, final_rect, target_id, action, payload, enabled)
 
-    def _draw_hover_inspector(self, screen: pygame.Surface, input_handler: InputHandler) -> None:
-        hovered = input_handler.hovered_target()
-        if hovered is None or self._hover_card is None:
-            self._hover_card = None
-            self._hover_hint = ""
+    def _queue_hovered_card(
+        self,
+        card_data: Any,
+        anchor_rect: pygame.Rect,
+        target_id: str,
+        action: str,
+        payload: dict[str, Any],
+        enabled: bool,
+    ) -> None:
+        if self._hover_draw_request is not None and self._hover_draw_request["target_id"] == target_id:
+            expanded_rect = self._hover_draw_request["rect"].copy()
+        else:
+            expanded_rect = self._expanded_hover_rect(anchor_rect)
+        self._hover_draw_request = {
+            "card": card_data,
+            "rect": expanded_rect,
+            "target_id": target_id,
+            "action": action,
+            "payload": dict(payload),
+            "enabled": enabled,
+        }
+
+    def _expanded_hover_rect(self, anchor_rect: pygame.Rect) -> pygame.Rect:
+        scale = 2.5
+        draw_w = int(anchor_rect.w * scale)
+        draw_h = int(anchor_rect.h * scale)
+        expanded_rect = pygame.Rect(
+            anchor_rect.centerx - draw_w // 2,
+            anchor_rect.centery - draw_h // 2,
+            draw_w,
+            draw_h,
+        )
+
+        margin = max(12, int(self.layout.width * 0.015))
+        bounds = self.layout.rects["screen"].inflate(-margin * 2, -margin * 2)
+
+        if expanded_rect.w > bounds.w or expanded_rect.h > bounds.h:
+            fit_scale = min(bounds.w / max(1, expanded_rect.w), bounds.h / max(1, expanded_rect.h))
+            draw_w = max(1, int(expanded_rect.w * fit_scale))
+            draw_h = max(1, int(expanded_rect.h * fit_scale))
+            expanded_rect = pygame.Rect(
+                anchor_rect.centerx - draw_w // 2,
+                anchor_rect.centery - draw_h // 2,
+                draw_w,
+                draw_h,
+            )
+
+        if expanded_rect.left < bounds.left:
+            expanded_rect.x = bounds.left
+        if expanded_rect.right > bounds.right:
+            expanded_rect.x = bounds.right - expanded_rect.w
+        if expanded_rect.top < bounds.top:
+            expanded_rect.y = bounds.top
+        if expanded_rect.bottom > bounds.bottom:
+            expanded_rect.y = bounds.bottom - expanded_rect.h
+
+        return expanded_rect
+
+    def _draw_hovered_card(self, screen: pygame.Surface) -> None:
+        if self._hover_draw_request is None:
             return
 
-        card = self._hover_card
-        hint = self._hover_hint
-        card_w, card_h = self.layout.card_size()
-        inspect_w = int(card_w * 1.42)
-        inspect_h = int(card_h * 1.42)
-        center = self.layout.rects["center"]
-        rect = pygame.Rect(
-            center.x + int(center.w * 0.03),
-            center.bottom - inspect_h - int(self.layout.height * 0.025),
-            inspect_w,
-            inspect_h,
+        card_data = self._hover_draw_request["card"]
+        rect = self._hover_draw_request["rect"]
+        shadow_rect = rect.inflate(int(rect.w * 0.08), int(rect.h * 0.08))
+        self._draw_translucent_rect(
+            screen,
+            shadow_rect,
+            (10, 8, 12, 110),
+            (*self.theme.accent_gold, 80),
+            max(1, int(rect.w * 0.012)),
+            radius=max(1, int(rect.w * 0.08)),
         )
-        panel_rect = rect.inflate(int(inspect_w * 0.12), int(inspect_h * 0.26))
-        self._draw_translucent_rect(screen, panel_rect, (16, 13, 19, 222), (*self.theme.accent_gold, 135), max(1, int(inspect_w * 0.018)), radius=max(1, int(inspect_w * 0.08)))
-        surface = self.card_renderer.card_surface(card, "normal", rect.size)
+        surface = self.card_renderer.detailed_card_surface(card_data, rect.size)
         screen.blit(surface, rect)
 
-        if hint:
-            text_x = rect.x
-            text_y = rect.bottom + int(panel_rect.h * 0.035)
-            for line in self._wrap_text(hint, self.layout.fonts["tiny"], rect.w):
-                line_surface = self.layout.fonts["tiny"].render(line, True, self.theme.text_primary)
-                screen.blit(line_surface, (text_x, text_y))
-                text_y += int(self.layout.height * 0.021)
+    def _append_hovered_hit_target(self, targets: list[HitTarget]) -> None:
+        if self._hover_draw_request is None:
+            return
 
-        self._hover_card = None
-        self._hover_hint = ""
+        targets.append(
+            HitTarget(
+                self._hover_draw_request["target_id"],
+                self._hover_draw_request["rect"].copy(),
+                self._hover_draw_request["action"],
+                dict(self._hover_draw_request["payload"]),
+                enabled=self._hover_draw_request["enabled"],
+            )
+        )
 
     def _wrap_text(self, text: str, font: pygame.font.Font, max_w: int) -> list[str]:
         words = text.split()
