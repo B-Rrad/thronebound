@@ -8,7 +8,10 @@ import pygame; pygame.init(); pygame.display.set_mode((1, 1))
 from ringbound_game import RingboundGame
 from settings import STATE_DRAFTING, STATE_PLAYING, STATE_GAMEOVER
 from ui_elements import CardUI
-from ai_players import _card_data
+
+
+def card_data(card):
+    return getattr(card, "data", card)
 
 for trial in range(5):
     game = RingboundGame()
@@ -61,7 +64,7 @@ for trial in range(5):
         elif game.play_phase == "DEFEND":
             atk = game.get_current_attack_card()
             if atk:
-                ad = _card_data(atk)
+                ad = card_data(atk)
                 played = False
                 for c in game.get_player_realm_hand(cp):
                     if game.can_defend_with_card(c, ad):

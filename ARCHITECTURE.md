@@ -2,16 +2,25 @@
 
 ## Data Flow
 
-1. `main.py` owns all game rules and state mutation.
+1. `ringbound_game/ui_game.py` composes the game object from focused rule/state mixins.
 2. `UIController` receives pygame events and returns high-level `Intent` values.
-3. `main.py` maps each intent to existing rule methods (`attempt_draft`, `handle_hand_card_click`, `resolve_suit_choice`, etc.).
-4. `main.py` calls `ui.draw(screen, self)` every frame.
+3. `RingboundGame.handle_intent()` maps each intent to rule methods (`attempt_draft`, `handle_hand_card_click`, `resolve_suit_choice`, etc.).
+4. `RingboundGame.run()` calls `ui.draw(screen, self)` every frame.
 5. `Renderer` reads the immutable snapshot of game state and draws the scene.
 
 This keeps UI rendering/input separate from rule enforcement.
 
 ## Package Layout
 
+- `ringbound_game/ui_game.py`: composition root and pygame setup.
+- `ringbound_game/state.py`: decks, hands, player lookup, trump state, setup/reset helpers.
+- `ringbound_game/drafting.py`: draft legality, AI draft picks, and transition into play.
+- `ringbound_game/rules.py`: attack/defense legality, playable-card checks, and AI-visible card queries.
+- `ringbound_game/heroes.py`: hero activation, pending hero choices, and hero resolution.
+- `ringbound_game/rounds.py`: card play, concessions, round cleanup, draw-up, and game-over checks.
+- `ringbound_game/ai_turns.py`: AI action selection and dispatch.
+- `ringbound_game/events.py`: pygame event handling, intent mapping, resize handling, and main loop.
+- `ringbound_game/audio.py`: music playback.
 - `ui/__init__.py`: `UIController` and public export surface.
 - `ui/theme.py`: design tokens and color constants.
 - `ui/font_cache.py`: cached `pygame.font.Font` objects by file path and point size.
@@ -23,7 +32,7 @@ This keeps UI rendering/input separate from rule enforcement.
 
 ## Resize Behavior
 
-- `main.py` listens for `VIDEORESIZE`.
+- `RingboundGame.handle_events()` listens for `VIDEORESIZE`.
 - Window is recreated with `pygame.RESIZABLE` dimensions clamped to at least `1024x600`.
 - `UIController.on_resize()` calls `LayoutManager.reflow(new_w, new_h)` and clears cached card surfaces.
 - Input re-hit-testing runs immediately so hover state stays correct.
@@ -36,7 +45,7 @@ This keeps UI rendering/input separate from rule enforcement.
 
 ## Adding a New Game Phase
 
-1. Keep game logic in `main.py` (phase transitions and legality checks).
+1. Keep game logic in the relevant `ringbound_game/` module.
 2. Add phase presentation in `ui/renderer.py` (labels, actionable buttons, zones).
 3. Add any new interactions in `ui/input_handler.py` as intents.
 4. Map new intents in `RingboundGame.handle_intent`.

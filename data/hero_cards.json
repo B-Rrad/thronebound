@@ -74,7 +74,7 @@
       "id": "gollum",
       "name": "Gollum",
       "faction": "Shadow",
-      "power": "Defender may redefine trump for one round.",
+      "power": "The player who played Gollum may redefine trump for one round.",
       "image": "gollum.png"
     },
     {

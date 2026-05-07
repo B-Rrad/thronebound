@@ -20,11 +20,21 @@ ringbound/
 |   |-- hero_cards.json
 |   `-- realm_cards.json
 |-- ringbound_game/
-|   |-- base.py
+|   |-- ai_turns.py
+|   |-- audio.py
+|   |-- combat.py
+|   |-- drafting.py
 |   |-- events.py
 |   |-- game.py
-|   |-- gameplay.py
-|   `-- rendering.py
+|   |-- heroes.py
+|   |-- rounds.py
+|   |-- rules.py
+|   |-- state.py
+|   `-- ui_game.py
+|-- ui/
+|   |-- input_handler.py
+|   |-- renderer.py
+|   `-- ...
 |-- release/
 |   `-- Ringbound.exe
 |-- main.py
@@ -82,16 +92,15 @@ python main.py
 - `Saruman` and `Sauron` are start-of-round attack tools.
 - `Gandalf` and `Boromir` are defensive responses.
 - `Legolas` and `Balrog` must be played together with a realm attack card.
-- `Gollum` lets the defender choose the temporary trump suit for the round.
+- `Gollum` lets the player who played it choose the temporary trump suit for the round.
 
 ## Project Notes
 
 - `main.py` is the launch entrypoint for the game.
-- `ringbound_game/base.py` owns setup, shared state, card loading, and the main loop shell.
-- `ringbound_game/gameplay.py` owns drafting, combat flow, hero powers, and win-condition logic.
-- `ringbound_game/events.py` owns mouse input and state-driven click handling.
-- `ringbound_game/rendering.py` owns screen drawing and panel/layout helpers.
-- `ui_elements.py` contains the card and button drawing helpers.
+- `ringbound_game/ui_game.py` composes the main game object from focused modules.
+- `ringbound_game/state.py`, `drafting.py`, `rules.py`, `heroes.py`, `rounds.py`, `ai_turns.py`, `events.py`, and `audio.py` own their named slices of gameplay and app behavior.
+- `ui/` owns rendering, responsive layout, animation, card surface caching, and input intent handling.
+- `ui_elements.py` remains for legacy smoke-test compatibility.
 - `settings.py` contains shared window, color, and state constants.
 - `balance_analysis.py` is a separate analysis utility and is not required to play the game.
 - The game loads `36` realm cards and `12` hero cards from JSON files in `data/`.

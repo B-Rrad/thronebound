@@ -2,119 +2,133 @@ import sys
 
 import pygame
 
-from ai_players import EasyAI, MediumAI, HardAI
-from settings import (
-    STATE_DIFFICULTY,
-    STATE_DRAFTING,
-    STATE_GAMEOVER,
-    STATE_MODE_SELECT,
-    STATE_PLAYING,
-    STATE_SPLASH,
-)
+from ai_manager import make_ai
+from settings import FPS, STATE_DRAFTING, STATE_GAMEOVER, STATE_PLAYING, STATE_SPLASH
 
 
-class EventMixin:
-    def handle_draft_clicks(self, mouse_pos):
-        for visual_card in self.realm_draft_visuals[:]:
-            if visual_card.is_clicked(mouse_pos):
-                self.attempt_draft(visual_card, "realm")
-                return True
-
-        for visual_card in self.hero_draft_visuals[:]:
-            if visual_card.is_clicked(mouse_pos):
-                self.attempt_draft(visual_card, "hero")
-                return True
-
-        return False
-
+class EventLoopMixin:
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
+            if event.type == self.MUSIC_END_EVENT:
+                self._advance_music()
+                continue
 
-                if self.state == STATE_SPLASH:
-                    self.state = STATE_MODE_SELECT
+            if event.type == pygame.VIDEORESIZE:
+                resized_w = max(1024, event.w)
+                resized_h = max(600, event.h)
+                self.screen = pygame.display.set_mode((resized_w, resized_h), pygame.RESIZABLE)
+                self.ui.on_resize(resized_w, resized_h)
 
-                elif self.state == STATE_MODE_SELECT:
-                    if self.two_player_btn.is_clicked(mouse_pos):
-                        self.ai_opponent = None
-                        if self.setup_game():
-                            self.state = STATE_DRAFTING
-                    elif self.vs_ai_btn.is_clicked(mouse_pos):
-                        self.state = STATE_DIFFICULTY
+            intent = self.ui.handle_event(event)
+            if intent is not None:
+                self.handle_intent(intent)
 
-                elif self.state == STATE_DIFFICULTY:
-                    if self.easy_btn.is_clicked(mouse_pos):
-                        self.ai_opponent = EasyAI()
-                    elif self.medium_btn.is_clicked(mouse_pos):
-                        self.ai_opponent = MediumAI()
-                    elif self.hard_btn.is_clicked(mouse_pos):
-                        self.ai_opponent = HardAI()
-                    else:
-                        continue
-                    if self.setup_game():
-                        self.state = STATE_DRAFTING
-                        self.schedule_ai()
+    def handle_intent(self, intent):
+        action = intent.action
+        payload = intent.payload
 
-                elif self.state == STATE_GAMEOVER:
-                    self.reset_game_state()
+        if action == "start_game" and self.state == STATE_SPLASH:
+            # payload may specify play mode and AI choices
+            mode = payload.get("mode")
+            # allow explicit AI selection for either player
+            p1_choice = payload.get("p1_ai")
+            p2_choice = payload.get("p2_ai")
 
-                elif self.state == STATE_DRAFTING:
-                    if self.is_ai_turn():
-                        continue
-                    if self.handle_draft_clicks(mouse_pos):
-                        self.schedule_ai()
-                        continue
+            if mode == "2p":
+                self.p1_ai = None
+                self.p2_ai = None
+            else:
+                if p1_choice is not None:
+                    self.p1_ai = make_ai(p1_choice)
+                if p2_choice is not None:
+                    self.p2_ai = make_ai(p2_choice)
 
-                elif self.state == STATE_PLAYING:
-                    if self.is_ai_turn():
-                        continue
+            self.setup_game()
+            self.state = STATE_DRAFTING
+            return
 
-                    if self.can_activate_galadriel("P1") and self.p1_heal_btn.is_clicked(mouse_pos):
-                        self.activate_galadriel("P1")
-                        self.schedule_ai()
-                        continue
-                    if self.ai_opponent is None and self.can_activate_galadriel("P2") and self.p2_heal_btn.is_clicked(mouse_pos):
-                        self.activate_galadriel("P2")
-                        continue
-                    if self.handle_pending_click(mouse_pos):
-                        self.schedule_ai()
-                        continue
+        if action == "restart_game" and self.state == STATE_GAMEOVER:
+            self.reset_game_state()
+            return
 
-                    for visual_card in self.active_hand_visuals[:]:
-                        if visual_card.is_clicked(mouse_pos):
-                            self.handle_hand_card_click(visual_card)
-                            self.schedule_ai()
-                            break
+        if action == "pick_draft_card" and self.state == STATE_DRAFTING:
+            if not self.is_human_turn():
+                return
+            card_index = payload.get("card_index")
+            card_type = payload.get("card_type")
+            if isinstance(card_index, int) and card_type in ("realm", "hero"):
+                self.attempt_draft(card_index, card_type)
+            return
 
-                    if self.can_concede_defense() and self.wound_btn.is_clicked(mouse_pos):
-                        self.concede_defense()
-                        self.schedule_ai()
-                    elif self.can_end_attack() and self.end_atk_btn.is_clicked(mouse_pos):
-                        self.end_round(defender_took_wound=False, pickup_defenses=False)
-                        self.schedule_ai()
+        if action == "select_aragorn_target" and self.state == STATE_PLAYING and self.pending_action is not None:
+            if not self.is_human_turn():
+                return
+            if self.pending_action.get("type") == "aragorn_return":
+                attack_index = payload.get("attack_index")
+                if isinstance(attack_index, int):
+                    self.resolve_aragorn(attack_index)
+            return
 
-    def handle_pending_click(self, mouse_pos):
-        if self.pending_action is None:
-            return False
-
-        action_type = self.pending_action["type"]
-        if action_type == "choose_suit":
-            for suit, button in self.suit_buttons.items():
-                if button.is_clicked(mouse_pos):
+        if action == "choose_suit" and self.state == STATE_PLAYING and self.pending_action is not None:
+            if not self.is_human_turn():
+                return
+            if self.pending_action.get("type") == "choose_suit":
+                suit = payload.get("suit")
+                if suit in self.all_suits:
                     self.resolve_suit_choice(suit)
-                    return True
-            return True
+            return
 
-        if action_type == "aragorn_return":
-            for attack_card in self.table_attacks:
-                if attack_card.is_clicked(mouse_pos):
-                    self.resolve_aragorn(attack_card)
-                    return True
-            return True
+        if action == "select_hand_card" and self.state == STATE_PLAYING:
+            if not self.is_human_turn():
+                return
+            if self.pending_action is not None and self.pending_action.get("type") in ("aragorn_return", "choose_suit"):
+                return
+            card_index = payload.get("card_index")
+            if isinstance(card_index, int) and 0 <= card_index < len(self.active_hand_visuals):
+                self.handle_hand_card_click(self.active_hand_visuals[card_index])
+            return
 
-        return False
+        if action == "concede_defense" and self.state == STATE_PLAYING:
+            if not self.is_human_turn():
+                return
+            if self.play_phase == "DEFEND" and self.pending_action is None:
+                self.concede_defense()
+            return
+
+        if action == "end_attack" and self.state == STATE_PLAYING:
+            if not self.is_human_turn():
+                return
+            if self.play_phase == "REINFORCE" and self.pending_action is None:
+                self.end_round(defender_took_wound=False, pickup_defenses=False)
+            return
+
+        if action == "confirm_selection":
+            resolved = self.ui.resolve_space_intent()
+            if resolved is not None:
+                self.handle_intent(resolved)
+            return
+
+        if action == "request_redraw":
+            return
+
+        if action == "pause_confirm_yes":
+            self.ui.input_handler.pause_confirm = False
+            self.reset_game_state()
+            return
+
+        if action == "pause_confirm_no":
+            self.ui.input_handler.pause_confirm = False
+            return
+
+    def run(self):
+        while True:
+            self.handle_events()
+            self.step_drafting()
+            self.step_ai()
+            self.ui.draw(self.screen, self)
+            pygame.display.flip()
+            self.clock.tick(FPS)
