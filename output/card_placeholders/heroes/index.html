@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Hero Card Placeholders</title>
+  <style>
+    :root {
+      --bg: #f2ede3;
+      --panel: #fffaf2;
+      --ink: #201b17;
+      --muted: #6b645b;
+      --border: #d9ceba;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 28px;
+      font-family: "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top, #fffdf7 0%, rgba(255, 253, 247, 0) 32%),
+        linear-gradient(180deg, #f6f0e5 0%, var(--bg) 100%);
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+    }
+    .intro {
+      margin: 0 0 28px;
+      max-width: 900px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 18px;
+    }
+    .card-tile {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(196, 183, 161, 0.9);
+    }
+    .card-tile img {
+      width: 100%;
+      display: block;
+      border-radius: 12px;
+      background: #fff;
+    }
+    .card-tile h3 {
+      margin: 10px 0 4px;
+      font-size: 17px;
+    }
+    .card-tile p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hero Card Placeholder Gallery</h1>
+  <p class="intro">These hero placeholders use the same overall framing language as the realm cards: centered art, restrained border treatment, and a bottom title stack. The gold icon and border establish the shared hero-card identity, and the power description sits directly beneath the portrait area. The roster shown here reflects the locked Greek identities from the hero spec file.</p>
+  <section class="card-grid">
+    
+      <article class="card-tile">
+        <img src="aragorn.svg" alt="Odysseus">
+        <h3>Odysseus</h3>
+        <p>Return one played attack card to your hand.</p>
+      </article>
+      <article class="card-tile">
+        <img src="legolas.svg" alt="Achilles">
+        <h3>Achilles</h3>
+        <p>Add one attack card regardless of rank (play with card).</p>
+      </article>
+      <article class="card-tile">
+        <img src="gandalf.svg" alt="Athena">
+        <h3>Athena</h3>
+        <p>Cancel one non-trump attack (standalone).</p>
+      </article>
+      <article class="card-tile">
+        <img src="galadriel.svg" alt="Asclepius">
+        <h3>Asclepius</h3>
+        <p>Heal two wounds (any time).</p>
+      </article>
+      <article class="card-tile">
+        <img src="frodo.svg" alt="Hermes">
+        <h3>Hermes</h3>
+        <p>Disable trump suit for one round.</p>
+      </article>
+      <article class="card-tile">
+        <img src="boromir.svg" alt="Ajax">
+        <h3>Ajax</h3>
+        <p>Auto-defend one attack; attacker discards one random card.</p>
+      </article>
+      <article class="card-tile">
+        <img src="nazgul.svg" alt="Hades">
+        <h3>Hades</h3>
+        <p>Defender may use only trump cards (standalone).</p>
+      </article>
+      <article class="card-tile">
+        <img src="saruman.svg" alt="Medea">
+        <h3>Medea</h3>
+        <p>Exchange one card with defender&#x27;s highest or trump card (start of round).</p>
+      </article>
+      <article class="card-tile">
+        <img src="sauron.svg" alt="Argus Panoptes">
+        <h3>Argus Panoptes</h3>
+        <p>View opponent&#x27;s hand (start of round).</p>
+      </article>
+      <article class="card-tile">
+        <img src="balrog.svg" alt="Ares">
+        <h3>Ares</h3>
+        <p>Inflict one wound even if fully defended (end of round, play with card).</p>
+      </article>
+      <article class="card-tile">
+        <img src="gollum.svg" alt="Autolycus">
+        <h3>Autolycus</h3>
+        <p>The player who played Gollum may redefine trump for one round.</p>
+      </article>
+      <article class="card-tile">
+        <img src="wormtongue.svg" alt="Circe">
+        <h3>Circe</h3>
+        <p>Name a suit; defender cannot play that suit this round.</p>
+      </article>
+  </section>
+</body>
+</html>

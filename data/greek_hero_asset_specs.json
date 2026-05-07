@@ -1,0 +1,206 @@
+{
+  "asset_version": 3,
+  "status": "identities_locked_ready_for_art",
+  "design_decisions": {
+    "mechanics_source": "Keep the current hero powers from hero_cards.json.",
+    "hero_grouping": "single shared hero deck",
+    "factions_removed": true,
+    "gods_allowed": true,
+    "dominion_binding": "independent by default"
+  },
+  "open_questions": [
+    "Do you want the final hero portraits to feel uniformly divine-mythic, or should mortals read more grounded than gods and sorcerers?",
+    "Should the personal emblems appear on-card, or stay only in the generation brief for later use?"
+  ],
+  "hero_card_layout_requirements": {
+    "required_elements": [
+      "hero name",
+      "power text area",
+      "clear portrait silhouette",
+      "optional hero emblem badge",
+      "image filename reserved for final asset export"
+    ]
+  },
+  "hero_slots": [
+    {
+      "legacy_id": "aragorn",
+      "mechanic_summary": "Return one played attack card to your hand.",
+      "best_fit_theme": "resourceful tactician or returning warrior",
+      "candidate_figures": [
+        "Odysseus",
+        "Athena",
+        "Diomedes"
+      ],
+      "selected_figure": "Odysseus",
+      "hero_emblem": "strung bow over a curling sea-wave",
+      "image": "odysseus.png",
+      "art_brief": "A cunning bronze-age king in travel-worn cloak and polished armor, holding a bow and looking calculating rather than furious, with hints of sea-voyage myth and clever survival.",
+      "status": "locked"
+    },
+    {
+      "legacy_id": "legolas",
+      "mechanic_summary": "Add one attack card regardless of rank.",
+      "best_fit_theme": "swift hunter or precision striker",
+      "candidate_figures": [
+        "Artemis",
+        "Atalanta",
+        "Achilles"
+      ],
+      "selected_figure": "Achilles",
+      "hero_emblem": "spearpoint over a sunburst shield",
+      "image": "achilles.png",
+      "art_brief": "A radiant unstoppable warrior in bright heroic armor, spear-forward and mid-stride, with overwhelming momentum and battlefield confidence.",
+      "status": "locked"
+    },
+    {
+      "legacy_id": "gandalf",
+      "mechanic_summary": "Cancel one non-trump attack.",
+      "best_fit_theme": "wise protector or prophetic defender",
+      "candidate_figures": [
+        "Athena",
+        "Apollo",
+        "Tiresias"
+      ],
+      "selected_figure": "Athena",
+      "hero_emblem": "owl above a crested helm",
+      "image": "athena.png",
+      "art_brief": "A calm armored goddess with owl and aegis motifs, poised as a strategic protector, projecting clarity, wisdom, and exacting defense.",
+      "status": "locked"
+    },
+    {
+      "legacy_id": "galadriel",
+      "mechanic_summary": "Heal two wounds.",
+      "best_fit_theme": "sacred healer or divine aid figure",
+      "candidate_figures": [
+        "Asclepius",
+        "Apollo",
+        "Hygieia"
+      ],
+      "selected_figure": "Asclepius",
+      "hero_emblem": "serpent coiled around a healing staff",
+      "image": "asclepius.png",
+      "art_brief": "A serene divine healer in pale robes with a sacred staff and serpent symbol, surrounded by a gentle temple-lit aura of restoration.",
+      "status": "locked"
+    },
+    {
+      "legacy_id": "frodo",
+      "mechanic_summary": "Disable the Crowned Dominion for one round.",
+      "best_fit_theme": "humble disruptor or fate-twisting traveler",
+      "candidate_figures": [
+        "Hermes",
+        "Orpheus",
+        "Theseus"
+      ],
+      "selected_figure": "Hermes",
+      "hero_emblem": "winged sandal above a crossroads sigil",
+      "image": "hermes.png",
+      "art_brief": "A swift divine messenger with winged sandals and traveler’s cloak, playful but sharp, carrying the energy of clever disruption and sudden reversals.",
+      "status": "locked"
+    },
+    {
+      "legacy_id": "boromir",
+      "mechanic_summary": "Auto-defend one attack and force a discard.",
+      "best_fit_theme": "shield hero or steadfast defender",
+      "candidate_figures": [
+        "Ajax",
+        "Athena",
+        "Heracles"
+      ],
+      "selected_figure": "Ajax",
+      "hero_emblem": "tower shield crossed by a broken spear",
+      "image": "ajax.png",
+      "art_brief": "A massive shield-bearing hero in heavy bronze armor, grounded and immovable, with a disciplined stance that suggests punishing counterforce.",
+      "status": "locked"
+    },
+    {
+      "legacy_id": "nazgul",
+      "mechanic_summary": "Defender may use only Crowned Dominion cards.",
+      "best_fit_theme": "terror figure or curse enforcer",
+      "candidate_figures": [
+        "Hades",
+        "Erinyes",
+        "Minos"
+      ],
+      "selected_figure": "Hades",
+      "hero_emblem": "black bident within a grave ring",
+      "image": "hades.png",
+      "art_brief": "A severe underworld king in shadowed regalia with a bident and funerary crown, imposing inevitability and fear rather than chaotic rage.",
+      "status": "locked"
+    },
+    {
+      "legacy_id": "saruman",
+      "mechanic_summary": "Exchange one card with defender's highest or Crowned Dominion card.",
+      "best_fit_theme": "schemer, manipulator, or oath-breaker",
+      "candidate_figures": [
+        "Hermes",
+        "Medea",
+        "Sisyphus"
+      ],
+      "selected_figure": "Medea",
+      "hero_emblem": "crescent flask with a curling spell-rune",
+      "image": "medea.png",
+      "art_brief": "A dangerous sorceress in dark royal robes with potion-glass, moonlit magic, and a gaze that suggests calculated exchange and betrayal.",
+      "status": "locked"
+    },
+    {
+      "legacy_id": "sauron",
+      "mechanic_summary": "View the opponent's hand.",
+      "best_fit_theme": "all-seeing tyrant or prophetic watcher",
+      "candidate_figures": [
+        "Apollo",
+        "Argus Panoptes",
+        "Themis"
+      ],
+      "selected_figure": "Argus Panoptes",
+      "hero_emblem": "many-eyed disk above a watchful crescent",
+      "image": "argus_panoptes.png",
+      "art_brief": "A relentless mythic watcher with many-eyed motifs worked into cloak, armor, or halo design, communicating total surveillance and impossible awareness.",
+      "status": "locked"
+    },
+    {
+      "legacy_id": "balrog",
+      "mechanic_summary": "Inflict one wound even if fully defended.",
+      "best_fit_theme": "unstoppable monster or brutal war-engine",
+      "candidate_figures": [
+        "Ares",
+        "Typhon",
+        "Heracles"
+      ],
+      "selected_figure": "Ares",
+      "hero_emblem": "blood-red spearhead within a war helm",
+      "image": "ares.png",
+      "art_brief": "A brutal war god in storm-dark armor, spear and helm dominant, radiating aggression and the certainty that violence lands even through resistance.",
+      "status": "locked"
+    },
+    {
+      "legacy_id": "gollum",
+      "mechanic_summary": "The player who used this hero may redefine the Crowned Dominion for one round.",
+      "best_fit_theme": "trickster, thief, or unstable guide",
+      "candidate_figures": [
+        "Hermes",
+        "Autolycus",
+        "Dolon"
+      ],
+      "selected_figure": "Autolycus",
+      "hero_emblem": "fox mask over a stolen crown",
+      "image": "autolycus.png",
+      "art_brief": "A sly thief-prince with foxlike cunning, light armor, and a smirking unstable presence, evoking sudden reversals and stolen advantage.",
+      "status": "locked"
+    },
+    {
+      "legacy_id": "wormtongue",
+      "mechanic_summary": "Name one dominion; the defender cannot play that dominion this round.",
+      "best_fit_theme": "whisperer, deceiver, or silencing courtier",
+      "candidate_figures": [
+        "Circe",
+        "Sinon",
+        "Ate"
+      ],
+      "selected_figure": "Circe",
+      "hero_emblem": "enchanted cup with a barred mouth sigil",
+      "image": "circe.png",
+      "art_brief": "A mesmerizing enchantress with ritual cup, island-magic atmosphere, and an expression of soft control, suggesting the power to forbid and redirect action.",
+      "status": "locked"
+    }
+  ]
+}

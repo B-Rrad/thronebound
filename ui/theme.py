@@ -14,6 +14,10 @@ class Theme:
     shire: tuple[int, int, int] = (90, 138, 74)
     mordor: tuple[int, int, int] = (138, 48, 48)
     rohan: tuple[int, int, int] = (160, 120, 48)
+    verdant_court: tuple[int, int, int] = (156, 175, 136)
+    ember_throne: tuple[int, int, int] = (109, 31, 51)
+    tidewake_dominion: tuple[int, int, int] = (62, 142, 222)
+    obsidian_veil: tuple[int, int, int] = (28, 28, 28)
     fellowship: tuple[int, int, int] = (201, 168, 76)
     shadow: tuple[int, int, int] = (184, 74, 46)
     disabled_overlay: tuple[int, int, int, int] = (0, 0, 0, 140)
@@ -29,4 +33,12 @@ class Theme:
             "Shire": self.shire,
             "Mordor": self.mordor,
             "Rohan": self.rohan,
+            "Verdant Court": self.verdant_court,
+            "Ember Throne": self.ember_throne,
+            "Tidewake Dominion": self.tidewake_dominion,
+            "Obsidian Veil": self.obsidian_veil,
+            "verdant_court": self.verdant_court,
+            "ember_throne": self.ember_throne,
+            "tidewake_dominion": self.tidewake_dominion,
+            "obsidian_veil": self.obsidian_veil,
         }

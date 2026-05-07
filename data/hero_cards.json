@@ -53,14 +53,14 @@
       "id": "saruman",
       "name": "Saruman",
       "faction": "Shadow",
-      "power": "Exchange one card with defender’s highest or trump card (start of round).",
+      "power": "Exchange one card with defender's highest or trump card (start of round).",
       "image": "saruman.png"
     },
     {
       "id": "sauron",
       "name": "Sauron",
       "faction": "Shadow",
-      "power": "View opponent’s hand (start of round).",
+      "power": "View opponent's hand (start of round).",
       "image": "sauron.png"
     },
     {

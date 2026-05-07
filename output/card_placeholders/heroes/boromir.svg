@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" role="img" aria-labelledby="title desc">
+  <title id="title">Ajax</title>
+  <desc id="desc">Placeholder hero card for Ajax with gold hero framing.</desc>
+  <defs>
+    <linearGradient id="bg-boromir" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f6f0e4"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="718" height="1018" rx="40" fill="url(#bg-boromir)" stroke="#c9a84c" stroke-width="16"/>
+  <rect x="42" y="42" width="666" height="966" rx="28" fill="none" stroke="#8b6d21" stroke-width="5"/>
+
+  <g transform="translate(112,112)">
+    
+    <g transform="translate(0,0) scale(0.62)">
+      <path d="M0 -58 C18 -48 30 -28 30 -6 C30 22 10 42 0 58 C-10 42 -30 22 -30 -6 C-30 -28 -18 -48 0 -58 Z" fill="#c9a84c"/>
+      <circle cx="0" cy="-6" r="12" fill="#241d12"/>
+      <path d="M-48 -4 C-44 18 -32 34 -18 46" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round"/>
+      <path d="M48 -4 C44 18 32 34 18 46" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round"/>
+      <path d="M-54 6 C-48 18 -42 28 -32 34" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round"/>
+      <path d="M54 6 C48 18 42 28 32 34" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round"/>
+    </g>
+    
+  </g>
+
+  
+        <g transform="translate(375,372) scale(1.32)">
+          <path d="M-18 -124 C24 -124 42 -70 40 -34 C38 0 42 42 62 94 L-42 94 C-52 52 -54 22 -46 -18 C-38 -56 -36 -108 -18 -124 Z" fill="#241d12"/>
+          <path d="M18 -114 L18 42" fill="none" stroke="#c9a84c" stroke-width="12" stroke-linecap="round"/>
+          <path d="M18 -114 L-10 -74" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round"/>
+          <path d="M18 -114 L46 -74" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round"/>
+        </g>
+        
+
+  <line x1="118" y1="658" x2="632" y2="658" stroke="#ece2cb" stroke-width="4"/>
+  <rect x="92" y="676" width="566" height="188" rx="22" fill="#ece2cb" opacity="0.72"/>
+  <text x="375" y="758" text-anchor="middle" font-size="29" font-weight="600" fill="#241d12" opacity="0.9">Auto-defend one attack; attacker</text>
+<text x="375" y="792" text-anchor="middle" font-size="29" font-weight="600" fill="#241d12" opacity="0.9">discards one random card.</text>
+
+  <line x1="118" y1="892" x2="632" y2="892" stroke="#ece2cb" stroke-width="4"/>
+  <text x="375" y="944" text-anchor="middle" font-size="42" font-weight="700" fill="#241d12">Ajax</text>
+  <text x="375" y="980" text-anchor="middle" font-size="22" font-weight="700" fill="#c9a84c" letter-spacing="4">HERO</text>
+</svg>

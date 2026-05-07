@@ -151,8 +151,9 @@ class CardRenderer:
         cy = int(h * 0.16)
         icon_w = int(w * 0.14)
         icon_h = int(h * 0.12)
+        suit_key = suit.strip().lower().replace(" ", "_")
 
-        if suit == "Gondor":
+        if suit_key == "gondor":
             points = [
                 (cx, cy - icon_h // 2),
                 (cx - icon_w // 3, cy + icon_h // 3),
@@ -162,14 +163,14 @@ class CardRenderer:
             ]
             pygame.draw.polygon(surface, self.theme.text_primary, points)
             pygame.draw.rect(surface, self.theme.text_primary, pygame.Rect(cx - max(1, icon_w // 10), cy + icon_h // 4, max(1, icon_w // 5), max(1, icon_h // 2)))
-        elif suit == "Shire":
+        elif suit_key == "shire":
             pygame.draw.ellipse(surface, color, pygame.Rect(cx - icon_w // 2, cy - icon_h // 2, icon_w, icon_h))
             pygame.draw.line(surface, self.theme.text_primary, (cx - icon_w // 4, cy + icon_h // 3), (cx + icon_w // 4, cy - icon_h // 3), max(1, icon_w // 10))
-        elif suit == "Mordor":
+        elif suit_key == "mordor":
             pygame.draw.ellipse(surface, color, pygame.Rect(cx - icon_w // 2, cy - icon_h // 3, icon_w, int(icon_h * 0.7)))
             pygame.draw.ellipse(surface, self.theme.bg, pygame.Rect(cx - icon_w // 4, cy - icon_h // 6, icon_w // 2, icon_h // 3))
             pygame.draw.circle(surface, self.theme.text_primary, (cx, cy), max(1, icon_w // 10))
-        elif suit == "Rohan":
+        elif suit_key == "rohan":
             horse = [
                 (cx - icon_w // 2, cy),
                 (cx - icon_w // 6, cy - icon_h // 3),
@@ -179,6 +180,38 @@ class CardRenderer:
                 (cx - icon_w // 4, cy + icon_h // 3),
             ]
             pygame.draw.polygon(surface, color, horse)
+        elif suit_key == "verdant_court":
+            pygame.draw.arc(surface, color, pygame.Rect(cx - icon_w // 2, cy - icon_h // 2, icon_w, icon_h), 3.45, 5.95, max(1, icon_w // 10))
+            for offset in (-icon_w // 3, 0, icon_w // 3):
+                leaf_rect = pygame.Rect(cx + offset - icon_w // 10, cy - icon_h // 3, icon_w // 5, icon_h // 2)
+                pygame.draw.ellipse(surface, color, leaf_rect)
+            pygame.draw.line(surface, self.theme.text_primary, (cx, cy - icon_h // 6), (cx, cy + icon_h // 4), max(1, icon_w // 12))
+        elif suit_key == "ember_throne":
+            flame = [
+                (cx, cy - icon_h // 2),
+                (cx + icon_w // 5, cy - icon_h // 6),
+                (cx + icon_w // 8, cy + icon_h // 2),
+                (cx, cy + icon_h // 5),
+                (cx - icon_w // 8, cy + icon_h // 2),
+                (cx - icon_w // 5, cy - icon_h // 6),
+            ]
+            left_horn = [(cx - icon_w // 3, cy - icon_h // 5), (cx - icon_w // 2, cy - icon_h // 2), (cx - icon_w // 6, cy - icon_h // 3)]
+            right_horn = [(cx + icon_w // 3, cy - icon_h // 5), (cx + icon_w // 2, cy - icon_h // 2), (cx + icon_w // 6, cy - icon_h // 3)]
+            pygame.draw.polygon(surface, color, flame)
+            pygame.draw.polygon(surface, color, left_horn)
+            pygame.draw.polygon(surface, color, right_horn)
+        elif suit_key == "tidewake_dominion":
+            pygame.draw.line(surface, color, (cx, cy - icon_h // 2), (cx, cy + icon_h // 2), max(1, icon_w // 10))
+            pygame.draw.line(surface, color, (cx - icon_w // 3, cy - icon_h // 8), (cx, cy - icon_h // 2), max(1, icon_w // 12))
+            pygame.draw.line(surface, color, (cx + icon_w // 3, cy - icon_h // 8), (cx, cy - icon_h // 2), max(1, icon_w // 12))
+            wave_rect = pygame.Rect(cx - icon_w // 2, cy, icon_w, icon_h // 2)
+            pygame.draw.arc(surface, color, wave_rect, 3.14, 6.28, max(1, icon_w // 10))
+        elif suit_key == "obsidian_veil":
+            halo_rect = pygame.Rect(cx - icon_w // 2, cy - icon_h // 2, icon_w, icon_h)
+            pygame.draw.arc(surface, color, halo_rect, 0.35, 2.70, max(1, icon_w // 10))
+            pygame.draw.arc(surface, color, halo_rect, 3.55, 5.95, max(1, icon_w // 10))
+            shard = [(cx, cy - icon_h // 2), (cx + icon_w // 7, cy + icon_h // 2), (cx - icon_w // 7, cy + icon_h // 2)]
+            pygame.draw.polygon(surface, color, shard)
 
     def _draw_faction_crest(self, surface: pygame.Surface, faction: str, color: tuple[int, int, int], w: int, h: int) -> None:
         cx = int(w * 0.84)

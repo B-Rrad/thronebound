@@ -1,0 +1,197 @@
+{
+  "shared_layout": {
+    "card_ratio": "poker_portrait",
+    "required_elements": [
+      "rank displayed in opposite corners",
+      "dominion icon paired with the rank marker",
+      "dominion name or banner on the face",
+      "high silhouette clarity at table distance"
+    ],
+    "art_style": "mythic illustrated playing card",
+    "avoid": [
+      "photoreal muddy rendering",
+      "mixed dominion motifs on the same card",
+      "tiny unreadable symbols",
+      "busy backgrounds that compete with rank readability"
+    ]
+  },
+  "dominions": [
+    {
+      "id": "verdant_court",
+      "name": "Verdant Court",
+      "color": {
+        "name": "Sage",
+        "hex": "#9CAF88"
+      },
+      "icon": {
+        "primary": "leaf_crown",
+        "alternates": [
+          "branch_sigil"
+        ],
+        "design_notes": "Thin organic crown silhouette built from leaves or interlocking branches.",
+        "placeholder_svg": "assets/icons/dominions/verdant_court.svg"
+      },
+      "motifs": [
+        "ancient wisdom",
+        "forests",
+        "stone ruins",
+        "moonlit groves",
+        "antlered standards"
+      ],
+      "silhouette_language": [
+        "staffs",
+        "cloaks",
+        "antlers",
+        "bows",
+        "long tapering shapes"
+      ],
+      "card_feel": [
+        "elegant",
+        "elevated",
+        "calm",
+        "precise"
+      ],
+      "frame_notes": "Pale stone backgrounds, vine borders, and soft crescent ornaments.",
+      "prompt_tags": [
+        "moonlit grove",
+        "weathered carved stone",
+        "ritual stillness",
+        "sage textiles"
+      ],
+      "crowned_dominion_copy": "The Crowned Dominion is Verdant Court."
+    },
+    {
+      "id": "ember_throne",
+      "name": "Ember Throne",
+      "color": {
+        "name": "Burgundy",
+        "hex": "#6D1F33"
+      },
+      "icon": {
+        "primary": "horned_flame",
+        "alternates": [
+          "dragon_claw_crest"
+        ],
+        "design_notes": "Compact flame emblem with a regal horned or draconic crown silhouette.",
+        "placeholder_svg": "assets/icons/dominions/ember_throne.svg"
+      },
+      "motifs": [
+        "fire",
+        "conquest",
+        "ash",
+        "mountain citadels",
+        "draconic banners"
+      ],
+      "silhouette_language": [
+        "wings",
+        "horns",
+        "plate armor",
+        "spears",
+        "jagged triangular forms"
+      ],
+      "card_feel": [
+        "heavy",
+        "dominant",
+        "aggressive",
+        "regal"
+      ],
+      "frame_notes": "Dark ivory face, burgundy framing, and angular flame notches.",
+      "prompt_tags": [
+        "ashfall",
+        "citadel basalt",
+        "banner firelight",
+        "triangular heraldry"
+      ],
+      "crowned_dominion_copy": "The Crowned Dominion is Ember Throne."
+    },
+    {
+      "id": "tidewake_dominion",
+      "name": "Tidewake Dominion",
+      "color": {
+        "name": "Tufts Blue",
+        "hex": "#3E8EDE"
+      },
+      "icon": {
+        "primary": "trident_wave",
+        "alternates": [
+          "spiral_shell"
+        ],
+        "design_notes": "A clean crest that merges trident points with a wave curl or shell spiral.",
+        "placeholder_svg": "assets/icons/dominions/tidewake_dominion.svg"
+      },
+      "motifs": [
+        "deep seas",
+        "tides",
+        "coral palaces",
+        "currents",
+        "storm-forged relics"
+      ],
+      "silhouette_language": [
+        "fins",
+        "tridents",
+        "flowing capes",
+        "curved blades",
+        "sweeping arcs"
+      ],
+      "card_feel": [
+        "fluid",
+        "noble",
+        "mysterious",
+        "disciplined"
+      ],
+      "frame_notes": "Cool pale cards with wave-line corners and curved framing.",
+      "prompt_tags": [
+        "seafoam highlights",
+        "coral stone",
+        "storm relics",
+        "ceremonial tide motion"
+      ],
+      "crowned_dominion_copy": "The Crowned Dominion is Tidewake Dominion."
+    },
+    {
+      "id": "obsidian_veil",
+      "name": "Obsidian Veil",
+      "color": {
+        "name": "Black",
+        "hex": "#111111"
+      },
+      "icon": {
+        "primary": "broken_halo",
+        "alternates": [
+          "skull_crown",
+          "grave_rune"
+        ],
+        "design_notes": "A severe eclipse or funerary crest with sharp negative space.",
+        "placeholder_svg": "assets/icons/dominions/obsidian_veil.svg"
+      },
+      "motifs": [
+        "death",
+        "tomb kingdoms",
+        "eclipses",
+        "black stone temples",
+        "cursed processions"
+      ],
+      "silhouette_language": [
+        "ribs",
+        "crowns",
+        "scythes",
+        "broken standards",
+        "sharp vertical shards"
+      ],
+      "card_feel": [
+        "austere",
+        "ominous",
+        "ritualistic",
+        "relentless"
+      ],
+      "frame_notes": "Off-white faces with black framing, cracked borders, and eclipse motifs.",
+      "prompt_tags": [
+        "funerary architecture",
+        "ritual procession",
+        "eclipse light",
+        "shattered stone"
+      ],
+      "crowned_dominion_copy": "The Crowned Dominion is Obsidian Veil."
+    }
+  ]
+}

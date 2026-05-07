@@ -1,0 +1,64 @@
+{
+  "asset_version": 1,
+  "workflow_goal": "Create dominion icon placeholders first, then generate realm card art in dominion batches, then retheme hero portraits after figure selection.",
+  "source_files": {
+    "dominions": "data/dominions.json",
+    "realm_cards": "data/realm_card_asset_specs.json",
+    "heroes": "data/greek_hero_asset_specs.json"
+  },
+  "automation": {
+    "realm_placeholder_generator": "scripts/generate_realm_card_placeholders.py",
+    "realm_placeholder_gallery": "output/card_placeholders/realm/index.html",
+    "hero_placeholder_generator": "scripts/generate_hero_card_placeholders.py",
+    "hero_placeholder_gallery": "output/card_placeholders/heroes/index.html"
+  },
+  "output_paths": {
+    "placeholder_icons_svg": "assets/icons/dominions/",
+    "generated_icons_png": "output/generated_icons/",
+    "generated_realm_cards": "output/generated_cards/realm/",
+    "generated_hero_cards": "output/generated_cards/heroes/"
+  },
+  "icon_jobs": [
+    {
+      "dominion_id": "verdant_court",
+      "placeholder_svg": "assets/icons/dominions/verdant_court.svg",
+      "target_png": "output/generated_icons/verdant_court.png",
+      "prompt": "Use case: logo-brand. Asset type: dominion suit icon for a fantasy card game. Primary request: create a clean vector-friendly leaf crown sigil for Verdant Court. Scene/backdrop: no scene, centered emblem on a plain light background. Subject: elegant leaf crown or interlocking branch crest. Style/medium: flat heraldic emblem, crisp linework, minimal shading. Composition/framing: centered, square, strong silhouette at small sizes. Lighting/mood: calm, ancient, elevated. Color palette: sage green, pale stone, dark ink accents. Constraints: no text, no border frame, no gradients that blur the shape, must read at card-corner size. Avoid: photorealism, clutter, extra weapons, other dominion motifs."
+    },
+    {
+      "dominion_id": "ember_throne",
+      "placeholder_svg": "assets/icons/dominions/ember_throne.svg",
+      "target_png": "output/generated_icons/ember_throne.png",
+      "prompt": "Use case: logo-brand. Asset type: dominion suit icon for a fantasy card game. Primary request: create a clean vector-friendly horned flame sigil for Ember Throne. Scene/backdrop: no scene, centered emblem on a plain light background. Subject: compact regal flame with horned or draconic crown silhouette. Style/medium: flat heraldic emblem, crisp angular linework, minimal shading. Composition/framing: centered, square, strong silhouette at small sizes. Lighting/mood: dominant, aggressive, regal. Color palette: burgundy, ember orange, dark ivory accents. Constraints: no text, no border frame, must read at card-corner size. Avoid: soft organic forms, excessive detail, mixed sea or forest imagery."
+    },
+    {
+      "dominion_id": "tidewake_dominion",
+      "placeholder_svg": "assets/icons/dominions/tidewake_dominion.svg",
+      "target_png": "output/generated_icons/tidewake_dominion.png",
+      "prompt": "Use case: logo-brand. Asset type: dominion suit icon for a fantasy card game. Primary request: create a clean vector-friendly trident-wave sigil for Tidewake Dominion. Scene/backdrop: no scene, centered emblem on a plain light background. Subject: trident merged with a wave curl or spiral shell. Style/medium: flat heraldic emblem, curved linework, minimal shading. Composition/framing: centered, square, elegant silhouette at small sizes. Lighting/mood: noble, mysterious, disciplined. Color palette: Tufts blue, seafoam highlights, dark navy accents. Constraints: no text, no border frame, must read at card-corner size. Avoid: overly realistic water splash effects, clutter, fire motifs, skeletal motifs."
+    },
+    {
+      "dominion_id": "obsidian_veil",
+      "placeholder_svg": "assets/icons/dominions/obsidian_veil.svg",
+      "target_png": "output/generated_icons/obsidian_veil.png",
+      "prompt": "Use case: logo-brand. Asset type: dominion suit icon for a fantasy card game. Primary request: create a clean vector-friendly broken halo sigil for Obsidian Veil. Scene/backdrop: no scene, centered emblem on a plain light background. Subject: severe eclipse ring broken around a grave shard or funerary crest. Style/medium: flat heraldic emblem, sharp negative space, minimal shading. Composition/framing: centered, square, austere silhouette at small sizes. Lighting/mood: ominous, ritualistic, relentless. Color palette: black, off-white, cold gray. Constraints: no text, no border frame, must read at card-corner size. Avoid: cartoon skulls, gore, ornate filigree, sea or forest motifs."
+    }
+  ],
+  "realm_card_generation": {
+    "recommended_batch_order": [
+      "Generate or refine the four dominion icons.",
+      "Generate one sample card for each dominion at rank 10 to validate framing and style.",
+      "Generate the remaining cards dominion by dominion.",
+      "Do a final pass for corner-rank readability consistency."
+    ],
+    "draft_size": "1024x1536",
+    "final_size": "2048x3072",
+    "base_prompt_template": "Use case: illustration-story. Asset type: portrait fantasy playing card front. Primary request: create the front art for {name}. Scene/backdrop: {frame_notes}. Subject: {rank_title} of {dominion_name}; {art_brief}. Style/medium: mythic illustrated playing card, painterly but readable, single central silhouette. Composition/framing: portrait card composition with empty space protected in the top-left and bottom-right corners for rank and icon overlays. Lighting/mood: {card_feel}. Color palette: emphasize {color_name}. Constraints: include only one central figure or creature, preserve high contrast silhouette, avoid text baked into the art, avoid crowd scenes, avoid clipping the head or main weapon. Avoid: muddy rendering, mixed dominion motifs, tiny background details that overpower the character.",
+    "negative_prompt_hint": "No watermark, no logo text, no extra characters, no modern props, no photoreal card mockup frame."
+  },
+  "hero_card_generation": {
+    "note": "Wait to generate final hero portraits until each mechanic has an exact Greek identity selected.",
+    "draft_size": "1024x1536",
+    "base_prompt_template": "Use case: illustration-story. Asset type: portrait hero card front. Primary request: create the portrait art for {selected_figure}. Scene/backdrop: mythic Greek setting with restrained environment detail. Subject: {selected_figure}, chosen for the mechanic '{mechanic_summary}'. Style/medium: heroic mythic illustration, readable playing card portrait, strong silhouette. Composition/framing: centered portrait with preserved text box space in the lower third and preserved icon/name space in the top area. Lighting/mood: legendary, dramatic, clear at small scale. Constraints: no faction badge, no modern props, no text baked into the art, one clear subject only. Avoid: muddy backgrounds, crowd scenes, overly realistic photo style."
+  }
+}
