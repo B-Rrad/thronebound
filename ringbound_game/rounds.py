@@ -96,7 +96,13 @@ class RoundMixin:
         self.round_effects = self.new_round_effects()
 
     def end_round(self, defender_took_wound, pickup_defenses):
-        if not defender_took_wound and self.round_effects["balrog_active"] == self.attacker:
+        balrog_attack_card = self.round_effects["balrog_attack_card"]
+        balrog_fully_defended = (
+            balrog_attack_card is not None
+            and any(attack_card is balrog_attack_card or attack_card == balrog_attack_card for attack_card in self.table_attacks)
+            and len(self.table_attacks) == len(self.table_defenses)
+        )
+        if not defender_took_wound and self.round_effects["balrog_active"] == self.attacker and balrog_fully_defended:
             self.wounds[self.defender] += 1
             self.status_message = f"Balrog wounds {self.defender} despite the defense."
 

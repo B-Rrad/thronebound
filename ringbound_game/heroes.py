@@ -296,6 +296,7 @@ class HeroMixin:
             self.round_effects["legolas_bonus"] = 1
         elif mode == "balrog_attack":
             self.round_effects["balrog_active"] = owner
+            self.round_effects["balrog_attack_card"] = chosen_card
 
         self.attempt_play_card(chosen_card)
         if self.state != STATE_GAMEOVER:
@@ -306,4 +307,3 @@ class HeroMixin:
             self.update_hand_visuals()
             if self.is_ai_player(self.current_player):
                 self._arm_ai_delay()
-

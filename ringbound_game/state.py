@@ -12,6 +12,7 @@ class GameStateMixin:
             "wormtongue_suit": None,
             "legolas_bonus": 0,
             "balrog_active": None,
+            "balrog_attack_card": None,
             "gandalf_ranks": [],
         }
 
