@@ -52,6 +52,26 @@ class CardRenderer:
         self.cache.put(key, surface)
         return surface
 
+    def card_back_surface(self, state: str, size: tuple[int, int]) -> pygame.Surface:
+        w, h = size
+        key = ("card_back", state, w, h)
+        cached = self.cache.get(key)
+        if cached is not None:
+            return cached
+
+        surf = pygame.Surface((w, h), pygame.SRCALPHA)
+        radius = max(1, int(w * 0.09))
+        border = max(1, int(w * 0.035))
+        rect = pygame.Rect(0, 0, w, h)
+        pygame.draw.rect(surf, (18, 14, 22), rect, border_radius=radius)
+        pygame.draw.rect(surf, self.theme.accent_gold, rect, width=border, border_radius=radius)
+        inner = rect.inflate(-int(w * 0.18), -int(h * 0.14))
+        pygame.draw.rect(surf, (*self.theme.border_subtle, 170), inner, width=max(1, border // 2), border_radius=max(1, radius // 2))
+        pygame.draw.circle(surf, self.theme.accent_ember, rect.center, max(2, int(w * 0.16)), width=max(1, border))
+        pygame.draw.circle(surf, self.theme.accent_gold, rect.center, max(2, int(w * 0.07)))
+        self.cache.put(key, surf)
+        return surf
+
     def _draw_realm_card(self, card: dict[str, Any], state: str, size: tuple[int, int]) -> pygame.Surface:
         w, h = size
         surf = pygame.Surface((w, h), pygame.SRCALPHA)

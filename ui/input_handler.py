@@ -28,6 +28,7 @@ class InputHandler:
         self.pressed: str | None = None
         self.mouse_pos: tuple[int, int] = (0, 0)
         self.pause_confirm: bool = False
+        self.game_log_scroll: int = 0
 
     def update_targets(self, targets: list[HitTarget]) -> None:
         self.targets = targets
@@ -37,12 +38,18 @@ class InputHandler:
         self.mouse_pos = mouse_pos
         self.hovered = None
         for target in reversed(self.targets):
-            if target.enabled and target.rect.collidepoint(mouse_pos):
+            if target.rect.collidepoint(mouse_pos):
                 self.hovered = target.target_id
                 return
 
     def is_hovering_interactive(self) -> bool:
-        return self.hovered is not None
+        return any(target.target_id == self.hovered and target.enabled for target in self.targets)
+
+    def hovered_target(self) -> HitTarget | None:
+        for target in reversed(self.targets):
+            if target.target_id == self.hovered:
+                return target
+        return None
 
     def is_pressed(self, target_id: str) -> bool:
         return self.pressed == target_id
@@ -64,6 +71,11 @@ class InputHandler:
                 return Intent("request_redraw", {})
             if event.key == pygame.K_SPACE:
                 return Intent("confirm_selection", {})
+
+        if event.type == pygame.MOUSEWHEEL:
+            hovered = self.hovered_target()
+            if hovered is not None and hovered.payload.get("region") == "game_log":
+                return Intent("scroll_log", {"delta": -event.y})
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             self.rehit_test(event.pos)

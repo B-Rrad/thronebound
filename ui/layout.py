@@ -36,8 +36,16 @@ class LayoutManager:
         self.rects["center"] = pygame.Rect(side_w, top_h, center_w, mid_h)
         self.rects["hand_area"] = pygame.Rect(0, top_h + mid_h, self.width, hand_h)
 
-        combat_h = int(mid_h * 0.84)
-        combat_y = self.rects["center"].y + int(mid_h * 0.03)
+        opponent_h = int(mid_h * 0.13)
+        self.rects["opponent_hand_area"] = pygame.Rect(
+            self.rects["center"].x + int(center_w * 0.04),
+            self.rects["center"].y + int(mid_h * 0.02),
+            int(center_w * 0.92),
+            opponent_h,
+        )
+
+        combat_h = int(mid_h * 0.80)
+        combat_y = self.rects["opponent_hand_area"].bottom + int(mid_h * 0.02)
         self.rects["combat_area"] = pygame.Rect(self.rects["center"].x, combat_y, center_w, combat_h)
 
         self.rects["attack_zone"] = pygame.Rect(

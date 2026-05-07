@@ -28,6 +28,8 @@ class Renderer:
         self._phase_flash_until = 0
         self._last_wounds: dict[str, int] = {"P1": 0, "P2": 0}
         self._wound_flash_until: dict[str, int] = {"P1": 0, "P2": 0}
+        self._hover_card: Any | None = None
+        self._hover_hint: str = ""
 
     def draw(self, screen: pygame.Surface, game: Any, input_handler: InputHandler) -> list[HitTarget]:
         now = pygame.time.get_ticks()
@@ -264,10 +266,13 @@ class Renderer:
         self._last_phase = phase_text
 
         self._draw_trump_panel(screen, game)
-        self._draw_effects_panel(screen, game)
+        self._draw_effects_panel(screen, game, targets, input_handler)
+        self._draw_status_banner(screen, game)
+        self._draw_opponent_hand(screen, game, targets, input_handler, now)
         self._draw_combat(screen, game, targets, input_handler, now)
         self._draw_hand(screen, game, targets, input_handler, now)
         self._draw_action_buttons(screen, game, targets, input_handler)
+        self._draw_hover_inspector(screen, input_handler)
 
     def _draw_player_header(self, screen: pygame.Surface, player: str, wounds: int, rect: pygame.Rect, now: int, game: Any | None = None) -> None:
         try:
@@ -340,7 +345,7 @@ class Renderer:
         trump_line = self.layout.fonts["tiny"].render(f"Active: {trump_text if trump_text else 'None'}", True, self.theme.text_primary)
         screen.blit(trump_line, (panel.x + int(panel.w * 0.08), panel.y + int(panel.h * 0.54)))
 
-    def _draw_effects_panel(self, screen: pygame.Surface, game: Any) -> None:
+    def _draw_effects_panel(self, screen: pygame.Surface, game: Any, targets: list[HitTarget], input_handler: InputHandler) -> None:
         panel = self.layout.rects["effects_panel"]
         self._draw_translucent_rect(screen, panel, (22, 18, 28, 168), (*self.theme.border_subtle, 150), max(1, int(panel.w * 0.03)), radius=max(1, int(panel.w * 0.06)))
 
@@ -371,6 +376,98 @@ class Renderer:
             line_surface = self.layout.fonts["tiny"].render(line, True, self.theme.text_primary)
             screen.blit(line_surface, (panel.x + int(panel.w * 0.18), y))
             y += int(panel.h * 0.07)
+
+        log_title_y = panel.y + int(panel.h * 0.48)
+        pygame.draw.line(screen, (*self.theme.border_subtle, 160), (panel.x + int(panel.w * 0.08), log_title_y), (panel.right - int(panel.w * 0.08), log_title_y), max(1, int(panel.w * 0.01)))
+        log_title = self.layout.fonts["small"].render("Action Log", True, self.theme.accent_gold)
+        screen.blit(log_title, (panel.x + int(panel.w * 0.08), log_title_y + int(panel.h * 0.035)))
+
+        button_size = max(18, int(panel.w * 0.14))
+        up_button = pygame.Rect(panel.right - int(panel.w * 0.22), log_title_y + int(panel.h * 0.028), button_size, button_size)
+        down_button = pygame.Rect(panel.right - int(panel.w * 0.11), log_title_y + int(panel.h * 0.028), button_size, button_size)
+
+        entries = list(getattr(game, "game_log", []))
+        visible_count = 5
+        max_scroll = max(0, len(entries) - visible_count)
+        input_handler.game_log_scroll = min(getattr(input_handler, "game_log_scroll", 0), max_scroll)
+        scroll = input_handler.game_log_scroll
+        end = len(entries) - scroll
+        visible_entries = entries[max(0, end - visible_count):end]
+
+        self._draw_icon_button(screen, up_button, "up", input_handler.is_pressed("log_up"), enabled=scroll < max_scroll)
+        self._draw_icon_button(screen, down_button, "down", input_handler.is_pressed("log_down"), enabled=scroll > 0)
+        targets.append(HitTarget("log_up", up_button, "scroll_log", {"delta": 1}, enabled=scroll < max_scroll))
+        targets.append(HitTarget("log_down", down_button, "scroll_log", {"delta": -1}, enabled=scroll > 0))
+
+        log_area = pygame.Rect(panel.x + int(panel.w * 0.08), log_title_y + int(panel.h * 0.085), int(panel.w * 0.84), int(panel.h * 0.39))
+        targets.append(HitTarget("log_area", log_area, "noop", {"region": "game_log"}, enabled=False))
+
+        log_y = log_area.y
+        for entry in visible_entries:
+            for line in self._wrap_text(entry, self.layout.fonts["tiny"], int(panel.w * 0.78))[:2]:
+                line_surface = self.layout.fonts["tiny"].render(line, True, self.theme.text_primary)
+                screen.blit(line_surface, (panel.x + int(panel.w * 0.10), log_y))
+                log_y += int(panel.h * 0.045)
+            log_y += int(panel.h * 0.015)
+
+    def _draw_status_banner(self, screen: pygame.Surface, game: Any) -> None:
+        area = self.layout.rects["opponent_hand_area"]
+        message = getattr(game, "status_message", "")
+        if not message:
+            return
+        font = self.layout.fonts["small"]
+        lines = self._wrap_text(message, font, int(area.w * 0.74))[:2]
+        rendered = [font.render(line, True, self.theme.text_primary) for line in lines]
+        text_w = max((line.get_width() for line in rendered), default=1)
+        line_h = max((line.get_height() for line in rendered), default=1)
+        box = pygame.Rect(0, 0, text_w + 36, len(rendered) * line_h + 16)
+        box.center = (area.centerx, area.y + int(area.h * 0.17))
+        self._draw_bubble(screen, box, fill=(18, 14, 22, 190), outline=(*self.theme.accent_gold, 115), radius=14, shadow_offset=(0, 2))
+        text_y = box.y + 8
+        for line in rendered:
+            screen.blit(line, line.get_rect(centerx=box.centerx, y=text_y))
+            text_y += line_h
+
+    def _draw_opponent_hand(self, screen: pygame.Surface, game: Any, targets: list[HitTarget], input_handler: InputHandler, now: int) -> None:
+        area = self.layout.rects["opponent_hand_area"]
+        visible_player = getattr(game, "visible_hand_player", lambda: getattr(game, "current_player", None))()
+        if visible_player is None:
+            return
+        opponent = game.get_opponent(visible_player)
+        realm_cards = list(game.get_player_realm_hand(opponent))
+        hero_cards = list(game.get_player_hero_hand(opponent))
+        total_cards = len(realm_cards) + len(hero_cards)
+        if total_cards <= 0:
+            return
+
+        revealed = getattr(game, "revealed_hand", None)
+        show_realm = revealed is not None and revealed.get("viewer") == visible_player and revealed.get("target") == opponent
+        label_text = f"Opponent Hand: {total_cards} card{'s' if total_cards != 1 else ''}"
+        if show_realm:
+            label_text = f"Revealed Opponent Realm: {len(realm_cards)}"
+        label = self.layout.fonts["tiny"].render(label_text, True, self.theme.text_muted)
+        screen.blit(label, (area.x, area.y + int(area.h * 0.38)))
+
+        card_count = len(realm_cards) if show_realm else total_cards
+        if card_count <= 0:
+            return
+        mini_h = max(28, int(area.h * 0.45))
+        mini_w = int(mini_h / 1.5)
+        gap = max(4, int(mini_w * 0.22))
+        total_w = card_count * mini_w + (card_count - 1) * gap
+        start_x = area.centerx - total_w // 2
+        y = area.y + int(area.h * 0.45)
+
+        if show_realm:
+            for idx, card_data in enumerate(realm_cards):
+                rect = pygame.Rect(start_x + idx * (mini_w + gap), y, mini_w, mini_h)
+                self._draw_card_instance(screen, card_data, rect, input_handler, targets, now, f"opp_revealed_{idx}", "noop", {"card_data": card_data}, enabled=False, animate=False)
+            return
+
+        for idx in range(total_cards):
+            rect = pygame.Rect(start_x + idx * (mini_w + gap), y, mini_w, mini_h)
+            surface = self.card_renderer.card_back_surface("normal", rect.size)
+            screen.blit(surface, rect)
 
     def _draw_combat(self, screen: pygame.Surface, game: Any, targets: list[HitTarget], input_handler: InputHandler, now: int) -> None:
         attack_zone = self.layout.rects["attack_zone"]
@@ -430,7 +527,7 @@ class Renderer:
                 now,
                 f"hand_{idx}",
                 "select_hand_card",
-                {"card_index": idx},
+                {"card_index": idx, "card_data": card_data, "hint": game.card_play_hint(card_data)},
                 enabled=bool(game.is_card_playable_in_hand(card_data)),
             )
 
@@ -479,6 +576,19 @@ class Renderer:
         label = self.layout.fonts["small"].render(text, True, self.theme.text_primary)
         screen.blit(label, label.get_rect(center=rect.center))
 
+    def _draw_icon_button(self, screen: pygame.Surface, rect: pygame.Rect, direction: str, pressed: bool, enabled: bool = True) -> None:
+        color = self.theme.accent_gold if enabled else self.theme.border_subtle
+        if pressed and enabled:
+            color = tuple(max(0, int(c * (1.0 - self.theme.press_darkening))) for c in color)
+        self._draw_translucent_rect(screen, rect, (*color, 150), (*self.theme.text_primary, 115), max(1, int(rect.h * 0.08)), radius=max(1, int(rect.h * 0.20)))
+        cx, cy = rect.center
+        offset = max(3, int(rect.h * 0.18))
+        if direction == "up":
+            points = [(cx, cy - offset), (cx - offset, cy + offset), (cx + offset, cy + offset)]
+        else:
+            points = [(cx, cy + offset), (cx - offset, cy - offset), (cx + offset, cy - offset)]
+        pygame.draw.polygon(screen, self.theme.text_primary if enabled else self.theme.text_muted, points)
+
     def _draw_card_instance(
         self,
         screen: pygame.Surface,
@@ -491,10 +601,14 @@ class Renderer:
         action: str,
         payload: dict[str, Any],
         enabled: bool = True,
+        animate: bool = True,
     ) -> None:
         card_id = self.card_renderer._id_for_card(card_data)
 
         targets.append(HitTarget(target_id, logical_rect.copy(), action, payload, enabled=enabled))
+        if input_handler.hovered == target_id:
+            self._hover_card = card_data
+            self._hover_hint = str(payload.get("hint", ""))
 
         state = "disabled" if not enabled else "normal"
         if input_handler.hovered == target_id and enabled:
@@ -514,6 +628,14 @@ class Renderer:
         prior_card_id = self._slot_card_ids.get(target_id)
 
         # Animate any newly entered card for this slot, even if the slot coordinates are unchanged.
+        if not animate:
+            self._slot_card_ids[target_id] = card_id
+            self._last_positions[motion_key] = draw_rect.copy()
+            self._card_last_rects[card_id] = draw_rect.copy()
+            card_surface = self.card_renderer.card_surface(card_data, state, draw_rect.size)
+            screen.blit(card_surface, draw_rect)
+            return
+
         if prior_card_id != card_id:
             start = self._card_last_rects.get(card_id)
             if start is None:
@@ -537,6 +659,54 @@ class Renderer:
             card_surface.set_alpha(final_alpha)
 
         screen.blit(card_surface, final_rect)
+
+    def _draw_hover_inspector(self, screen: pygame.Surface, input_handler: InputHandler) -> None:
+        hovered = input_handler.hovered_target()
+        if hovered is None or self._hover_card is None:
+            self._hover_card = None
+            self._hover_hint = ""
+            return
+
+        card = self._hover_card
+        hint = self._hover_hint
+        card_w, card_h = self.layout.card_size()
+        inspect_w = int(card_w * 1.42)
+        inspect_h = int(card_h * 1.42)
+        center = self.layout.rects["center"]
+        rect = pygame.Rect(
+            center.x + int(center.w * 0.03),
+            center.bottom - inspect_h - int(self.layout.height * 0.025),
+            inspect_w,
+            inspect_h,
+        )
+        panel_rect = rect.inflate(int(inspect_w * 0.12), int(inspect_h * 0.26))
+        self._draw_translucent_rect(screen, panel_rect, (16, 13, 19, 222), (*self.theme.accent_gold, 135), max(1, int(inspect_w * 0.018)), radius=max(1, int(inspect_w * 0.08)))
+        surface = self.card_renderer.card_surface(card, "normal", rect.size)
+        screen.blit(surface, rect)
+
+        if hint:
+            text_x = rect.x
+            text_y = rect.bottom + int(panel_rect.h * 0.035)
+            for line in self._wrap_text(hint, self.layout.fonts["tiny"], rect.w):
+                line_surface = self.layout.fonts["tiny"].render(line, True, self.theme.text_primary)
+                screen.blit(line_surface, (text_x, text_y))
+                text_y += int(self.layout.height * 0.021)
+
+        self._hover_card = None
+        self._hover_hint = ""
+
+    def _wrap_text(self, text: str, font: pygame.font.Font, max_w: int) -> list[str]:
+        words = text.split()
+        if not words:
+            return []
+        lines = [words[0]]
+        for word in words[1:]:
+            candidate = f"{lines[-1]} {word}"
+            if font.size(candidate)[0] <= max_w:
+                lines[-1] = candidate
+            else:
+                lines.append(word)
+        return lines
 
     def _draw_pause_confirm(self, screen: pygame.Surface, targets: list[HitTarget], input_handler: InputHandler) -> None:
         shade = pygame.Surface(self.layout.rects["screen"].size, pygame.SRCALPHA)

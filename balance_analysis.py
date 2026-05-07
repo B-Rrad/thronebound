@@ -525,6 +525,7 @@ class SimulationGame:
             "wormtongue_suit": None,
             "legolas_bonus": 0,
             "balrog_active": None,
+            "balrog_attack_card": None,
         }
 
     def get_ai(self, player):
@@ -804,6 +805,8 @@ class SimulationGame:
         hand = self.get_player_realm_hand(player)
         hand.remove(card)
         self.table_attacks.append(card)
+        if self.round_effects["balrog_active"] == player and self.round_effects["balrog_attack_card"] is None:
+            self.round_effects["balrog_attack_card"] = card
         if self.round_effects["legolas_bonus"] > 0:
             self.round_effects["legolas_bonus"] -= 1
         self.play_phase = "DEFEND"
@@ -829,7 +832,13 @@ class SimulationGame:
             hand.append(self.realm_deck.pop())
 
     def end_round(self, defender_took_wound, pickup_defenses):
-        if not defender_took_wound and self.round_effects["balrog_active"] == self.attacker:
+        balrog_attack_card = self.round_effects["balrog_attack_card"]
+        balrog_fully_defended = (
+            balrog_attack_card is not None
+            and any(card is balrog_attack_card or card == balrog_attack_card for card in self.table_attacks)
+            and len(self.table_attacks) == len(self.table_defenses)
+        )
+        if not defender_took_wound and self.round_effects["balrog_active"] == self.attacker and balrog_fully_defended:
             self.wounds[self.defender] += 1
 
         if not defender_took_wound:

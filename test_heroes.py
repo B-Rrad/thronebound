@@ -215,6 +215,7 @@ class HeroRegressionTests(unittest.TestCase):
 
         self.game.resolve_hero_attack_card(attack_card)
         self.assertEqual(self.game.round_effects["balrog_active"], "P1")
+        self.assertIs(self.game.round_effects["balrog_attack_card"], attack_card)
         self.assertEqual(self.game.play_phase, "DEFEND")
         self.assertEqual(self.game.current_player, "P2")
 
@@ -222,6 +223,27 @@ class HeroRegressionTests(unittest.TestCase):
         self.game.end_round(False, False)
 
         self.assertEqual(self.game.wounds["P2"], 1)
+        self.assertEqual(self.game.attacker, "P2")
+        self.assertEqual(self.game.defender, "P1")
+
+    def test_balrog_does_not_wound_if_gandalf_cancels_balrog_attack(self):
+        attack_card = realm("Balrog Attack", "Shire", 7)
+        balrog = hero("balrog", "Shadow")
+        gandalf = hero("gandalf", "Fellowship")
+        self.game.p1_hand = [attack_card]
+        self.game.p1_heroes = [balrog]
+        self.game.p2_hand = [realm("Spare Defender", "Rohan", 4)]
+        self.game.p2_heroes = [gandalf]
+
+        self.game.attempt_hero_play(balrog)
+        self.game.resolve_hero_attack_card(attack_card)
+
+        self.game.attempt_hero_play(gandalf)
+        self.assertEqual(self.game.table_attacks, [])
+
+        self.game.end_round(False, False)
+
+        self.assertEqual(self.game.wounds["P2"], 0)
         self.assertEqual(self.game.attacker, "P2")
         self.assertEqual(self.game.defender, "P1")
 
@@ -263,6 +285,13 @@ class HeroRegressionTests(unittest.TestCase):
         self.game.table_attacks = [realm("Lead", "Gondor", 7)]
         self.game.table_defenses = [realm("Block", "Gondor", 9)]
         self.game.p1_hand = [off_rank]
+        self.game.p1_heroes = [balrog]
+
+        self.assertFalse(self.game.can_use_hero(balrog))
+
+    def test_balrog_cannot_be_used_with_empty_realm_hand(self):
+        balrog = hero("balrog", "Shadow")
+        self.game.p1_hand = []
         self.game.p1_heroes = [balrog]
 
         self.assertFalse(self.game.can_use_hero(balrog))
