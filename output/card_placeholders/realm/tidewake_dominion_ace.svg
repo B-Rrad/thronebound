@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" role="img" aria-labelledby="title desc">
   <title id="title">Ace of Tidewake Dominion</title>
-  <desc id="desc">Placeholder card for Ace of Tidewake Dominion using the Tidewake Dominion dominion frame.</desc>
+  <desc id="desc">Concept art card for Ace of Tidewake Dominion using the Tidewake Dominion dominion frame.</desc>
   <defs>
     <linearGradient id="bg-tidewake_dominion_ace" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0%" stop-color="#edf5fb"/>
@@ -23,14 +23,23 @@
         </g>
   </g>
   
-        <g transform="translate(375,430) scale(1.34)">
-          <path d="M-12 -118 C28 -118 42 -72 34 -38 C26 -4 28 40 58 90 L-30 90 C-42 48 -44 16 -36 -22 C-30 -52 -32 -92 -12 -118 Z" fill="#1e3554"/>
-          <path d="M22 -102 L22 40" fill="none" stroke="#3E8EDE" stroke-width="12" stroke-linecap="round"/>
-          <path d="M22 -102 L-8 -62" fill="none" stroke="#3E8EDE" stroke-width="10" stroke-linecap="round"/>
-          <path d="M22 -102 L52 -62" fill="none" stroke="#3E8EDE" stroke-width="10" stroke-linecap="round"/>
-          <path d="M-48 40 C-18 22 12 22 44 40" fill="none" stroke="#3E8EDE" stroke-width="10" stroke-linecap="round" opacity="0.45"/>
+        <g opacity="0.92">
+          <path d="M214 564 C266 486 326 438 392 406 C344 462 322 530 338 608" fill="none" stroke="#90c8ef" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+          <path d="M536 564 C486 486 426 438 360 406 C408 462 430 530 414 608" fill="none" stroke="#90c8ef" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+          <path d="M240 332 C286 294 330 284 375 302 C420 284 464 294 510 332" fill="none" stroke="#dbeaf9" stroke-width="16" stroke-linecap="round" opacity="0.52"/>
+          <path d="M246 612 C306 582 362 574 430 592 C470 602 504 602 540 592" fill="none" stroke="#dbeaf9" stroke-width="14" stroke-linecap="round" opacity="0.48"/>
+          <circle cx="294" cy="254" r="10" fill="#90c8ef" opacity="0.34"/>
+          <circle cx="454" cy="226" r="8" fill="#90c8ef" opacity="0.28"/>
         </g>
         
+  
+            <g transform="translate(375,450) scale(1.34)">
+              <path d="M-106 42 C-88 -12 -42 -54 24 -68 C82 -80 132 -50 142 2 C150 42 126 82 74 98 C52 106 18 108 -20 104 C-46 100 -70 86 -86 70 C-102 54 -110 46 -106 42 Z" fill="#1e3554"/>
+              <path d="M52 -18 C76 -44 106 -52 138 -40" fill="none" stroke="#3E8EDE" stroke-width="10" stroke-linecap="round"/>
+              <path d="M-54 22 C-12 44 36 54 88 46" fill="none" stroke="#3E8EDE" stroke-width="10" stroke-linecap="round" opacity="0.86"/>
+              <path d="M-32 68 C-10 92 10 114 28 136" fill="none" stroke="#1e3554" stroke-width="12" stroke-linecap="round"/>
+            </g>
+            
 
   <line x1="118" y1="856" x2="632" y2="856" stroke="#dbeaf9" stroke-width="4"/>
   <text x="375" y="904" text-anchor="middle" font-size="42" font-weight="700" fill="#1e3554">Ancient Leviathan</text>

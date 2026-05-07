@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" role="img" aria-labelledby="title desc">
   <title id="title">Ajax</title>
-  <desc id="desc">Placeholder hero card for Ajax with gold hero framing.</desc>
+  <desc id="desc">Concept art hero card for Ajax with gold hero framing.</desc>
   <defs>
     <linearGradient id="bg-boromir" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0%" stop-color="#f6f0e4"/>
@@ -24,11 +24,17 @@
   </g>
 
   
-        <g transform="translate(375,372) scale(1.32)">
-          <path d="M-18 -124 C24 -124 42 -70 40 -34 C38 0 42 42 62 94 L-42 94 C-52 52 -54 22 -46 -18 C-38 -56 -36 -108 -18 -124 Z" fill="#241d12"/>
-          <path d="M18 -114 L18 42" fill="none" stroke="#c9a84c" stroke-width="12" stroke-linecap="round"/>
-          <path d="M18 -114 L-10 -74" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round"/>
-          <path d="M18 -114 L46 -74" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round"/>
+        <g transform="translate(375,254) scale(1.42)">
+          <path d="M-54 30 C-24 -8 8 -22 42 -14 C58 -10 70 -16 82 -32 C82 8 58 46 18 62 C-14 74 -42 66 -66 48 C-60 48 -56 42 -54 30 Z" fill="#c9a84c" opacity="0.18"/>
+          <path d="M-36 30 C-10 46 16 46 50 26" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round" opacity="0.3"/>
+        </g>
+        
+  
+        <g transform="translate(375,400) scale(1.28)">
+          <path d="M0 -132 L26 -96 L42 -8 L56 104 L-20 104 L-28 10 L-40 -88 Z" fill="#241d12"/>
+          <circle cx="-44" cy="12" r="46" fill="#241d12"/>
+          <circle cx="-44" cy="12" r="24" fill="#c9a84c" opacity="0.26"/>
+          <path d="M30 -82 L88 112" fill="none" stroke="#c9a84c" stroke-width="12" stroke-linecap="round"/>
         </g>
         
 

@@ -78,7 +78,7 @@ python main.py
 - Mouse only
 - Click on the splash screen to begin the draft
 - Click cards to draft or play them
-- Click on-screen buttons such as `Take Wound`, `End Attack`, `Pass Attack`, `P1 Heal`, `P2 Heal`, or suit choices when prompted
+- Click on-screen buttons such as `Take Wound`, `End Attack`, `Pass Attack`, `P1 Heal`, `P2 Heal`, or dominion choices when prompted
 
 ## Gameplay Rules
 
@@ -88,11 +88,11 @@ python main.py
 
 ## Hero Timing Notes
 
-- `Galadriel` may be used at any time while that player has wounds remaining.
-- `Saruman` and `Sauron` are start-of-round attack tools.
-- `Gandalf` and `Boromir` are defensive responses.
-- `Legolas` and `Balrog` must be played together with a realm attack card.
-- `Gollum` lets the player who played it choose the temporary trump suit for the round.
+- `Asclepius` may be used at any time while that player has wounds remaining.
+- `Medea` and `Argus Panoptes` are start-of-round attack tools.
+- `Athena` and `Ajax` are defensive responses.
+- `Achilles` and `Ares` must be played together with a realm attack card.
+- `Autolycus` lets the player who played it choose the temporary crown suit for the round.
 
 ## Project Notes
 

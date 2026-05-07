@@ -2,10 +2,10 @@
   "shared_layout": {
     "card_ratio": "poker_portrait",
     "required_elements": [
-      "rank displayed in opposite corners",
-      "dominion icon paired with the rank marker",
-      "dominion name or banner on the face",
-      "high silhouette clarity at table distance"
+      "rank displayed in the top-left corner only",
+      "dominion icon paired with the enlarged top-left rank marker",
+      "centered illustration area with strong silhouette clarity",
+      "card name and dominion label stacked at the bottom"
     ],
     "art_style": "mythic illustrated playing card",
     "avoid": [

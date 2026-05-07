@@ -120,11 +120,16 @@ class CardRenderer:
         pygame.draw.rect(surf, self.theme.surface, card_rect, border_radius=radius)
         pygame.draw.rect(surf, self.theme.accent_gold, card_rect, width=border, border_radius=radius)
 
-        faction = card.get("faction", "")
-        faction_color = self.theme.fellowship if faction == "Fellowship" else self.theme.shadow
+        faction = card.get("faction", "Legend")
+        if faction == "Fellowship":
+            faction_color = self.theme.fellowship
+        elif faction == "Shadow":
+            faction_color = self.theme.shadow
+        else:
+            faction_color = self.theme.accent_gold
 
         name_surface = self.layout.fonts["label"].render(card.get("name", "HERO"), True, self.theme.text_primary)
-        faction_surface = self.layout.fonts["small"].render(faction, True, faction_color)
+        faction_surface = self.layout.fonts["small"].render(faction.upper(), True, faction_color)
 
         surf.blit(name_surface, (int(w * 0.08), int(h * 0.08)))
         surf.blit(faction_surface, (int(w * 0.08), int(h * 0.23)))
@@ -220,9 +225,14 @@ class CardRenderer:
         if faction == "Fellowship":
             pygame.draw.polygon(surface, color, [(cx, cy - size), (cx + size, cy), (cx, cy + size), (cx - size, cy)], width=0)
             pygame.draw.circle(surface, self.theme.surface, (cx, cy), max(1, size // 3))
-        else:
+        elif faction == "Shadow":
             pygame.draw.circle(surface, color, (cx, cy), size)
             pygame.draw.circle(surface, self.theme.surface, (cx, cy), max(1, size // 2), width=max(1, size // 4))
+        else:
+            pygame.draw.circle(surface, color, (cx, cy), size, width=max(1, size // 4))
+            pygame.draw.circle(surface, color, (cx, cy), max(1, size // 5))
+            for dx, dy in ((0, -size), (size, 0), (0, size), (-size, 0)):
+                pygame.draw.circle(surface, color, (cx + dx, cy + dy), max(1, size // 6))
 
     def _apply_disabled_overlay(self, surface: pygame.Surface) -> None:
         overlay = pygame.Surface(surface.get_size(), pygame.SRCALPHA)

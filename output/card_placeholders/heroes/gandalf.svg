@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" role="img" aria-labelledby="title desc">
   <title id="title">Athena</title>
-  <desc id="desc">Placeholder hero card for Athena with gold hero framing.</desc>
+  <desc id="desc">Concept art hero card for Athena with gold hero framing.</desc>
   <defs>
     <linearGradient id="bg-gandalf" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0%" stop-color="#f6f0e4"/>
@@ -24,16 +24,23 @@
   </g>
 
   
-        <g transform="translate(375,372) scale(1.32)">
-          <path d="M0 -136 L34 -108 L54 28 L62 96 L-62 96 L-54 28 L-34 -108 Z" fill="#241d12"/>
-          <path d="M0 -146 L18 -128 L10 -108 L0 -116 L-10 -108 L-18 -128 Z" fill="#c9a84c" opacity="0.75"/>
-          <path d="M-58 80 L0 40 L58 80" fill="#c9a84c" opacity="0.18"/>
+        <g transform="translate(375,254) scale(1.42)">
+          <path d="M0 -72 C28 -62 52 -34 56 -4 C60 26 42 52 14 60 L0 72 L-14 60 C-42 52 -60 26 -56 -4 C-52 -34 -28 -62 0 -72 Z" fill="#c9a84c" opacity="0.16"/>
+          <path d="M0 -54 V48 M-34 -10 H34" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round" opacity="0.26"/>
+        </g>
+        
+  
+        <g transform="translate(375,400) scale(1.28)">
+          <path d="M0 -132 C22 -126 34 -110 34 -88 C34 -66 18 -48 0 -38 C-18 -48 -34 -66 -34 -88 C-34 -110 -22 -126 0 -132 Z" fill="#c9a84c" opacity="0.38"/>
+          <path d="M0 -92 L28 -32 L42 106 L-42 106 L-28 -32 Z" fill="#241d12"/>
+          <circle cx="54" cy="-78" r="16" fill="#c9a84c" opacity="0.72"/>
+          <path d="M-54 -10 C-30 -24 -10 -30 14 -28 C36 -26 54 -18 70 -4" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round"/>
         </g>
         
 
   <line x1="118" y1="658" x2="632" y2="658" stroke="#ece2cb" stroke-width="4"/>
   <rect x="92" y="676" width="566" height="188" rx="22" fill="#ece2cb" opacity="0.72"/>
-  <text x="375" y="758" text-anchor="middle" font-size="29" font-weight="600" fill="#241d12" opacity="0.9">Cancel one non-trump attack</text>
+  <text x="375" y="758" text-anchor="middle" font-size="29" font-weight="600" fill="#241d12" opacity="0.9">Cancel one non-crown attack</text>
 <text x="375" y="792" text-anchor="middle" font-size="29" font-weight="600" fill="#241d12" opacity="0.9">(standalone).</text>
 
   <line x1="118" y1="892" x2="632" y2="892" stroke="#ece2cb" stroke-width="4"/>

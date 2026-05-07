@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" role="img" aria-labelledby="title desc">
   <title id="title">Autolycus</title>
-  <desc id="desc">Placeholder hero card for Autolycus with gold hero framing.</desc>
+  <desc id="desc">Concept art hero card for Autolycus with gold hero framing.</desc>
   <defs>
     <linearGradient id="bg-gollum" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0%" stop-color="#f6f0e4"/>
@@ -24,17 +24,25 @@
   </g>
 
   
-        <g transform="translate(375,372) scale(1.32)">
-          <path d="M0 -134 C18 -128 30 -114 30 -92 C30 -70 18 -54 0 -46 C-18 -54 -30 -70 -30 -92 C-30 -114 -18 -128 0 -134 Z" fill="#c9a84c" opacity="0.42"/>
-          <path d="M0 -88 L24 -34 L48 98 L-48 98 L-24 -34 Z" fill="#241d12"/>
-          <rect x="-6" y="-120" width="12" height="176" rx="4" fill="#241d12"/>
+        <g transform="translate(375,254) scale(1.42)">
+          <circle cx="0" cy="0" r="60" fill="none" stroke="#c9a84c" stroke-width="10" opacity="0.32"/>
+          <path d="M0 -54 L22 -12 L56 -8 L30 16 L40 52 L0 30 L-40 52 L-30 16 L-56 -8 L-22 -12 Z" fill="#c9a84c" opacity="0.18"/>
+        </g>
+        
+  
+        <g transform="translate(375,400) scale(1.28)">
+          <path d="M-10 -126 C18 -120 34 -96 34 -66 C34 -34 14 -10 -12 2 C-34 -16 -44 -42 -38 -76 C-34 -102 -22 -118 -10 -126 Z" fill="#c9a84c" opacity="0.34"/>
+          <path d="M-24 -78 L-48 12 L-50 106 L28 106 L18 18 L4 -72 Z" fill="#241d12"/>
+          <path d="M24 -64 C44 -50 56 -30 60 -4" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round"/>
+          <path d="M38 -100 L64 -118 L58 -88" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round"/>
         </g>
         
 
   <line x1="118" y1="658" x2="632" y2="658" stroke="#ece2cb" stroke-width="4"/>
   <rect x="92" y="676" width="566" height="188" rx="22" fill="#ece2cb" opacity="0.72"/>
-  <text x="375" y="758" text-anchor="middle" font-size="29" font-weight="600" fill="#241d12" opacity="0.9">The player who played Gollum may</text>
-<text x="375" y="792" text-anchor="middle" font-size="29" font-weight="600" fill="#241d12" opacity="0.9">redefine trump for one round.</text>
+  <text x="375" y="741" text-anchor="middle" font-size="29" font-weight="600" fill="#241d12" opacity="0.9">The player who played Autolycus</text>
+<text x="375" y="775" text-anchor="middle" font-size="29" font-weight="600" fill="#241d12" opacity="0.9">may redefine the crown suit for</text>
+<text x="375" y="809" text-anchor="middle" font-size="29" font-weight="600" fill="#241d12" opacity="0.9">one round.</text>
 
   <line x1="118" y1="892" x2="632" y2="892" stroke="#ece2cb" stroke-width="4"/>
   <text x="375" y="944" text-anchor="middle" font-size="42" font-weight="700" fill="#241d12">Autolycus</text>

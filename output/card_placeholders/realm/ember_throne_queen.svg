@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" role="img" aria-labelledby="title desc">
   <title id="title">Queen of Ember Throne</title>
-  <desc id="desc">Placeholder card for Queen of Ember Throne using the Ember Throne dominion frame.</desc>
+  <desc id="desc">Concept art card for Queen of Ember Throne using the Ember Throne dominion frame.</desc>
   <defs>
     <linearGradient id="bg-ember_throne_queen" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0%" stop-color="#f5ece5"/>
@@ -22,11 +22,22 @@
         </g>
   </g>
   
-        <g transform="translate(375,430) scale(1.34)">
-          <path d="M0 -126 L26 -86 L44 10 L58 84 L-58 84 L-44 10 L-26 -86 Z" fill="#31181f"/>
-          <path d="M0 -136 L22 -122 L16 -104 L0 -112 L-16 -104 L-22 -122 Z" fill="#6D1F33" opacity="0.7"/>
-          <rect x="-6" y="-82" width="12" height="126" rx="4" fill="#6D1F33" opacity="0.85"/>
-          <path d="M-58 84 L0 46 L58 84" fill="#6D1F33" opacity="0.18"/>
+        <g opacity="0.94">
+          <path d="M184 560 L274 414 L316 604 Z" fill="#d69a78" opacity="0.22"/>
+          <path d="M566 560 L476 414 L434 604 Z" fill="#d69a78" opacity="0.22"/>
+          <path d="M222 344 L304 278 L326 466 Z" fill="#ead4d8" opacity="0.28"/>
+          <path d="M528 344 L446 278 L424 466 Z" fill="#ead4d8" opacity="0.28"/>
+          <path d="M338 244 L375 154 L412 244" fill="#d69a78" opacity="0.5"/>
+          <path d="M375 182 C404 220 420 250 420 282 C420 332 396 364 375 364 C354 364 330 332 330 282 C330 258 340 234 356 212 C354 236 362 256 375 272 C386 254 388 222 375 182 Z" fill="#ead4d8" opacity="0.32"/>
+        </g>
+        
+  
+        <g transform="translate(375,450) scale(1.34)">
+          <path d="M0 -136 C20 -130 32 -114 32 -92 C32 -70 16 -52 0 -42 C-16 -52 -32 -70 -32 -92 C-32 -114 -20 -130 0 -136 Z" fill="#6D1F33" opacity="0.4"/>
+          <path d="M0 -92 L26 -38 L44 108 L-44 108 L-26 -38 Z" fill="#31181f"/>
+          <rect x="-6" y="-122" width="12" height="178" rx="4" fill="#31181f"/>
+          <path d="M-54 8 C-34 -20 -18 -32 0 -34 C18 -32 34 -20 54 8" fill="none" stroke="#6D1F33" stroke-width="10" stroke-linecap="round" opacity="0.82"/>
+          <circle cx="0" cy="-16" r="12" fill="#6D1F33" opacity="0.8"/>
         </g>
         
 

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" role="img" aria-labelledby="title desc">
   <title id="title">Ace of Obsidian Veil</title>
-  <desc id="desc">Placeholder card for Ace of Obsidian Veil using the Obsidian Veil dominion frame.</desc>
+  <desc id="desc">Concept art card for Ace of Obsidian Veil using the Obsidian Veil dominion frame.</desc>
   <defs>
     <linearGradient id="bg-obsidian_veil_ace" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0%" stop-color="#f0ebe1"/>
@@ -23,13 +23,23 @@
     </g>
   </g>
   
-    <g transform="translate(375,430) scale(1.34)">
-      <path d="M0 -128 L38 -92 L22 -14 L56 86 L-56 86 L-22 -14 L-38 -92 Z" fill="#1a1a1a"/>
-      <path d="M0 -86 V62" fill="none" stroke="#111111" stroke-width="10" stroke-linecap="round" opacity="0.8"/>
-      <path d="M-26 -112 C-16 -132 -4 -142 12 -148" fill="none" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
-      <path d="M14 -148 C2 -128 -6 -116 -18 -106" fill="none" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
+    <g opacity="0.95">
+      <circle cx="375" cy="254" r="116" fill="#ddd5c8" opacity="0.34"/>
+      <circle cx="375" cy="254" r="86" fill="none" stroke="#a6a0a0" stroke-width="16" opacity="0.42"/>
+      <path d="M286 364 L318 304 L350 602" fill="none" stroke="#a6a0a0" stroke-width="14" stroke-linecap="round" opacity="0.36"/>
+      <path d="M464 364 L432 304 L400 602" fill="none" stroke="#a6a0a0" stroke-width="14" stroke-linecap="round" opacity="0.36"/>
+      <path d="M240 588 L294 428 L326 618 Z" fill="#ddd5c8" opacity="0.22"/>
+      <path d="M510 588 L456 428 L424 618 Z" fill="#ddd5c8" opacity="0.22"/>
     </g>
     
+  
+        <g transform="translate(375,450) scale(1.34)">
+          <path d="M0 -128 C36 -124 64 -96 72 -52 C80 -12 68 24 40 48 C24 62 12 76 0 96 C-12 76 -24 62 -40 48 C-68 24 -80 -12 -72 -52 C-64 -96 -36 -124 0 -128 Z" fill="#1a1a1a"/>
+          <path d="M0 -88 V76" fill="none" stroke="#111111" stroke-width="12" stroke-linecap="round" opacity="0.88"/>
+          <path d="M-34 -24 L-74 24 M34 -24 L74 24" fill="none" stroke="#111111" stroke-width="10" stroke-linecap="round"/>
+          <path d="M-22 86 L-28 136 M22 86 L28 136" fill="none" stroke="#1a1a1a" stroke-width="12" stroke-linecap="round"/>
+        </g>
+        
 
   <line x1="118" y1="856" x2="632" y2="856" stroke="#ddd5c8" stroke-width="4"/>
   <text x="375" y="904" text-anchor="middle" font-size="42" font-weight="700" fill="#1a1a1a">Ancient Revenant</text>

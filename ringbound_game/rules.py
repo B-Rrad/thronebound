@@ -178,7 +178,8 @@ class RulesMixin:
         if self.pending_action is not None:
             action_type = self.pending_action["type"]
             if action_type == "saruman_exchange":
-                return "Choose one of your realm cards for Saruman." if self.is_realm_card(card_data) else "Saruman swaps realm cards only."
+                hero_name = self.get_hero_display_name("saruman")
+                return f"Choose one of your realm cards for {hero_name}." if self.is_realm_card(card_data) else f"{hero_name} swaps realm cards only."
             if action_type == "hero_attack_card":
                 return "Choose a realm card for this hero attack." if self.can_select_hero_attack_card(card_data) else "This hero needs a legal realm card."
             return "Finish the current hero choice first."
@@ -191,14 +192,14 @@ class RulesMixin:
             if attack_card is None:
                 return "There is no attack to defend."
             if self.round_effects["wormtongue_suit"] == card_data.get("suit"):
-                return f"Wormtongue forbids {card_data.get('suit')} this round."
+                return f"{self.get_hero_display_name('wormtongue')} forbids {card_data.get('suit')} this round."
             if self.round_effects["nazgul_active"] and not self.is_trump_card(card_data):
-                return "Nazgul allows only trump cards for defense."
+                return f"{self.get_hero_display_name('nazgul')} allows only crown cards for defense."
             if card_data.get("suit") == attack_card.get("suit"):
                 return "Same-suit defense must be higher than the attack."
             if self.is_trump_card(card_data) and self.is_trump_card(attack_card):
-                return "Trump defense must be higher than the trump attack."
-            return "Defend with a higher matching suit card or trump."
+                return "Crown defense must be higher than the crown attack."
+            return "Defend with a higher matching suit card or a crown card."
         if self.play_phase == "REINFORCE" and not self.can_attack_with_card(card_data):
             return "Reinforcements must match a rank already on the table."
         if self.play_phase in ("ATTACK", "REINFORCE"):

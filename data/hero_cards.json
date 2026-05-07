@@ -2,87 +2,87 @@
   "hero_cards": [
     {
       "id": "aragorn",
-      "name": "Aragorn",
-      "faction": "Fellowship",
+      "name": "Odysseus",
+      "faction": "Legend",
       "power": "Return one played attack card to your hand.",
-      "image": "aragorn.png"
+      "image": "odysseus.png"
     },
     {
       "id": "legolas",
-      "name": "Legolas",
-      "faction": "Fellowship",
+      "name": "Achilles",
+      "faction": "Legend",
       "power": "Add one attack card regardless of rank (play with card).",
-      "image": "legolas.png"
+      "image": "achilles.png"
     },
     {
       "id": "gandalf",
-      "name": "Gandalf",
-      "faction": "Fellowship",
-      "power": "Cancel one non-trump attack (standalone).",
-      "image": "gandalf.png"
+      "name": "Athena",
+      "faction": "Legend",
+      "power": "Cancel one non-crown attack (standalone).",
+      "image": "athena.png"
     },
     {
       "id": "galadriel",
-      "name": "Galadriel",
-      "faction": "Fellowship",
+      "name": "Asclepius",
+      "faction": "Legend",
       "power": "Heal two wounds (any time).",
-      "image": "galadriel.png"
+      "image": "asclepius.png"
     },
     {
       "id": "frodo",
-      "name": "Frodo",
-      "faction": "Fellowship",
-      "power": "Disable trump suit for one round.",
-      "image": "frodo.png"
+      "name": "Hermes",
+      "faction": "Legend",
+      "power": "Disable the crown suit for one round.",
+      "image": "hermes.png"
     },
     {
       "id": "boromir",
-      "name": "Boromir",
-      "faction": "Fellowship",
+      "name": "Ajax",
+      "faction": "Legend",
       "power": "Auto-defend one attack; attacker discards one random card.",
-      "image": "boromir.png"
+      "image": "ajax.png"
     },
     {
       "id": "nazgul",
-      "name": "Nazgul",
-      "faction": "Shadow",
-      "power": "Defender may use only trump cards (standalone).",
-      "image": "nazgul.png"
+      "name": "Hades",
+      "faction": "Legend",
+      "power": "Defender may use only crown cards (standalone).",
+      "image": "hades.png"
     },
     {
       "id": "saruman",
-      "name": "Saruman",
-      "faction": "Shadow",
-      "power": "Exchange one card with defender's highest or trump card (start of round).",
-      "image": "saruman.png"
+      "name": "Medea",
+      "faction": "Legend",
+      "power": "Exchange one card with defender's highest or crown card (start of round).",
+      "image": "medea.png"
     },
     {
       "id": "sauron",
-      "name": "Sauron",
-      "faction": "Shadow",
+      "name": "Argus Panoptes",
+      "faction": "Legend",
       "power": "View opponent's hand (start of round).",
-      "image": "sauron.png"
+      "image": "argus_panoptes.png"
     },
     {
       "id": "balrog",
-      "name": "Balrog",
-      "faction": "Shadow",
+      "name": "Ares",
+      "faction": "Legend",
       "power": "Inflict one wound even if fully defended (end of round, play with card).",
-      "image": "balrog.png"
+      "image": "ares.png"
     },
     {
       "id": "gollum",
-      "name": "Gollum",
-      "faction": "Shadow",
-      "power": "The player who played Gollum may redefine trump for one round.",
-      "image": "gollum.png"
+      "name": "Autolycus",
+      "faction": "Legend",
+      "power": "The player who played Autolycus may redefine the crown suit for one round.",
+      "image": "autolycus.png"
     },
     {
       "id": "wormtongue",
-      "name": "Wormtongue",
-      "faction": "Shadow",
-      "power": "Name a suit; defender cannot play that suit this round.",
-      "image": "wormtongue.png"
+      "name": "Circe",
+      "faction": "Legend",
+      "power": "Name a dominion; defender cannot play that dominion this round.",
+      "image": "circe.png"
     }
   ]
 }

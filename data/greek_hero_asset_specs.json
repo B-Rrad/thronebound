@@ -54,7 +54,7 @@
     },
     {
       "legacy_id": "gandalf",
-      "mechanic_summary": "Cancel one non-trump attack.",
+      "mechanic_summary": "Cancel one non-crown attack.",
       "best_fit_theme": "wise protector or prophetic defender",
       "candidate_figures": [
         "Athena",
@@ -84,7 +84,7 @@
     },
     {
       "legacy_id": "frodo",
-      "mechanic_summary": "Disable the Crowned Dominion for one round.",
+      "mechanic_summary": "Disable the crown suit for one round.",
       "best_fit_theme": "humble disruptor or fate-twisting traveler",
       "candidate_figures": [
         "Hermes",
@@ -114,7 +114,7 @@
     },
     {
       "legacy_id": "nazgul",
-      "mechanic_summary": "Defender may use only Crowned Dominion cards.",
+      "mechanic_summary": "Defender may use only crown cards.",
       "best_fit_theme": "terror figure or curse enforcer",
       "candidate_figures": [
         "Hades",
@@ -129,7 +129,7 @@
     },
     {
       "legacy_id": "saruman",
-      "mechanic_summary": "Exchange one card with defender's highest or Crowned Dominion card.",
+      "mechanic_summary": "Exchange one card with defender's highest or crown card.",
       "best_fit_theme": "schemer, manipulator, or oath-breaker",
       "candidate_figures": [
         "Hermes",
@@ -174,7 +174,7 @@
     },
     {
       "legacy_id": "gollum",
-      "mechanic_summary": "The player who used this hero may redefine the Crowned Dominion for one round.",
+      "mechanic_summary": "The player who used this hero may redefine the crown suit for one round.",
       "best_fit_theme": "trickster, thief, or unstable guide",
       "candidate_figures": [
         "Hermes",

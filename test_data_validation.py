@@ -5,7 +5,7 @@ from resource_manager import discover_music_tracks, load_cards
 
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-EXPECTED_SUITS = {"Gondor", "Mordor", "Rohan", "Shire"}
+EXPECTED_SUITS = {"Verdant Court", "Ember Throne", "Tidewake Dominion", "Obsidian Veil"}
 EXPECTED_RANKS = set(range(6, 15))
 EXPECTED_HERO_IDS = {
     "aragorn",
@@ -55,12 +55,14 @@ class CardDataValidationTests(unittest.TestCase):
         heroes_by_id = {card["id"]: card for card in self.hero_cards}
         for card in self.hero_cards:
             self.assertEqual({"id", "name", "faction", "power", "image"}, set(card))
-            self.assertIn(card["faction"], {"Fellowship", "Shadow"})
+            self.assertEqual(card["faction"], "Legend")
             self.assertTrue(card["name"])
             self.assertTrue(card["power"])
 
         self.assertIn("player who played", heroes_by_id["gollum"]["power"].lower())
         self.assertIn("fully defended", heroes_by_id["balrog"]["power"].lower())
+        self.assertEqual(heroes_by_id["gollum"]["name"], "Autolycus")
+        self.assertIn("crown suit", heroes_by_id["gollum"]["power"].lower())
 
     def test_packaged_resources_exist_for_runtime(self):
         self.assertTrue(os.path.isdir(os.path.join(PROJECT_ROOT, "data")))

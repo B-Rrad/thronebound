@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" role="img" aria-labelledby="title desc">
   <title id="title">Ares</title>
-  <desc id="desc">Placeholder hero card for Ares with gold hero framing.</desc>
+  <desc id="desc">Concept art hero card for Ares with gold hero framing.</desc>
   <defs>
     <linearGradient id="bg-balrog" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0%" stop-color="#f6f0e4"/>
@@ -24,13 +24,18 @@
   </g>
 
   
-    <g transform="translate(375,372) scale(1.32)">
-      <path d="M0 -136 L40 -96 L24 -10 L56 94 L-56 94 L-24 -10 L-40 -96 Z" fill="#241d12"/>
-      <path d="M0 -92 V70" fill="none" stroke="#c9a84c" stroke-width="10" stroke-linecap="round" opacity="0.84"/>
-      <path d="M-28 -116 C-20 -138 -4 -150 12 -154" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round"/>
-      <path d="M16 -154 C4 -132 -4 -120 -18 -108" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round"/>
+    <g transform="translate(375,254) scale(1.42)">
+      <path d="M0 -64 L46 -10 L18 56 L-18 56 L-46 -10 Z" fill="#c9a84c" opacity="0.14"/>
+      <circle cx="0" cy="0" r="60" fill="none" stroke="#c9a84c" stroke-width="10" opacity="0.26"/>
     </g>
     
+  
+        <g transform="translate(375,400) scale(1.28)">
+          <path d="M0 -134 L30 -102 L50 8 L62 110 L-62 110 L-50 8 L-30 -102 Z" fill="#241d12"/>
+          <path d="M-24 -112 L-74 -154 M24 -112 L74 -154" fill="none" stroke="#c9a84c" stroke-width="12" stroke-linecap="round"/>
+          <path d="M26 -92 L88 116" fill="none" stroke="#c9a84c" stroke-width="12" stroke-linecap="round"/>
+        </g>
+        
 
   <line x1="118" y1="658" x2="632" y2="658" stroke="#ece2cb" stroke-width="4"/>
   <rect x="92" y="676" width="566" height="188" rx="22" fill="#ece2cb" opacity="0.72"/>

@@ -194,7 +194,7 @@ class Renderer:
         self._render_text_box(screen, p2, (int(self.layout.width * 0.84), int(self.layout.height * 0.04)), fill=(18, 14, 22, 188), outline=(*self.theme.border_subtle, 150), radius=18, padding=(18, 10))
         self._render_text_box(screen, draft_rule, (self.layout.rects["screen"].centerx, int(self.layout.height * 0.10)), fill=(20, 16, 24, 188), outline=(*self.theme.accent_gold, 115), radius=16, padding=(20, 10))
 
-        trump_label = self.layout.fonts["small"].render("Trump Card", True, self.theme.accent_gold)
+        trump_label = self.layout.fonts["small"].render("Crown Card", True, self.theme.accent_gold)
         trump_rect = pygame.Rect(
             int(self.layout.width * 0.02),
             int(self.layout.height * 0.10),
@@ -331,7 +331,7 @@ class Renderer:
         panel = self.layout.rects["trump_panel"]
         self._draw_translucent_rect(screen, panel, (22, 18, 28, 168), (*self.theme.border_subtle, 150), max(1, int(panel.w * 0.03)), radius=max(1, int(panel.w * 0.06)))
 
-        label = self.layout.fonts["small"].render("RING SUIT (TRUMP)", True, self.theme.accent_gold)
+        label = self.layout.fonts["small"].render("CROWN SUIT", True, self.theme.accent_gold)
         screen.blit(label, (panel.x + int(panel.w * 0.08), panel.y + int(panel.h * 0.03)))
 
         if game.trump_card is not None:
@@ -356,17 +356,17 @@ class Renderer:
         effects = game.round_effects
         trump = game.get_effective_trump_suit()
         if effects["trump_disabled"]:
-            lines.append("Trump disabled")
+            lines.append("Crown suit disabled")
         elif effects["temporary_trump_suit"] is not None:
-            lines.append(f"Trump is {trump}")
+            lines.append(f"Crown suit is {trump}")
         if effects["nazgul_active"]:
-            lines.append("Defender must use trump")
+            lines.append("Defender must use crown")
         if effects["wormtongue_suit"] is not None:
             lines.append(f"Cannot play {effects['wormtongue_suit']}")
         if effects["legolas_bonus"] > 0:
-            lines.append("Legolas bonus ready")
+            lines.append(f"{game.get_hero_display_name('legolas')} bonus ready")
         if effects["balrog_active"] is not None:
-            lines.append("Balrog wound armed")
+            lines.append(f"{game.get_hero_display_name('balrog')} wound armed")
         if not lines:
             lines.append("No active hero effects")
 
@@ -536,7 +536,9 @@ class Renderer:
 
         if input_enabled and game.pending_action is not None and game.pending_action["type"] == "choose_suit":
             area = self.layout.rects["effects_panel"]
-            prompt = self.layout.fonts["tiny"].render("Choose a suit", True, self.theme.text_primary)
+            mode = game.pending_action.get("mode")
+            prompt_text = "Choose the crown dominion" if mode == "gollum_trump" else "Choose a dominion"
+            prompt = self.layout.fonts["tiny"].render(prompt_text, True, self.theme.text_primary)
             self._render_text_box(screen, prompt, (area.centerx, area.y + int(area.h * 0.66)), fill=(18, 14, 22, 196), outline=(*self.theme.accent_gold, 120), radius=14, padding=(16, 8))
 
             for idx, suit in enumerate(game.all_suits):

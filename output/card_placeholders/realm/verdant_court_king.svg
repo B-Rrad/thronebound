@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" role="img" aria-labelledby="title desc">
   <title id="title">King of Verdant Court</title>
-  <desc id="desc">Placeholder card for King of Verdant Court using the Verdant Court dominion frame.</desc>
+  <desc id="desc">Concept art card for King of Verdant Court using the Verdant Court dominion frame.</desc>
   <defs>
     <linearGradient id="bg-verdant_court_king" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0%" stop-color="#f3efe4"/>
@@ -23,12 +23,20 @@
         </g>
   </g>
   
-        <g transform="translate(375,430) scale(1.34)">
-          <path d="M0 -128 C18 -122 28 -106 28 -88 C28 -68 16 -54 0 -48 C-16 -54 -28 -68 -28 -88 C-28 -106 -18 -122 0 -128 Z" fill="#9CAF88" opacity="0.45"/>
-          <path d="M0 -84 L18 -36 L42 92 L-42 92 L-18 -36 Z" fill="#2d3a2e"/>
-          <rect x="-5" y="-118" width="10" height="160" rx="4" fill="#2d3a2e"/>
-          <path d="M-28 -118 C-40 -110 -46 -94 -44 -80" fill="none" stroke="#2d3a2e" stroke-width="8" stroke-linecap="round"/>
-          <path d="M28 -118 C40 -110 46 -94 44 -80" fill="none" stroke="#2d3a2e" stroke-width="8" stroke-linecap="round"/>
+        <g opacity="0.9">
+          <circle cx="375" cy="236" r="102" fill="#cdd8ba" opacity="0.46"/>
+          <path d="M194 568 C234 488 286 434 352 392 C294 452 258 520 244 612" fill="none" stroke="#cdd8ba" stroke-width="18" stroke-linecap="round" opacity="0.42"/>
+          <path d="M556 568 C516 488 464 434 398 392 C456 452 492 520 506 612" fill="none" stroke="#cdd8ba" stroke-width="18" stroke-linecap="round" opacity="0.42"/>
+          <path d="M292 338 L292 592 M458 338 L458 592" fill="none" stroke="#e4ead7" stroke-width="16" stroke-linecap="round" opacity="0.52"/>
+          <path d="M292 338 Q375 296 458 338" fill="none" stroke="#e4ead7" stroke-width="16" stroke-linecap="round" opacity="0.52"/>
+        </g>
+        
+  
+        <g transform="translate(375,450) scale(1.34)">
+          <path d="M0 -138 L28 -102 L46 10 L62 104 L-62 104 L-46 10 L-28 -102 Z" fill="#2d3a2e"/>
+          <path d="M-32 -116 L-10 -146 L0 -122 L10 -146 L32 -116" fill="#9CAF88" opacity="0.82"/>
+          <path d="M-70 88 L-28 54 L28 54 L70 88" fill="#9CAF88" opacity="0.2"/>
+          <rect x="-8" y="-86" width="16" height="146" rx="5" fill="#9CAF88" opacity="0.74"/>
         </g>
         
 

@@ -2,14 +2,15 @@
   "asset_version": 1,
   "layout_requirements": {
     "front_face_elements": [
-      "rank in top-left and bottom-right corners",
-      "dominion icon adjacent to each rank marker",
-      "dominion name on a banner, cartouche, or frame plate",
-      "single central character or creature silhouette",
-      "art must preserve empty negative space around rank markers"
+      "large rank in the top-left corner only",
+      "dominion icon paired with the top-left rank marker",
+      "single central character or creature illustration",
+      "card name near the bottom edge",
+      "dominion label beneath the card name"
     ],
     "export_notes": [
-      "keep transparent-safe margins around corners if icons are layered later",
+      "keep negative space protected around the enlarged top-left rank marker",
+      "do not place descriptive rules text on realm cards",
       "prefer portrait compositions that read when scaled down",
       "save filenames exactly as listed in each card entry"
     ]
