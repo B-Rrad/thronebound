@@ -1,11 +1,12 @@
 import os
 import unittest
+from pathlib import Path
 
 from resource_manager import discover_music_tracks, load_cards
 
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-EXPECTED_SUITS = {"Gondor", "Mordor", "Rohan", "Shire"}
+EXPECTED_SUITS = {"Verdant Court", "Ember Throne", "Tidewake Dominion", "Obsidian Veil"}
 EXPECTED_RANKS = set(range(6, 15))
 EXPECTED_HERO_IDS = {
     "aragorn",
@@ -55,18 +56,32 @@ class CardDataValidationTests(unittest.TestCase):
         heroes_by_id = {card["id"]: card for card in self.hero_cards}
         for card in self.hero_cards:
             self.assertEqual({"id", "name", "faction", "power", "image"}, set(card))
-            self.assertIn(card["faction"], {"Fellowship", "Shadow"})
+            self.assertEqual(card["faction"], "Legend")
             self.assertTrue(card["name"])
             self.assertTrue(card["power"])
 
         self.assertIn("player who played", heroes_by_id["gollum"]["power"].lower())
         self.assertIn("fully defended", heroes_by_id["balrog"]["power"].lower())
+        self.assertEqual(heroes_by_id["gollum"]["name"], "Autolycus")
+        self.assertIn("crown suit", heroes_by_id["gollum"]["power"].lower())
 
     def test_packaged_resources_exist_for_runtime(self):
         self.assertTrue(os.path.isdir(os.path.join(PROJECT_ROOT, "data")))
         self.assertTrue(os.path.isfile(os.path.join(PROJECT_ROOT, "background.jpg")))
         self.assertTrue(os.path.isfile(os.path.join(PROJECT_ROOT, "release", "Ringbound.exe")))
         self.assertGreaterEqual(len(discover_music_tracks(PROJECT_ROOT)), 1)
+
+    def test_generated_card_art_exists_for_runtime_ui(self):
+        hero_dir = Path(PROJECT_ROOT) / "output" / "card_placeholders" / "heroes"
+        realm_dir = Path(PROJECT_ROOT) / "output" / "card_placeholders" / "realm"
+
+        for card in self.hero_cards:
+            svg_name = Path(card["image"]).with_suffix(".svg").name
+            self.assertTrue((hero_dir / svg_name).is_file(), svg_name)
+
+        for card in self.realm_cards:
+            svg_name = Path(card["image"]).with_suffix(".svg").name
+            self.assertTrue((realm_dir / svg_name).is_file(), svg_name)
 
 
 if __name__ == "__main__":

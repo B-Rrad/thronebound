@@ -133,6 +133,26 @@ class GameStateMixin:
     def is_realm_card(self, card_data):
         return "suit" in card_data
 
+    def get_hero_display_name(self, hero_ref):
+        if isinstance(hero_ref, dict):
+            hero_id = hero_ref.get("id")
+            card_name = hero_ref.get("name")
+            if card_name:
+                return card_name
+        else:
+            hero_id = hero_ref
+            card_name = None
+
+        for hero_card in self.db.get("hero_cards", []):
+            if hero_card.get("id") == hero_id:
+                return hero_card.get("name", card_name or str(hero_id))
+
+        if card_name:
+            return card_name
+        if hero_id is None:
+            return "Hero"
+        return str(hero_id).replace("_", " ").title()
+
     def get_effective_trump_suit(self):
         if self.round_effects["trump_disabled"]:
             return None

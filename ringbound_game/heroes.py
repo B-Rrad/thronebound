@@ -36,7 +36,8 @@ class HeroMixin:
         self.wounds[player] = max(0, previous_wounds - 2)
         healed = previous_wounds - self.wounds[player]
         self.consume_hero_card(player, hero_card)
-        self.status_message = f"Galadriel heals {healed} wound(s) for {player}."
+        hero_name = self.get_hero_display_name(hero_card)
+        self.status_message = f"{hero_name} heals {healed} wound(s) for {player}."
         self.check_game_over()
         if self.state != STATE_GAMEOVER:
             self.update_hand_visuals()
@@ -77,12 +78,13 @@ class HeroMixin:
             return
 
         hero_id = hero_card["id"]
+        hero_name = self.get_hero_display_name(hero_card)
 
         if hero_id == "aragorn":
             self.set_pending_action(
                 "aragorn_return",
                 hero_card,
-                "Aragorn: click one attack card on the table to return it to your hand.",
+                f"{hero_name}: click one attack card on the table to return it to your hand.",
             )
             return
         if hero_id == "saruman":
@@ -92,7 +94,7 @@ class HeroMixin:
             self.set_pending_action(
                 "saruman_exchange",
                 hero_card,
-                f"Saruman: click one of your realm cards to swap with {target_card['name']}.",
+                f"{hero_name}: click one of your realm cards to swap with {target_card['name']}.",
                 target_card=target_card,
             )
             return
@@ -100,7 +102,7 @@ class HeroMixin:
             self.set_pending_action(
                 "choose_suit",
                 hero_card,
-                "Gollum: choose the suit that becomes trump for this round.",
+                f"{hero_name}: choose the suit that becomes the crown suit for this round.",
                 mode="gollum_trump",
             )
             return
@@ -108,7 +110,7 @@ class HeroMixin:
             self.set_pending_action(
                 "choose_suit",
                 hero_card,
-                "Wormtongue: choose the suit the defender cannot play this round.",
+                f"{hero_name}: choose the dominion the defender cannot play this round.",
                 mode="wormtongue_block",
             )
             return
@@ -119,7 +121,7 @@ class HeroMixin:
             self.set_pending_action(
                 "hero_attack_card",
                 hero_card,
-                "Legolas: choose one realm card to attack with now, ignoring rank restrictions.",
+                f"{hero_name}: choose one realm card to attack with now, ignoring rank restrictions.",
                 mode="legolas_bonus",
             )
             return
@@ -127,7 +129,7 @@ class HeroMixin:
             self.set_pending_action(
                 "hero_attack_card",
                 hero_card,
-                "Balrog: choose one realm card to attack with now.",
+                f"{hero_name}: choose one realm card to attack with now.",
                 mode="balrog_attack",
             )
             return
@@ -135,22 +137,22 @@ class HeroMixin:
         self.consume_hero_card(self.current_player, hero_card)
 
         if hero_id == "gandalf":
-            self.resolve_gandalf()
+            self.resolve_gandalf(hero_card)
         elif hero_id == "frodo":
             self.round_effects["trump_disabled"] = True
             self.round_effects["temporary_trump_suit"] = None
-            self.status_message = "Frodo disables trump for the rest of the round."
+            self.status_message = f"{hero_name} disables the crown suit for the rest of the round."
         elif hero_id == "boromir":
-            self.resolve_boromir()
+            self.resolve_boromir(hero_card)
         elif hero_id == "nazgul":
             self.round_effects["nazgul_active"] = True
-            self.status_message = "Nazgul forces the defender to rely on trump cards only."
+            self.status_message = f"{hero_name} forces the defender to rely on crown cards only."
         elif hero_id == "sauron":
             self.revealed_hand = {
                 "viewer": self.current_player,
                 "target": self.get_opponent(self.current_player),
             }
-            self.status_message = f"Sauron reveals {self.revealed_hand['target']}'s hand for this round."
+            self.status_message = f"{hero_name} reveals {self.revealed_hand['target']}'s hand for this round."
 
         self.pending_action = None
         self.check_game_over()
@@ -159,7 +161,7 @@ class HeroMixin:
             if self.is_ai_player(self.current_player):
                 self._arm_ai_delay()
 
-    def resolve_gandalf(self):
+    def resolve_gandalf(self, hero_card):
         attack_card = self.get_current_attack_card()
         if attack_card is None:
             return
@@ -174,25 +176,27 @@ class HeroMixin:
             return
 
         self.sync_turn_after_table_change()
-        self.status_message = "Gandalf cancels the latest non-trump attack. The attacker must continue with a played rank or end the attack."
+        hero_name = self.get_hero_display_name(hero_card)
+        self.status_message = f"{hero_name} cancels the latest non-crown attack. The attacker must continue with a played rank or end the attack."
 
-    def resolve_boromir(self):
+    def resolve_boromir(self, hero_card):
         if self.get_current_attack_card() is None:
             return
 
-        boromir_guard = {"id": "boromir_guard", "name": "Boromir", "faction": "Fellowship", "power": "Auto-defense"}
+        hero_name = self.get_hero_display_name(hero_card)
+        boromir_guard = {"id": "boromir_guard", "name": hero_name, "faction": "Legend", "power": "Auto-defense"}
         self.table_defenses.append(boromir_guard)
 
         discarded = self.remove_random_card_from_player(self.attacker)
         if self.player_has_no_cards(self.defender):
-            self.status_message = "Boromir defends the attack and the round ends."
+            self.status_message = f"{hero_name} defends the attack and the round ends."
             self.end_round(defender_took_wound=False, pickup_defenses=False)
             return
 
         if discarded is None:
-            self.status_message = "Boromir auto-defends the attack."
+            self.status_message = f"{hero_name} auto-defends the attack."
         else:
-            self.status_message = f"Boromir auto-defends. {self.attacker} discards {discarded['name']}."
+            self.status_message = f"{hero_name} auto-defends. {self.attacker} discards {discarded['name']}."
 
         self.play_phase = "REINFORCE"
         self.current_player = self.attacker
@@ -204,13 +208,14 @@ class HeroMixin:
         owner = self.pending_action["owner"]
         mode = self.pending_action["mode"]
         self.consume_hero_card(owner, hero_card)
+        hero_name = self.get_hero_display_name(hero_card)
 
         if mode == "gollum_trump":
             self.round_effects["temporary_trump_suit"] = suit
-            self.status_message = f"Gollum sets the trump suit to {suit} for this round."
+            self.status_message = f"{hero_name} sets the crown suit to {suit} for this round."
         else:
             self.round_effects["wormtongue_suit"] = suit
-            self.status_message = f"Wormtongue forbids the defender from playing {suit} this round."
+            self.status_message = f"{hero_name} forbids the defender from playing {suit} this round."
 
         self.pending_action = None
         self.current_player = owner
@@ -246,14 +251,15 @@ class HeroMixin:
 
         self.consume_hero_card(owner, hero_card)
         self.pending_action = None
+        hero_name = self.get_hero_display_name(hero_card)
 
         if self.player_has_no_cards(self.defender) and len(self.table_attacks) == len(self.table_defenses):
-            self.status_message = "Aragorn recovers an attack and the defense holds."
+            self.status_message = f"{hero_name} recovers an attack and the defense holds."
             self.end_round(defender_took_wound=False, pickup_defenses=False)
             return
 
         self.sync_turn_after_table_change()
-        self.status_message = "Aragorn returns an attack card to your hand."
+        self.status_message = f"{hero_name} returns an attack card to your hand."
         self.update_hand_visuals()
         if self.is_ai_player(self.current_player):
             self._arm_ai_delay()
@@ -275,7 +281,8 @@ class HeroMixin:
 
         self.consume_hero_card(owner, hero_card)
         self.pending_action = None
-        self.status_message = f"Saruman swaps {chosen_card['name']} for {target_card['name']}."
+        hero_name = self.get_hero_display_name(hero_card)
+        self.status_message = f"{hero_name} swaps {chosen_card['name']} for {target_card['name']}."
         self.update_hand_visuals()
         if self.is_ai_player(self.current_player):
             self._arm_ai_delay()
@@ -292,6 +299,7 @@ class HeroMixin:
         self.pending_action = None
         self.current_player = owner
         self.consume_hero_card(owner, hero_card)
+        hero_name = self.get_hero_display_name(hero_card)
         if mode == "legolas_bonus":
             self.round_effects["legolas_bonus"] = 1
         elif mode == "balrog_attack":
@@ -301,9 +309,9 @@ class HeroMixin:
         self.attempt_play_card(chosen_card)
         if self.state != STATE_GAMEOVER:
             if mode == "legolas_bonus":
-                self.status_message = f"Legolas joins the attack with {chosen_card['name']}."
+                self.status_message = f"{hero_name} joins the attack with {chosen_card['name']}."
             else:
-                self.status_message = f"Balrog charges with {chosen_card['name']}."
+                self.status_message = f"{hero_name} charges with {chosen_card['name']}."
             self.update_hand_visuals()
             if self.is_ai_player(self.current_player):
                 self._arm_ai_delay()

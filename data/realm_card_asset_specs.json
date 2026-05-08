@@ -1,0 +1,372 @@
+{
+  "asset_version": 1,
+  "layout_requirements": {
+    "front_face_elements": [
+      "large rank in the top-left corner only",
+      "dominion icon paired with the top-left rank marker",
+      "single central character or creature illustration",
+      "card name near the bottom edge",
+      "dominion label beneath the card name"
+    ],
+    "export_notes": [
+      "keep negative space protected around the enlarged top-left rank marker",
+      "do not place descriptive rules text on realm cards",
+      "prefer portrait compositions that read when scaled down",
+      "save filenames exactly as listed in each card entry"
+    ]
+  },
+  "dominions": [
+    {
+      "dominion_id": "verdant_court",
+      "dominion_name": "Verdant Court",
+      "dominion_icon": "leaf_crown",
+      "cards": [
+        {
+          "id": "verdant_court_6",
+          "name": "6 of Verdant Court",
+          "rank_value": 6,
+          "rank_code": "6",
+          "rank_title": "Initiate",
+          "image": "verdant_court_6.png",
+          "art_brief": "A young initiate in a moonlit grove with carved stone ruins, staff in hand, long tapering silhouette, elegant and calm."
+        },
+        {
+          "id": "verdant_court_7",
+          "name": "7 of Verdant Court",
+          "rank_value": 7,
+          "rank_code": "7",
+          "rank_title": "Pathfinder",
+          "image": "verdant_court_7.png",
+          "art_brief": "A forest pathfinder beneath antlered standards, bow and cloak, poised among vines and pale stone."
+        },
+        {
+          "id": "verdant_court_8",
+          "name": "8 of Verdant Court",
+          "rank_value": 8,
+          "rank_code": "8",
+          "rank_title": "Warden",
+          "image": "verdant_court_8.png",
+          "art_brief": "A court warden guarding an ancient ruin threshold, antler motifs, disciplined stance, balanced negative space."
+        },
+        {
+          "id": "verdant_court_9",
+          "name": "9 of Verdant Court",
+          "rank_value": 9,
+          "rank_code": "9",
+          "rank_title": "Bowknight",
+          "image": "verdant_court_9.png",
+          "art_brief": "A noble bowknight with crescent ornaments and leaf-crown heraldry, elevated and precise, framed by moonlit branches."
+        },
+        {
+          "id": "verdant_court_10",
+          "name": "10 of Verdant Court",
+          "rank_value": 10,
+          "rank_code": "10",
+          "rank_title": "Moon-Sage",
+          "image": "verdant_court_10.png",
+          "art_brief": "A moon-sage channeling ancient wisdom among standing stones, pale sage palette, ritual calm."
+        },
+        {
+          "id": "verdant_court_jack",
+          "name": "Jack of Verdant Court",
+          "rank_value": 11,
+          "rank_code": "J",
+          "rank_title": "Stag Champion",
+          "image": "verdant_court_jack.png",
+          "art_brief": "A champion with antlered standard and staff-blade, elegant heroic silhouette, forest nobility."
+        },
+        {
+          "id": "verdant_court_queen",
+          "name": "Queen of Verdant Court",
+          "rank_value": 12,
+          "rank_code": "Q",
+          "rank_title": "Grove Oracle",
+          "image": "verdant_court_queen.png",
+          "art_brief": "A grove oracle seated or standing within a moonlit ruin, serene authority, leaf-crown iconography."
+        },
+        {
+          "id": "verdant_court_king",
+          "name": "King of Verdant Court",
+          "rank_value": 13,
+          "rank_code": "K",
+          "rank_title": "Thorn Sovereign",
+          "image": "verdant_court_king.png",
+          "art_brief": "A sovereign draped in layered cloaks and thorned regalia, ancient stone court, poised and elevated."
+        },
+        {
+          "id": "verdant_court_ace",
+          "name": "Ace of Verdant Court",
+          "rank_value": 14,
+          "rank_code": "A",
+          "rank_title": "Ancient Hart",
+          "image": "verdant_court_ace.png",
+          "art_brief": "An ancient mythic hart spirit emerging from a moonlit grove, antlers like branches, sacred stillness."
+        }
+      ]
+    },
+    {
+      "dominion_id": "ember_throne",
+      "dominion_name": "Ember Throne",
+      "dominion_icon": "horned_flame",
+      "cards": [
+        {
+          "id": "ember_throne_6",
+          "name": "6 of Ember Throne",
+          "rank_value": 6,
+          "rank_code": "6",
+          "rank_title": "Ember Initiate",
+          "image": "ember_throne_6.png",
+          "art_brief": "A fiery initiate before a mountain citadel, horned flame banners, jagged triangular accents, dominant posture."
+        },
+        {
+          "id": "ember_throne_7",
+          "name": "7 of Ember Throne",
+          "rank_value": 7,
+          "rank_code": "7",
+          "rank_title": "Ash Scout",
+          "image": "ember_throne_7.png",
+          "art_brief": "A scout moving through ashfall with spear and light armor, burgundy framing, hard angular shapes."
+        },
+        {
+          "id": "ember_throne_8",
+          "name": "8 of Ember Throne",
+          "rank_value": 8,
+          "rank_code": "8",
+          "rank_title": "Citadel Guard",
+          "image": "ember_throne_8.png",
+          "art_brief": "A plate-armored guard standing before basalt gates, draconic crest, heavy and aggressive silhouette."
+        },
+        {
+          "id": "ember_throne_9",
+          "name": "9 of Ember Throne",
+          "rank_value": 9,
+          "rank_code": "9",
+          "rank_title": "Spear Knight",
+          "image": "ember_throne_9.png",
+          "art_brief": "A spear knight under horned banners, regal armor, wings and angular fire motifs, conquest energy."
+        },
+        {
+          "id": "ember_throne_10",
+          "name": "10 of Ember Throne",
+          "rank_value": 10,
+          "rank_code": "10",
+          "rank_title": "Flame Magus",
+          "image": "ember_throne_10.png",
+          "art_brief": "A flame magus commanding furnace fire in a mountain hall, heavy shadows, disciplined menace."
+        },
+        {
+          "id": "ember_throne_jack",
+          "name": "Jack of Ember Throne",
+          "rank_value": 11,
+          "rank_code": "J",
+          "rank_title": "Dragon Champion",
+          "image": "ember_throne_jack.png",
+          "art_brief": "A champion with dragon-claw heraldry and blazing spear, broad dominant silhouette, citadel grandeur."
+        },
+        {
+          "id": "ember_throne_queen",
+          "name": "Queen of Ember Throne",
+          "rank_value": 12,
+          "rank_code": "Q",
+          "rank_title": "Ash Oracle",
+          "image": "ember_throne_queen.png",
+          "art_brief": "An oracle amid drifting cinders and draconic banners, regal command, firelit burgundy atmosphere."
+        },
+        {
+          "id": "ember_throne_king",
+          "name": "King of Ember Throne",
+          "rank_value": 13,
+          "rank_code": "K",
+          "rank_title": "Ember Sovereign",
+          "image": "ember_throne_king.png",
+          "art_brief": "A mountain sovereign on a dark throne, horned flame insignia, brutal and ceremonial majesty."
+        },
+        {
+          "id": "ember_throne_ace",
+          "name": "Ace of Ember Throne",
+          "rank_value": 14,
+          "rank_code": "A",
+          "rank_title": "Ancient Wyrm",
+          "image": "ember_throne_ace.png",
+          "art_brief": "An ancient draconic force coiled around a volcanic citadel, flame and ash, unmistakable apex power."
+        }
+      ]
+    },
+    {
+      "dominion_id": "tidewake_dominion",
+      "dominion_name": "Tidewake Dominion",
+      "dominion_icon": "trident_wave",
+      "cards": [
+        {
+          "id": "tidewake_dominion_6",
+          "name": "6 of Tidewake Dominion",
+          "rank_value": 6,
+          "rank_code": "6",
+          "rank_title": "Tide Initiate",
+          "image": "tidewake_dominion_6.png",
+          "art_brief": "A young initiate carrying a shell relic through seafoam-lit halls, curved lines and noble restraint."
+        },
+        {
+          "id": "tidewake_dominion_7",
+          "name": "7 of Tidewake Dominion",
+          "rank_value": 7,
+          "rank_code": "7",
+          "rank_title": "Current Scout",
+          "image": "tidewake_dominion_7.png",
+          "art_brief": "A swift scout with flowing cape and curved blade, moving through coral arches and tide spray."
+        },
+        {
+          "id": "tidewake_dominion_8",
+          "name": "8 of Tidewake Dominion",
+          "rank_value": 8,
+          "rank_code": "8",
+          "rank_title": "Reef Guard",
+          "image": "tidewake_dominion_8.png",
+          "art_brief": "A disciplined reef guard with trident and fin-shaped armor, pale blue framing, calm vigilance."
+        },
+        {
+          "id": "tidewake_dominion_9",
+          "name": "9 of Tidewake Dominion",
+          "rank_value": 9,
+          "rank_code": "9",
+          "rank_title": "Trident Knight",
+          "image": "tidewake_dominion_9.png",
+          "art_brief": "A trident knight in a sweeping heroic arc, storm-forged relics and noble marine heraldry."
+        },
+        {
+          "id": "tidewake_dominion_10",
+          "name": "10 of Tidewake Dominion",
+          "rank_value": 10,
+          "rank_code": "10",
+          "rank_title": "Storm Priest",
+          "image": "tidewake_dominion_10.png",
+          "art_brief": "A storm priest invoking currents around a coral palace dais, mysterious, fluid, and disciplined."
+        },
+        {
+          "id": "tidewake_dominion_jack",
+          "name": "Jack of Tidewake Dominion",
+          "rank_value": 11,
+          "rank_code": "J",
+          "rank_title": "Wave Champion",
+          "image": "tidewake_dominion_jack.png",
+          "art_brief": "A champion framed by sweeping wave crests, trident-wave iconography, poised in noble motion."
+        },
+        {
+          "id": "tidewake_dominion_queen",
+          "name": "Queen of Tidewake Dominion",
+          "rank_value": 12,
+          "rank_code": "Q",
+          "rank_title": "Shell Oracle",
+          "image": "tidewake_dominion_queen.png",
+          "art_brief": "An oracle reading the tides through shell relics and moonlit surf, mysterious and serene."
+        },
+        {
+          "id": "tidewake_dominion_king",
+          "name": "King of Tidewake Dominion",
+          "rank_value": 13,
+          "rank_code": "K",
+          "rank_title": "Deep Sovereign",
+          "image": "tidewake_dominion_king.png",
+          "art_brief": "A sovereign of the deep on a coral throne, long flowing shapes, disciplined command, marine regality."
+        },
+        {
+          "id": "tidewake_dominion_ace",
+          "name": "Ace of Tidewake Dominion",
+          "rank_value": 14,
+          "rank_code": "A",
+          "rank_title": "Ancient Leviathan",
+          "image": "tidewake_dominion_ace.png",
+          "art_brief": "A mythic leviathan or sea-force rising through storm tides, elegant arcs and unmistakable scale."
+        }
+      ]
+    },
+    {
+      "dominion_id": "obsidian_veil",
+      "dominion_name": "Obsidian Veil",
+      "dominion_icon": "broken_halo",
+      "cards": [
+        {
+          "id": "obsidian_veil_6",
+          "name": "6 of Obsidian Veil",
+          "rank_value": 6,
+          "rank_code": "6",
+          "rank_title": "Grave Initiate",
+          "image": "obsidian_veil_6.png",
+          "art_brief": "A funerary initiate in black stone temple shadows, austere robes, sharp vertical silhouettes."
+        },
+        {
+          "id": "obsidian_veil_7",
+          "name": "7 of Obsidian Veil",
+          "rank_value": 7,
+          "rank_code": "7",
+          "rank_title": "Tomb Scout",
+          "image": "obsidian_veil_7.png",
+          "art_brief": "A tomb scout moving through eclipse-lit ruins, broken standards, ominous negative space."
+        },
+        {
+          "id": "obsidian_veil_8",
+          "name": "8 of Obsidian Veil",
+          "rank_value": 8,
+          "rank_code": "8",
+          "rank_title": "Sepulcher Guard",
+          "image": "obsidian_veil_8.png",
+          "art_brief": "A relentless guard of the sepulcher with shard-like armor and ritual stillness."
+        },
+        {
+          "id": "obsidian_veil_9",
+          "name": "9 of Obsidian Veil",
+          "rank_value": 9,
+          "rank_code": "9",
+          "rank_title": "Shard Knight",
+          "image": "obsidian_veil_9.png",
+          "art_brief": "A shard knight with broken halo heraldry, scythe-like weapon shapes, severe vertical composition."
+        },
+        {
+          "id": "obsidian_veil_10",
+          "name": "10 of Obsidian Veil",
+          "rank_value": 10,
+          "rank_code": "10",
+          "rank_title": "Eclipse Priest",
+          "image": "obsidian_veil_10.png",
+          "art_brief": "An eclipse priest conducting a death rite before black stone altars, ritualistic and ominous."
+        },
+        {
+          "id": "obsidian_veil_jack",
+          "name": "Jack of Obsidian Veil",
+          "rank_value": 11,
+          "rank_code": "J",
+          "rank_title": "Funeral Champion",
+          "image": "obsidian_veil_jack.png",
+          "art_brief": "A champion leading a cursed procession, crown and ribs motifs, relentless ceremonial force."
+        },
+        {
+          "id": "obsidian_veil_queen",
+          "name": "Queen of Obsidian Veil",
+          "rank_value": 12,
+          "rank_code": "Q",
+          "rank_title": "Grave Oracle",
+          "image": "obsidian_veil_queen.png",
+          "art_brief": "A grave oracle before a fractured eclipse halo, austere power, funereal geometry."
+        },
+        {
+          "id": "obsidian_veil_king",
+          "name": "King of Obsidian Veil",
+          "rank_value": 13,
+          "rank_code": "K",
+          "rank_title": "Obsidian Sovereign",
+          "image": "obsidian_veil_king.png",
+          "art_brief": "A sovereign of the tomb kingdoms enthroned in black stone, sharp shards and unyielding ritual authority."
+        },
+        {
+          "id": "obsidian_veil_ace",
+          "name": "Ace of Obsidian Veil",
+          "rank_value": 14,
+          "rank_code": "A",
+          "rank_title": "Ancient Revenant",
+          "image": "obsidian_veil_ace.png",
+          "art_brief": "An ancient revenant or death force emerging beneath an eclipse, stark black-and-ivory contrast, unstoppable presence."
+        }
+      ]
+    }
+  ]
+}

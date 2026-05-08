@@ -1,256 +1,256 @@
 {
   "realm_cards": [
     {
-      "id": "gondor_6",
-      "name": "6 of Gondor",
-      "suit": "Gondor",
+      "id": "verdant_court_6",
+      "name": "6 of Verdant Court",
+      "suit": "Verdant Court",
       "rank": 6,
-      "image": "gondor_6.png"
+      "image": "verdant_court_6.png"
     },
     {
-      "id": "gondor_7",
-      "name": "7 of Gondor",
-      "suit": "Gondor",
+      "id": "verdant_court_7",
+      "name": "7 of Verdant Court",
+      "suit": "Verdant Court",
       "rank": 7,
-      "image": "gondor_7.png"
+      "image": "verdant_court_7.png"
     },
     {
-      "id": "gondor_8",
-      "name": "8 of Gondor",
-      "suit": "Gondor",
+      "id": "verdant_court_8",
+      "name": "8 of Verdant Court",
+      "suit": "Verdant Court",
       "rank": 8,
-      "image": "gondor_8.png"
+      "image": "verdant_court_8.png"
     },
     {
-      "id": "gondor_9",
-      "name": "9 of Gondor",
-      "suit": "Gondor",
+      "id": "verdant_court_9",
+      "name": "9 of Verdant Court",
+      "suit": "Verdant Court",
       "rank": 9,
-      "image": "gondor_9.png"
+      "image": "verdant_court_9.png"
     },
     {
-      "id": "gondor_10",
-      "name": "10 of Gondor",
-      "suit": "Gondor",
+      "id": "verdant_court_10",
+      "name": "10 of Verdant Court",
+      "suit": "Verdant Court",
       "rank": 10,
-      "image": "gondor_10.png"
+      "image": "verdant_court_10.png"
     },
     {
-      "id": "gondor_jack",
-      "name": "Jack of Gondor",
-      "suit": "Gondor",
+      "id": "verdant_court_jack",
+      "name": "Jack of Verdant Court",
+      "suit": "Verdant Court",
       "rank": 11,
-      "image": "gondor_jack.png"
+      "image": "verdant_court_jack.png"
     },
     {
-      "id": "gondor_queen",
-      "name": "Queen of Gondor",
-      "suit": "Gondor",
+      "id": "verdant_court_queen",
+      "name": "Queen of Verdant Court",
+      "suit": "Verdant Court",
       "rank": 12,
-      "image": "gondor_queen.png"
+      "image": "verdant_court_queen.png"
     },
     {
-      "id": "gondor_king",
-      "name": "King of Gondor",
-      "suit": "Gondor",
+      "id": "verdant_court_king",
+      "name": "King of Verdant Court",
+      "suit": "Verdant Court",
       "rank": 13,
-      "image": "gondor_king.png"
+      "image": "verdant_court_king.png"
     },
     {
-      "id": "gondor_ace",
-      "name": "Ace of Gondor",
-      "suit": "Gondor",
+      "id": "verdant_court_ace",
+      "name": "Ace of Verdant Court",
+      "suit": "Verdant Court",
       "rank": 14,
-      "image": "gondor_ace.png"
+      "image": "verdant_court_ace.png"
     },
     {
-      "id": "shire_6",
-      "name": "6 of Shire",
-      "suit": "Shire",
+      "id": "ember_throne_6",
+      "name": "6 of Ember Throne",
+      "suit": "Ember Throne",
       "rank": 6,
-      "image": "shire_6.png"
+      "image": "ember_throne_6.png"
     },
     {
-      "id": "shire_7",
-      "name": "7 of Shire",
-      "suit": "Shire",
+      "id": "ember_throne_7",
+      "name": "7 of Ember Throne",
+      "suit": "Ember Throne",
       "rank": 7,
-      "image": "shire_7.png"
+      "image": "ember_throne_7.png"
     },
     {
-      "id": "shire_8",
-      "name": "8 of Shire",
-      "suit": "Shire",
+      "id": "ember_throne_8",
+      "name": "8 of Ember Throne",
+      "suit": "Ember Throne",
       "rank": 8,
-      "image": "shire_8.png"
+      "image": "ember_throne_8.png"
     },
     {
-      "id": "shire_9",
-      "name": "9 of Shire",
-      "suit": "Shire",
+      "id": "ember_throne_9",
+      "name": "9 of Ember Throne",
+      "suit": "Ember Throne",
       "rank": 9,
-      "image": "shire_9.png"
+      "image": "ember_throne_9.png"
     },
     {
-      "id": "shire_10",
-      "name": "10 of Shire",
-      "suit": "Shire",
+      "id": "ember_throne_10",
+      "name": "10 of Ember Throne",
+      "suit": "Ember Throne",
       "rank": 10,
-      "image": "shire_10.png"
+      "image": "ember_throne_10.png"
     },
     {
-      "id": "shire_jack",
-      "name": "Jack of Shire",
-      "suit": "Shire",
+      "id": "ember_throne_jack",
+      "name": "Jack of Ember Throne",
+      "suit": "Ember Throne",
       "rank": 11,
-      "image": "shire_jack.png"
+      "image": "ember_throne_jack.png"
     },
     {
-      "id": "shire_queen",
-      "name": "Queen of Shire",
-      "suit": "Shire",
+      "id": "ember_throne_queen",
+      "name": "Queen of Ember Throne",
+      "suit": "Ember Throne",
       "rank": 12,
-      "image": "shire_queen.png"
+      "image": "ember_throne_queen.png"
     },
     {
-      "id": "shire_king",
-      "name": "King of Shire",
-      "suit": "Shire",
+      "id": "ember_throne_king",
+      "name": "King of Ember Throne",
+      "suit": "Ember Throne",
       "rank": 13,
-      "image": "shire_king.png"
+      "image": "ember_throne_king.png"
     },
     {
-      "id": "shire_ace",
-      "name": "Ace of Shire",
-      "suit": "Shire",
+      "id": "ember_throne_ace",
+      "name": "Ace of Ember Throne",
+      "suit": "Ember Throne",
       "rank": 14,
-      "image": "shire_ace.png"
+      "image": "ember_throne_ace.png"
     },
     {
-      "id": "rohan_6",
-      "name": "6 of Rohan",
-      "suit": "Rohan",
+      "id": "tidewake_dominion_6",
+      "name": "6 of Tidewake Dominion",
+      "suit": "Tidewake Dominion",
       "rank": 6,
-      "image": "rohan_6.png"
+      "image": "tidewake_dominion_6.png"
     },
     {
-      "id": "rohan_7",
-      "name": "7 of Rohan",
-      "suit": "Rohan",
+      "id": "tidewake_dominion_7",
+      "name": "7 of Tidewake Dominion",
+      "suit": "Tidewake Dominion",
       "rank": 7,
-      "image": "rohan_7.png"
+      "image": "tidewake_dominion_7.png"
     },
     {
-      "id": "rohan_8",
-      "name": "8 of Rohan",
-      "suit": "Rohan",
+      "id": "tidewake_dominion_8",
+      "name": "8 of Tidewake Dominion",
+      "suit": "Tidewake Dominion",
       "rank": 8,
-      "image": "rohan_8.png"
+      "image": "tidewake_dominion_8.png"
     },
     {
-      "id": "rohan_9",
-      "name": "9 of Rohan",
-      "suit": "Rohan",
+      "id": "tidewake_dominion_9",
+      "name": "9 of Tidewake Dominion",
+      "suit": "Tidewake Dominion",
       "rank": 9,
-      "image": "rohan_9.png"
+      "image": "tidewake_dominion_9.png"
     },
     {
-      "id": "rohan_10",
-      "name": "10 of Rohan",
-      "suit": "Rohan",
+      "id": "tidewake_dominion_10",
+      "name": "10 of Tidewake Dominion",
+      "suit": "Tidewake Dominion",
       "rank": 10,
-      "image": "rohan_10.png"
+      "image": "tidewake_dominion_10.png"
     },
     {
-      "id": "rohan_jack",
-      "name": "Jack of Rohan",
-      "suit": "Rohan",
+      "id": "tidewake_dominion_jack",
+      "name": "Jack of Tidewake Dominion",
+      "suit": "Tidewake Dominion",
       "rank": 11,
-      "image": "rohan_jack.png"
+      "image": "tidewake_dominion_jack.png"
     },
     {
-      "id": "rohan_queen",
-      "name": "Queen of Rohan",
-      "suit": "Rohan",
+      "id": "tidewake_dominion_queen",
+      "name": "Queen of Tidewake Dominion",
+      "suit": "Tidewake Dominion",
       "rank": 12,
-      "image": "rohan_queen.png"
+      "image": "tidewake_dominion_queen.png"
     },
     {
-      "id": "rohan_king",
-      "name": "King of Rohan",
-      "suit": "Rohan",
+      "id": "tidewake_dominion_king",
+      "name": "King of Tidewake Dominion",
+      "suit": "Tidewake Dominion",
       "rank": 13,
-      "image": "rohan_king.png"
+      "image": "tidewake_dominion_king.png"
     },
     {
-      "id": "rohan_ace",
-      "name": "Ace of Rohan",
-      "suit": "Rohan",
+      "id": "tidewake_dominion_ace",
+      "name": "Ace of Tidewake Dominion",
+      "suit": "Tidewake Dominion",
       "rank": 14,
-      "image": "rohan_ace.png"
+      "image": "tidewake_dominion_ace.png"
     },
     {
-      "id": "mordor_6",
-      "name": "6 of Mordor",
-      "suit": "Mordor",
+      "id": "obsidian_veil_6",
+      "name": "6 of Obsidian Veil",
+      "suit": "Obsidian Veil",
       "rank": 6,
-      "image": "mordor_6.png"
+      "image": "obsidian_veil_6.png"
     },
     {
-      "id": "mordor_7",
-      "name": "7 of Mordor",
-      "suit": "Mordor",
+      "id": "obsidian_veil_7",
+      "name": "7 of Obsidian Veil",
+      "suit": "Obsidian Veil",
       "rank": 7,
-      "image": "mordor_7.png"
+      "image": "obsidian_veil_7.png"
     },
     {
-      "id": "mordor_8",
-      "name": "8 of Mordor",
-      "suit": "Mordor",
+      "id": "obsidian_veil_8",
+      "name": "8 of Obsidian Veil",
+      "suit": "Obsidian Veil",
       "rank": 8,
-      "image": "mordor_8.png"
+      "image": "obsidian_veil_8.png"
     },
     {
-      "id": "mordor_9",
-      "name": "9 of Mordor",
-      "suit": "Mordor",
+      "id": "obsidian_veil_9",
+      "name": "9 of Obsidian Veil",
+      "suit": "Obsidian Veil",
       "rank": 9,
-      "image": "mordor_9.png"
+      "image": "obsidian_veil_9.png"
     },
     {
-      "id": "mordor_10",
-      "name": "10 of Mordor",
-      "suit": "Mordor",
+      "id": "obsidian_veil_10",
+      "name": "10 of Obsidian Veil",
+      "suit": "Obsidian Veil",
       "rank": 10,
-      "image": "mordor_10.png"
+      "image": "obsidian_veil_10.png"
     },
     {
-      "id": "mordor_jack",
-      "name": "Jack of Mordor",
-      "suit": "Mordor",
+      "id": "obsidian_veil_jack",
+      "name": "Jack of Obsidian Veil",
+      "suit": "Obsidian Veil",
       "rank": 11,
-      "image": "mordor_jack.png"
+      "image": "obsidian_veil_jack.png"
     },
     {
-      "id": "mordor_queen",
-      "name": "Queen of Mordor",
-      "suit": "Mordor",
+      "id": "obsidian_veil_queen",
+      "name": "Queen of Obsidian Veil",
+      "suit": "Obsidian Veil",
       "rank": 12,
-      "image": "mordor_queen.png"
+      "image": "obsidian_veil_queen.png"
     },
     {
-      "id": "mordor_king",
-      "name": "King of Mordor",
-      "suit": "Mordor",
+      "id": "obsidian_veil_king",
+      "name": "King of Obsidian Veil",
+      "suit": "Obsidian Veil",
       "rank": 13,
-      "image": "mordor_king.png"
+      "image": "obsidian_veil_king.png"
     },
     {
-      "id": "mordor_ace",
-      "name": "Ace of Mordor",
-      "suit": "Mordor",
+      "id": "obsidian_veil_ace",
+      "name": "Ace of Obsidian Veil",
+      "suit": "Obsidian Veil",
       "rank": 14,
-      "image": "mordor_ace.png"
+      "image": "obsidian_veil_ace.png"
     }
   ]
 }
