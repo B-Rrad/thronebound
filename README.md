@@ -1,6 +1,6 @@
-# Ringbound
+# Thronebound
 
-`Ringbound` is a local two-player fantasy card game built with `pygame`. Players draft realm cards and hero cards, then battle through attack/defense rounds until one player reaches 6 wounds or wins the realm-deck endgame.
+`Thronebound` is a local fantasy card game built with `pygame`. Players draft realm cards and hero cards, then battle through attack/defense rounds until one player reaches 6 wounds or wins the realm-deck endgame. The desktop game supports two local players or a local player against Random, Greedy, or Strategic AI.
 
 ## Submission Contents
 
@@ -9,14 +9,16 @@ This repository includes:
 - Full source code for the game
 - A prebuilt Windows executable at `release/Ringbound.exe`
 - Game data files in `data/`
+- A TypeScript/canvas browser rewrite in `web/`
 
 The gameplay video can be found here: https://youtu.be/C1FrNUbSaL8
 
 ## Repository Layout
 
 ```text
-ringbound/
+thronebound/
 |-- data/
+|   |-- dominions.json
 |   |-- hero_cards.json
 |   `-- realm_cards.json
 |-- ringbound_game/
@@ -35,9 +37,13 @@ ringbound/
 |   |-- input_handler.py
 |   |-- renderer.py
 |   `-- ...
+|-- web/
+|   |-- index.html
+|   `-- src/
 |-- release/
 |   `-- Ringbound.exe
 |-- main.py
+|-- package.json
 |-- settings.py
 |-- ui_elements.py
 |-- balance_analysis.py
@@ -49,7 +55,8 @@ ringbound/
 ## Requirements
 
 - Windows 10/11 to run the included executable
-- Python 3.12+ and `pygame` if running from source
+- Python 3.10+ and `pygame==2.6.1` if running the desktop game from source
+- Node.js 20+ if running the browser rewrite
 
 ## Run The Prebuilt Executable
 
@@ -73,12 +80,12 @@ python -m pip install -r requirements.txt
 python main.py
 ```
 
-## Controls
+## Desktop Controls
 
-- Mouse only
-- Click on the splash screen to begin the draft
+- Use the splash-screen buttons to start `Two Players`, `Vs Random AI`, `Vs Greedy AI`, or `Vs Strategic AI`
 - Click cards to draft or play them
-- Click on-screen buttons such as `Take Wound`, `End Attack`, `Pass Attack`, `P1 Heal`, `P2 Heal`, or dominion choices when prompted
+- Click on-screen buttons such as `Take Wound`, `End Attack`, `Pass Attack`, `P1 Heal`, `P2 Heal`, or suit choices when prompted
+- Press `Space` to confirm the currently highlighted target, `Esc` to open the restart confirmation, and use the mouse wheel or log arrow buttons to scroll the game log
 
 ## Gameplay Rules
 
@@ -91,7 +98,7 @@ python main.py
 - `Asclepius` may be used at any time while that player has wounds remaining.
 - `Medea` and `Argus Panoptes` are start-of-round attack tools.
 - `Athena` and `Ajax` are defensive responses.
-- `Achilles` and `Ares` must be played together with a realm attack card.
+- `Achilles` and `Ares` must be played together with a legal realm attack card.
 - `Autolycus` lets the player who played it choose the temporary crown suit for the round.
 
 ## Project Notes
@@ -103,8 +110,26 @@ python main.py
 - `ui_elements.py` remains for legacy smoke-test compatibility.
 - `settings.py` contains shared window, color, and state constants.
 - `balance_analysis.py` is a separate analysis utility and is not required to play the game.
+- `web/` contains the TypeScript/canvas rewrite scaffold for a browser version.
 - The game loads `36` realm cards and `12` hero cards from JSON files in `data/`.
 - The game-over screen includes a short reason so special endgame outcomes and tiebreaks are visible to the player.
+
+## Browser Rewrite
+
+The browser rewrite is in `web/`. It loads the same JSON card data and generated placeholder artwork as the desktop game. See `WEB_REWRITE.md` for current scope and migration notes.
+
+Run it locally with:
+
+```bash
+npm install
+npm run web:dev
+```
+
+Build it with:
+
+```bash
+npm run web:build
+```
 
 ## Rebuild The Executable
 
@@ -112,5 +137,5 @@ If you need to regenerate the executable on Windows:
 
 ```powershell
 python -m pip install pyinstaller
-python -m PyInstaller --noconfirm --clean --onefile --windowed --name Ringbound --add-data "data;data" --add-data "output;output" main.py
+python -m PyInstaller --noconfirm --clean --onefile --windowed --name Ringbound --add-data "data;data" --add-data "output;output" --add-data "fonts;fonts" --add-data "music;music" --add-data "background.jpg;." main.py
 ```

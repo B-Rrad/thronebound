@@ -7,3 +7,5 @@ dist/
 *.spec
 .pytest_cache/
 tmp_*_preview.png
+node_modules/
+dist-web/
