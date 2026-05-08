@@ -278,7 +278,7 @@ class CurrentGameRuleTests(unittest.TestCase):
         self.game.round_effects["wormtongue_suit"] = "Shire"
 
         self.assertFalse(self.game.is_card_playable_in_hand(defense))
-        self.assertEqual(self.game.card_play_hint(defense), "Wormtongue forbids Shire this round.")
+        self.assertEqual(self.game.card_play_hint(defense), "Circe forbids Shire this round.")
 
     def test_deck_empty_tiebreak_uses_empty_realm_hands_before_wounds(self):
         self.game.realm_deck = []
