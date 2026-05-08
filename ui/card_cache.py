@@ -32,6 +32,8 @@ class CardRenderer:
         self.root_dir = Path(root_dir)
         self._asset_cache: dict[str, pygame.Surface] = {}
         self._realm_title_by_id = self._load_realm_titles()
+        self._hero_cards_by_id, self._hero_cards_by_name = self._load_runtime_card_index("hero_cards")
+        self._realm_cards_by_id, self._realm_cards_by_name = self._load_runtime_card_index("realm_cards")
 
     def clear_cache(self) -> None:
         self.cache.clear()
@@ -65,7 +67,8 @@ class CardRenderer:
         if cached is not None:
             return cached
 
-        asset = self._load_card_asset(card, size)
+        asset_card = self._resolve_asset_card(card)
+        asset = self._load_card_asset(asset_card, size)
         surface = asset[0] if asset is not None else None
         if surface is None:
             surface = self.card_surface(card, "normal", size)
@@ -73,10 +76,10 @@ class CardRenderer:
             surface = surface.copy()
             asset_ext = asset[1]
             if asset_ext == ".svg":
-                if "faction" in card:
-                    self._overlay_hero_asset_labels(surface, card)
+                if "faction" in asset_card:
+                    self._overlay_hero_asset_labels(surface, asset_card)
                 else:
-                    self._overlay_realm_asset_labels(surface, card)
+                    self._overlay_realm_asset_labels(surface, asset_card)
 
         self.cache.put(key, surface)
         return surface
@@ -128,6 +131,42 @@ class CardRenderer:
                 if card_id and rank_title:
                     titles[card_id] = rank_title
         return titles
+
+    def _load_runtime_card_index(self, payload_key: str) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
+        data_path = self.root_dir / "data" / f"{payload_key}.json"
+        try:
+            payload = json.loads(data_path.read_text(encoding="utf-8"))
+        except Exception:
+            return {}, {}
+
+        by_id: dict[str, dict[str, Any]] = {}
+        by_name: dict[str, dict[str, Any]] = {}
+        for card in payload.get(payload_key, []):
+            card_id = card.get("id")
+            card_name = card.get("name")
+            if card_id:
+                by_id[str(card_id)] = card
+            if card_name:
+                by_name[str(card_name)] = card
+        return by_id, by_name
+
+    def _resolve_asset_card(self, card: dict[str, Any]) -> dict[str, Any]:
+        if card.get("image"):
+            return card
+
+        is_hero = "faction" in card
+        by_id = self._hero_cards_by_id if is_hero else self._realm_cards_by_id
+        by_name = self._hero_cards_by_name if is_hero else self._realm_cards_by_name
+
+        card_id = card.get("id")
+        if card_id and str(card_id) in by_id:
+            return by_id[str(card_id)]
+
+        card_name = card.get("name")
+        if card_name and str(card_name) in by_name:
+            return by_name[str(card_name)]
+
+        return card
 
     def _overlay_realm_asset_labels(self, surface: pygame.Surface, card: dict[str, Any]) -> None:
         w, h = surface.get_size()
