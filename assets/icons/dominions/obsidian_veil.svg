@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Obsidian Veil Placeholder Icon</title>
+  <desc id="desc">A broken halo and grave shard symbol for the Obsidian Veil dominion.</desc>
+  <rect width="256" height="256" rx="36" fill="#efebe2"/>
+  <path d="M194 128c0 34-28 62-62 62-31 0-57-22-61-52" fill="none" stroke="#111111" stroke-linecap="round" stroke-width="14"/>
+  <path d="M72 110c9-26 33-44 60-44 10 0 19 2 28 6" fill="none" stroke="#111111" stroke-linecap="round" stroke-width="14"/>
+  <path d="M166 78c9 5 17 12 23 21" fill="none" stroke="#111111" stroke-linecap="round" stroke-width="14"/>
+  <path d="M128 66 150 184 128 170 106 184Z" fill="#111111"/>
+  <path d="M128 88 138 148 128 142 118 148Z" fill="#efebe2"/>
+</svg>

@@ -6,3 +6,5 @@ build/
 dist/
 *.spec
 .pytest_cache/
+node_modules/
+dist-web/

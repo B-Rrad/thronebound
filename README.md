@@ -88,11 +88,11 @@ python main.py
 
 ## Hero Timing Notes
 
-- `Galadriel` may be used at any time while that player has wounds remaining.
-- `Saruman` and `Sauron` are start-of-round attack tools.
-- `Gandalf` and `Boromir` are defensive responses.
-- `Legolas` and `Balrog` must be played together with a realm attack card.
-- `Gollum` lets the player who played it choose the temporary trump suit for the round.
+- `Asclepius` may be used at any time while that player has wounds remaining.
+- `Medea` and `Argus Panoptes` are start-of-round attack tools.
+- `Athena` and `Ajax` are defensive responses.
+- `Achilles` and `Ares` must be played together with a legal realm attack card.
+- `Autolycus` lets the player who played it choose the temporary crown suit for the round.
 
 ## Project Notes
 
@@ -103,8 +103,13 @@ python main.py
 - `ui_elements.py` remains for legacy smoke-test compatibility.
 - `settings.py` contains shared window, color, and state constants.
 - `balance_analysis.py` is a separate analysis utility and is not required to play the game.
+- `web/` contains the TypeScript/canvas rewrite scaffold for a browser version.
 - The game loads `36` realm cards and `12` hero cards from JSON files in `data/`.
 - The game-over screen includes a short reason so special endgame outcomes and tiebreaks are visible to the player.
+
+## Web Rewrite
+
+The browser rewrite is starting in `web/`. See `WEB_REWRITE.md` for setup and deployment notes.
 
 ## Rebuild The Executable
 

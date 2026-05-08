@@ -25,7 +25,7 @@ class UIController:
         self.font_cache = FontCache(self.root_dir)
         self.layout_manager = LayoutManager(self.initial_size[0], self.initial_size[1], self.font_cache)
         self.animator = Animator()
-        self.card_renderer = CardRenderer(self.theme, self.layout_manager)
+        self.card_renderer = CardRenderer(self.theme, self.layout_manager, self.root_dir)
         self.input_handler = InputHandler()
         self.renderer = Renderer(self.theme, self.layout_manager, self.card_renderer, self.animator, self.root_dir)
         self._last_targets = []

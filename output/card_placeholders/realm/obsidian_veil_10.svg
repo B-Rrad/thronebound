@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" role="img" aria-labelledby="title desc">
+  <title id="title">10 of Obsidian Veil</title>
+  <desc id="desc">Concept art card for 10 of Obsidian Veil using the Obsidian Veil dominion frame.</desc>
+  <defs>
+    <linearGradient id="bg-obsidian_veil_10" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f0ebe1"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="718" height="1018" rx="40" fill="url(#bg-obsidian_veil_10)" stroke="#000000" stroke-width="16"/>
+  <rect x="42" y="42" width="666" height="966" rx="28" fill="none" stroke="#000000" stroke-width="5"/>
+
+  <g transform="translate(94,150)">
+    <text x="0" y="0" font-size="108" font-weight="700" fill="#111111">10</text>
+    <g transform="translate(24,74)">
+    <g transform="translate(0,0) scale(0.48)">
+      <path d="M58 0 C58 32 32 58 0 58 C-30 58 -54 38 -58 10" fill="none" stroke="#111111" stroke-width="10" stroke-linecap="round"/>
+      <path d="M-52 -18 C-42 -46 -18 -64 8 -64 C18 -64 28 -62 38 -56" fill="none" stroke="#111111" stroke-width="10" stroke-linecap="round"/>
+      <path d="M42 -50 C50 -44 56 -36 62 -24" fill="none" stroke="#111111" stroke-width="10" stroke-linecap="round"/>
+      <path d="M0 -60 L20 54 L0 42 L-20 54 Z" fill="#111111"/>
+      <path d="M0 -32 L10 16 L0 10 L-10 16 Z" fill="#1a1a1a"/>
+    </g>
+    </g>
+  </g>
+  
+    <g opacity="0.95">
+      <circle cx="375" cy="254" r="116" fill="#ddd5c8" opacity="0.34"/>
+      <circle cx="375" cy="254" r="86" fill="none" stroke="#a6a0a0" stroke-width="16" opacity="0.42"/>
+      <path d="M286 364 L318 304 L350 602" fill="none" stroke="#a6a0a0" stroke-width="14" stroke-linecap="round" opacity="0.36"/>
+      <path d="M464 364 L432 304 L400 602" fill="none" stroke="#a6a0a0" stroke-width="14" stroke-linecap="round" opacity="0.36"/>
+      <path d="M240 588 L294 428 L326 618 Z" fill="#ddd5c8" opacity="0.22"/>
+      <path d="M510 588 L456 428 L424 618 Z" fill="#ddd5c8" opacity="0.22"/>
+    </g>
+    
+  <g transform="translate(375,432) scale(1.0)"><circle cx="0" cy="-112" r="54" fill="none" stroke="#111111" stroke-width="10" opacity="0.72"/><circle cx="14" cy="-112" r="32" fill="#111111" opacity="0.22"/></g>
+  <g transform="translate(375,432) scale(1.0)"><circle cx="8" cy="-104" r="58" fill="none" stroke="#111111" stroke-width="8" opacity="0.56"/><circle cx="24" cy="-104" r="34" fill="#111111" opacity="0.18"/><path d="M-90 100 L-28 54 L28 54 L90 100" fill="none" stroke="#1a1a1a" stroke-width="10" stroke-linecap="round" opacity="0.22"/></g>
+  
+        <g transform="translate(375,450) scale(1.34)">
+          <path d="M0 -136 C20 -130 32 -114 32 -92 C32 -70 16 -52 0 -42 C-16 -52 -32 -70 -32 -92 C-32 -114 -20 -130 0 -136 Z" fill="#111111" opacity="0.4"/>
+          <path d="M0 -92 L26 -38 L44 108 L-44 108 L-26 -38 Z" fill="#1a1a1a"/>
+          <rect x="-6" y="-122" width="12" height="178" rx="4" fill="#1a1a1a"/>
+          <path d="M-54 8 C-34 -20 -18 -32 0 -34 C18 -32 34 -20 54 8" fill="none" stroke="#111111" stroke-width="10" stroke-linecap="round" opacity="0.82"/>
+          <circle cx="0" cy="-16" r="12" fill="#111111" opacity="0.8"/>
+        </g>
+        
+
+  <line x1="96" y1="742" x2="654" y2="742" stroke="#ddd5c8" stroke-width="4"/>
+  <text x="375" y="866" text-anchor="middle" font-size="105" font-weight="700" fill="#1a1a1a">Eclipse Priest</text>
+  <text x="375" y="976" text-anchor="middle" font-size="68" font-weight="700" fill="#111111" letter-spacing="2">OBSIDIAN VEIL</text>
+</svg>

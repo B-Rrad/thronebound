@@ -104,7 +104,8 @@ class RoundMixin:
         )
         if not defender_took_wound and self.round_effects["balrog_active"] == self.attacker and balrog_fully_defended:
             self.wounds[self.defender] += 1
-            self.status_message = f"Balrog wounds {self.defender} despite the defense."
+            hero_name = self.get_hero_display_name({"id": "balrog"})
+            self.status_message = f"{hero_name} wounds {self.defender} despite the defense."
 
         if not defender_took_wound:
             self.attacker, self.defender = self.defender, self.attacker
