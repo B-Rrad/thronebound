@@ -6,6 +6,7 @@ type Player = "P1" | "P2";
 type GameState = "loading" | "splash" | "drafting" | "playing" | "gameover";
 type PlayPhase = "ATTACK" | "DEFEND" | "REINFORCE";
 type CardKind = "realm" | "hero";
+type GameMode = "2p" | "random-ai";
 
 type RealmCard = {
   id: string;
@@ -71,6 +72,15 @@ const CARD_SVG_URLS = import.meta.glob("../../output/card_placeholders/**/*.svg"
   import: "default"
 }) as Record<string, string>;
 const CARD_ASSET_URLS = { ...CARD_PNG_URLS, ...CARD_SVG_URLS };
+const MUSIC_URLS = Object.entries(
+  import.meta.glob("../../music/*.mp3", {
+    eager: true,
+    query: "?url",
+    import: "default"
+  }) as Record<string, string>
+)
+  .sort(([left], [right]) => left.localeCompare(right))
+  .map(([, url]) => url);
 const SUIT_COLORS: Record<string, string> = Object.fromEntries(
   dominionData.dominions.map((dominion) => [dominion.name, dominion.color.hex])
 );
@@ -190,6 +200,13 @@ export class RingboundWebGame {
   private hoveredHitbox: CardHitbox | null = null;
   private lastWounds: Record<Player, number> = { P1: 0, P2: 0 };
   private woundFlashUntil: Record<Player, number> = { P1: 0, P2: 0 };
+  private music: HTMLAudioElement | null = null;
+  private musicEnabled = false;
+  private musicIndex = 0;
+  private mode: GameMode = "2p";
+  private aiPlayer: Player | null = null;
+  private aiTimer: number | null = null;
+  private aiActing = false;
 
   private state: GameState = "loading";
   private statusMessage = "Loading Ringbound...";
@@ -239,6 +256,11 @@ export class RingboundWebGame {
     this.ctx = ctx;
     this.backgroundImage = new Image();
     this.backgroundImage.src = BACKGROUND_URL;
+    if (MUSIC_URLS.length > 0) {
+      this.music = new Audio();
+      this.music.volume = 0.42;
+      this.music.addEventListener("ended", () => this.advanceMusic());
+    }
   }
 
   start() {
@@ -307,6 +329,10 @@ export class RingboundWebGame {
   }
 
   private resetGame() {
+    if (this.aiTimer !== null) {
+      window.clearTimeout(this.aiTimer);
+      this.aiTimer = null;
+    }
     this.realmDeck = [];
     this.heroDeck = [];
     this.trumpCard = null;
@@ -334,10 +360,14 @@ export class RingboundWebGame {
     this.winner = null;
     this.winReason = "";
     this.gameLog = [];
+    this.mode = "2p";
+    this.aiPlayer = null;
   }
 
-  private setupGame() {
+  private setupGame(mode: GameMode = "2p") {
     this.resetGame();
+    this.mode = mode;
+    this.aiPlayer = mode === "random-ai" ? "P2" : null;
     this.realmDeck = shuffle(this.allRealmCards.map((card) => ({ ...card })));
     this.heroDeck = shuffle(this.allHeroCards.map((card) => ({ ...card })));
 
@@ -369,7 +399,8 @@ export class RingboundWebGame {
     this.realmDraft = this.realmDeck.splice(-DRAFT_REALM_DISPLAY_COUNT).reverse();
     this.heroDraft = this.heroDeck.splice(-DRAFT_HERO_DISPLAY_COUNT).reverse();
     this.state = "drafting";
-    this.setStatus(`${this.currentDrafter} drafts first.`);
+    this.setStatus(`${this.playerLabel(this.currentDrafter)} drafts first.`);
+    this.scheduleAiTurn();
   }
 
   private getPlayerRealmHand(player: Player) {
@@ -382,6 +413,24 @@ export class RingboundWebGame {
 
   private getPlayerTotalCards(player: Player) {
     return this.getPlayerRealmHand(player).length + this.getPlayerHeroHand(player).length;
+  }
+
+  private isAiPlayer(player: Player) {
+    return this.aiPlayer === player;
+  }
+
+  private playerLabel(player: Player) {
+    return this.isAiPlayer(player) ? "Random AI" : "Player";
+  }
+
+  private isHumanTurn() {
+    if (this.state === "drafting") {
+      return !this.isAiPlayer(this.currentDrafter);
+    }
+    if (this.state === "playing") {
+      return !this.isAiPlayer(this.currentPlayer);
+    }
+    return true;
   }
 
   private getEffectiveTrumpSuit() {
@@ -466,6 +515,7 @@ export class RingboundWebGame {
     }
     this.switchDrafter();
     this.checkDraftComplete();
+    this.scheduleAiTurn();
   }
 
   private switchDrafter() {
@@ -474,7 +524,7 @@ export class RingboundWebGame {
       nextDrafter = this.currentDrafter;
     }
     this.currentDrafter = nextDrafter;
-    this.setStatus(`${this.currentDrafter} is drafting.`);
+    this.setStatus(`${this.playerLabel(this.currentDrafter)} is drafting.`);
   }
 
   private checkDraftComplete() {
@@ -486,7 +536,8 @@ export class RingboundWebGame {
     this.currentPlayer = this.attacker;
     this.playPhase = "ATTACK";
     this.state = "playing";
-    this.setStatus(`${this.attacker} opens the first attack.`);
+    this.setStatus(`${this.playerLabel(this.attacker)} opens the first attack.`);
+    this.scheduleAiTurn();
   }
 
   private canDefendWithCard(defenseCard: RealmCard, attackCard: RealmCard | null) {
@@ -842,6 +893,9 @@ export class RingboundWebGame {
   }
 
   private attemptPlayCard(card: RealmCard) {
+    if (this.isAiPlayer(this.currentPlayer) && !this.aiActing) {
+      return;
+    }
     const currentHand = this.getPlayerRealmHand(this.currentPlayer);
     if (!currentHand.includes(card)) {
       return;
@@ -876,15 +930,20 @@ export class RingboundWebGame {
       }
     }
     this.checkGameOver();
+    this.scheduleAiTurn();
   }
 
   private concedeDefense() {
+    if (this.isAiPlayer(this.currentPlayer) && !this.aiActing) {
+      return;
+    }
     if (this.playPhase !== "DEFEND" || this.pendingAction !== null) {
       return;
     }
     this.wounds[this.defender] += 1;
     this.setStatus(`${this.defender} takes a wound.`);
     this.endRound(true, true);
+    this.scheduleAiTurn();
   }
 
   private syncTurnAfterTableChange() {
@@ -953,8 +1012,98 @@ export class RingboundWebGame {
     this.clearRoundState();
     this.checkGameOver();
     if (this.state !== "gameover") {
-      this.setStatus(defenderTookWound ? `${this.attacker} keeps the attack.` : `${this.attacker} leads the next round.`);
+      this.setStatus(defenderTookWound ? `${this.playerLabel(this.attacker)} keeps the attack.` : `${this.playerLabel(this.attacker)} leads the next round.`);
+      this.scheduleAiTurn();
     }
+  }
+
+  private scheduleAiTurn() {
+    if (this.aiTimer !== null || !this.shouldAiAct()) {
+      return;
+    }
+    this.aiTimer = window.setTimeout(() => {
+      this.aiTimer = null;
+      this.performRandomAiTurn();
+    }, 650);
+  }
+
+  private shouldAiAct() {
+    if (this.aiPlayer === null || this.state === "gameover") {
+      return false;
+    }
+    if (this.state === "drafting") {
+      return this.currentDrafter === this.aiPlayer;
+    }
+    if (this.state === "playing") {
+      return this.currentPlayer === this.aiPlayer && this.pendingAction === null;
+    }
+    return false;
+  }
+
+  private performRandomAiTurn() {
+    if (!this.shouldAiAct()) {
+      return;
+    }
+    this.aiActing = true;
+    try {
+      if (this.state === "drafting") {
+        this.performRandomAiDraft();
+      } else if (this.state === "playing") {
+        this.performRandomAiPlay();
+      }
+    } finally {
+      this.aiActing = false;
+    }
+    this.scheduleAiTurn();
+  }
+
+  private performRandomAiDraft() {
+    const choices: Array<{ type: CardKind; index: number }> = [];
+    if (this.canDraftCardType(this.currentDrafter, "realm")) {
+      this.realmDraft.forEach((_, index) => choices.push({ type: "realm", index }));
+    }
+    if (this.canDraftCardType(this.currentDrafter, "hero")) {
+      this.heroDraft.forEach((_, index) => choices.push({ type: "hero", index }));
+    }
+    const choice = this.randomChoice(choices);
+    if (choice) {
+      this.attemptDraft(choice.index, choice.type);
+    }
+  }
+
+  private performRandomAiPlay() {
+    if (this.playPhase === "DEFEND") {
+      const legalDefenses = this.getPlayerRealmHand(this.currentPlayer).filter((card) => this.canDefendWithCard(card, this.getCurrentAttackCard()));
+      const defense = this.randomChoice(legalDefenses);
+      if (defense) {
+        this.attemptPlayCard(defense);
+      } else {
+        this.concedeDefense();
+      }
+      return;
+    }
+
+    if (this.playPhase === "REINFORCE" && this.tableAttacks.length > 0 && Math.random() < 0.45) {
+      this.endRound(false, false);
+      return;
+    }
+
+    const legalAttacks = this.getPlayerRealmHand(this.currentPlayer).filter((card) => this.canAttackWithCard(card));
+    const attack = this.randomChoice(legalAttacks);
+    if (attack) {
+      this.attemptPlayCard(attack);
+    } else if (this.tableAttacks.length > 0) {
+      this.endRound(false, false);
+    } else {
+      this.checkGameOver();
+    }
+  }
+
+  private randomChoice<T>(items: T[]) {
+    if (items.length === 0) {
+      return null;
+    }
+    return items[Math.floor(Math.random() * items.length)] ?? null;
   }
 
   private drawBackToSix(player: Player) {
@@ -1042,6 +1191,9 @@ export class RingboundWebGame {
     if (!hit) {
       return;
     }
+    if (!this.isHumanTurn() && !(hit.kind === "button" && hit.label === "music_toggle")) {
+      return;
+    }
     if (hit.kind === "button") {
       this.handleButton(hit.label ?? "");
     } else if (hit.kind === "draft-realm" && typeof hit.index === "number") {
@@ -1073,7 +1225,13 @@ export class RingboundWebGame {
 
   private handleButton(label: string) {
     if (label === "start") {
+      void this.enableMusic();
       this.setupGame();
+    } else if (label === "start_random_ai") {
+      void this.enableMusic();
+      this.setupGame("random-ai");
+    } else if (label === "mode_unavailable") {
+      this.setStatus("That AI mode is not wired yet. Use Random AI for now.");
     } else if (label === "restart") {
       this.state = "splash";
       this.setStatus("Click Start to begin a local two-player game.");
@@ -1082,12 +1240,59 @@ export class RingboundWebGame {
     } else if (label === "end") {
       if ((this.playPhase === "REINFORCE" || (this.playPhase === "ATTACK" && this.roundEffects.gandalfRanks.length > 0)) && this.pendingAction === null) {
         this.endRound(false, false);
+        this.scheduleAiTurn();
       }
     } else if (label === "log_up") {
       this.logScroll = Math.min(this.logScroll + 1, Math.max(0, this.gameLog.length - 5));
     } else if (label === "log_down") {
       this.logScroll = Math.max(0, this.logScroll - 1);
+    } else if (label === "music_toggle") {
+      this.toggleMusic();
     }
+  }
+
+  private toggleMusic() {
+    if (this.musicEnabled) {
+      this.disableMusic();
+    } else {
+      void this.enableMusic();
+    }
+  }
+
+  private async enableMusic() {
+    if (!this.music || MUSIC_URLS.length === 0) {
+      this.setStatus("No music tracks found.");
+      return;
+    }
+    this.musicEnabled = true;
+    if (!this.music.src) {
+      this.musicIndex = 0;
+      this.music.src = MUSIC_URLS[this.musicIndex]!;
+    }
+    try {
+      await this.music.play();
+      this.setStatus("Music enabled.");
+    } catch {
+      this.musicEnabled = false;
+      this.setStatus("Click Music On to enable music.");
+    }
+  }
+
+  private disableMusic() {
+    this.musicEnabled = false;
+    this.music?.pause();
+    this.setStatus("Music disabled.");
+  }
+
+  private advanceMusic() {
+    if (!this.musicEnabled || !this.music || MUSIC_URLS.length === 0) {
+      return;
+    }
+    this.musicIndex = (this.musicIndex + 1) % MUSIC_URLS.length;
+    this.music.src = MUSIC_URLS[this.musicIndex]!;
+    void this.music.play().catch(() => {
+      this.musicEnabled = false;
+    });
   }
 
   private addHitbox(hitbox: CardHitbox) {
@@ -1199,7 +1404,7 @@ export class RingboundWebGame {
     ctx.fillStyle = THEME.text;
     ctx.font = `700 ${Math.round(topH * 0.35)}px "Ringbound Display", Georgia, serif`;
     ctx.textAlign = "center";
-    ctx.fillText(`Player - ${this.playPhase}`, this.width / 2, topH * 0.62);
+    ctx.fillText(`${this.playerLabel(this.currentPlayer)} - ${this.playPhase}`, this.width / 2, topH * 0.62);
     ctx.textAlign = "left";
   }
 
@@ -1213,7 +1418,7 @@ export class RingboundWebGame {
     this.lastWounds[player] = wounds;
     ctx.fillStyle = THEME.text;
     ctx.font = `14px "Ringbound Body", Georgia, serif`;
-    drawFittedText(ctx, "Player", x, y + h * 0.36, Math.max(52, w * 0.18));
+    drawFittedText(ctx, this.playerLabel(player), x, y + h * 0.36, Math.max(70, w * 0.24));
     const r = Math.max(4, h * 0.12);
     const startX = x + 32;
     const cy = y + h * 0.32;
@@ -1279,10 +1484,16 @@ export class RingboundWebGame {
     const w = Math.min(320, this.width * 0.28);
     const h = Math.max(40, this.height * 0.065);
     const gap = this.height * 0.02;
-    const labels = ["Two Players", "Vs Random AI", "Vs Greedy AI", "Vs Strategic AI"];
-    labels.forEach((label, index) => {
-      this.drawButton(label, "start", centerX - w / 2, startY + index * (h + gap), w, h, index === 0 ? THEME.gold : SUIT_COLORS["Tidewake Dominion"] ?? THEME.gold);
+    const modes = [
+      { label: "Two Players", action: "start", color: THEME.gold },
+      { label: "Vs Random AI", action: "start_random_ai", color: SUIT_COLORS["Tidewake Dominion"] ?? THEME.gold },
+      { label: "Vs Greedy AI", action: "mode_unavailable", color: THEME.border },
+      { label: "Vs Strategic AI", action: "mode_unavailable", color: THEME.border }
+    ];
+    modes.forEach((mode, index) => {
+      this.drawButton(mode.label, mode.action, centerX - w / 2, startY + index * (h + gap), w, h, mode.color);
     });
+    this.drawMusicButton(centerX - w / 2, startY + modes.length * (h + gap) + gap * 0.4, w, h * 0.82);
   }
 
   private drawGameOver() {
@@ -1320,6 +1531,7 @@ export class RingboundWebGame {
       12
     );
     this.addHitbox({ kind: "button", label: "restart", x: 0, y: 0, w: this.width, h: this.height, enabled: true });
+    this.drawMusicButton(centerX - 92, centerY * 1.42, 184, 36);
   }
 
   private drawCenteredPanel(title: string, detail: string) {
@@ -1346,7 +1558,7 @@ export class RingboundWebGame {
     const centerX = sideW;
     const centerW = this.width - sideW * 2;
     this.textBubble(
-      `Drafting: Player`,
+      `Drafting: ${this.playerLabel(this.currentDrafter)}`,
       this.width / 2,
       this.height * 0.075,
       `700 ${Math.round(this.height * 0.03)}px "Ringbound Display", Georgia, serif`,
@@ -1356,7 +1568,7 @@ export class RingboundWebGame {
       14
     );
     this.textBubble(
-      `Player Draft: ${this.p1Hand.length} realm, ${this.p1Heroes.length} hero`,
+      `${this.playerLabel("P1")} Draft: ${this.p1Hand.length} realm, ${this.p1Heroes.length} hero`,
       this.width * 0.16,
       this.height * 0.035,
       `${Math.round(this.height * 0.018)}px "Ringbound Body", Georgia, serif`,
@@ -1366,7 +1578,7 @@ export class RingboundWebGame {
       10
     );
     this.textBubble(
-      `Player Draft: ${this.p2Hand.length} realm, ${this.p2Heroes.length} hero`,
+      `${this.playerLabel("P2")} Draft: ${this.p2Hand.length} realm, ${this.p2Heroes.length} hero`,
       this.width * 0.84,
       this.height * 0.035,
       `${Math.round(this.height * 0.018)}px "Ringbound Body", Georgia, serif`,
@@ -1723,6 +1935,7 @@ export class RingboundWebGame {
     ctx.fillStyle = THEME.text;
     ctx.font = `13px "Ringbound Body", Georgia, serif`;
     drawFittedText(ctx, `Active: ${this.getEffectiveTrumpSuit() ?? "None"}`, x + sideW * 0.02, topH + (this.height - topH - handH) * 0.54, sideW * 0.84);
+    this.drawMusicButton(x + sideW * 0.02, topH + (this.height - topH - handH) * 0.62, sideW * 0.84, 34);
 
     const centerX = sideW;
     const centerW = this.width - sideW * 2;
@@ -2198,6 +2411,12 @@ export class RingboundWebGame {
     ctx.fillText(ellipsizeText(ctx, label, w - 18), x + w / 2, y + h / 2 + 5);
     ctx.textAlign = "left";
     this.addHitbox({ kind: "button", label: action, x, y, w, h, enabled: true });
+  }
+
+  private drawMusicButton(x: number, y: number, w: number, h: number) {
+    const label = this.musicEnabled ? "Music On" : "Music Off";
+    const color = this.musicEnabled ? THEME.gold : THEME.border;
+    this.drawButton(label, "music_toggle", x, y, w, h, color);
   }
 
   private drawIconButton(direction: "up" | "down", action: string, x: number, y: number, w: number, h: number, enabled: boolean) {
