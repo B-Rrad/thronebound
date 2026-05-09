@@ -13,8 +13,6 @@ This repository includes:
 
 The Game can be played online here: https://drpeterjamieson.com/PROJECTS/THRONEBOUND/index.html
 
-The gameplay video can be found here: https://youtu.be/C1FrNUbSaL8
-
 ## Repository Layout
 
 ```text
