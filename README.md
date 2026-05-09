@@ -11,6 +11,8 @@ This repository includes:
 - Game data files in `data/`
 - A TypeScript/canvas browser rewrite in `web/`
 
+The Game can be played online here: https://drpeterjamieson.com/PROJECTS/THRONEBOUND/index.html
+
 The gameplay video can be found here: https://youtu.be/C1FrNUbSaL8
 
 ## Repository Layout
