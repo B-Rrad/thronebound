@@ -5,3 +5,5 @@
 The game can be played online here: https://drpeterjamieson.com/PROJECTS/THRONEBOUND/index.html
 
 A video demo of the game being played can be found here: https://youtu.be/ONRpg0IdMZ4
+
+For more info, check out the [wiki](https://github.com/B-Rrad/thronebound/wiki).
